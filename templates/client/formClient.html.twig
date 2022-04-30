@@ -1,0 +1,60 @@
+{% extends 'base.html.twig' %}
+{% block body %}
+    {% block naavbarLinks %}{% endblock %}
+    {% block login %}
+
+         {% if role is defined and role != "" %}
+            {% block logout %}{{parent()}}{% endblock %}
+
+         {% else %}
+
+            {% block loginSignIn %}{{parent()}}{% endblock %}
+         {% endif %}
+
+      {% endblock %}
+    <div class="form-container">  
+        <form id="form" class="form-signin" method="post" action="{{path('newClient')}}">    
+            <div class="d-flex">
+                <a name="" id="" class="btn m-3 pl-5" href="{{path('catalogue')}}" role="button"><i class="fa-solid fa-circle-left"></i> <span>Catalogue</span></a>
+                <h1 class="h3 mb-3 font-weight-bold">Devenez client chez Brasil Burger !</h1>             
+            </div>
+            <div class="row">
+                <div class="control col-md-6">
+                    <label for="prenom">Prenom</label>
+                    <input type="text" value="" name="prenom" id="prenom" class="box" data-aos="zoom-in-down" data-aos-delay= "150" autofocus>
+                    <small></small>
+                </div>
+                <div class="control col-md-6">
+                    <label for="nom">Nom</label>
+                    <input type="text" name="nom" id="nom" class="box" data-aos="zoom-in-down"  data-aos-delay= "300" >
+                    <small></small>
+                </div>
+            </div>  
+
+            <div class="row">
+                <div class="control col-md-6">
+                    <label for="email">Email</label>
+                    <input type="text" value="" name="email" id="email" class="box" data-aos="zoom-in-down" data-aos-delay= "450" >
+                    <small></small>
+                </div>
+                <div class="control col-md-6">
+                    <label for="password">Password</label>
+                    <input type="password" name="password" id="password" class="box" data-aos="zoom-in-down"  data-aos-delay= "600" >
+                    <small></small>
+                </div>
+            </div> 
+            <div class="row ">
+                <div class="control col-md-12">
+                    <label for="telephone">Telephone</label>
+                    <input type="number" value="" name="telephone" id="telephone" class="box" data-aos="zoom-in-down"  data-aos-delay= "750">
+                    <small></small>
+                </div>
+            </div>
+            <input type="submit" value="S'inscrire" class="btn" data-aos-delay= "900">
+        </form>
+    </div>
+    {% block js %}
+        <script src="js/register.js"></script>
+    {% endblock %}
+    
+{% endblock %}

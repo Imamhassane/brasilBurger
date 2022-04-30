@@ -1,0 +1,162 @@
+{% extends 'base.html.twig' %}
+{% block stylesheets %}
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons"
+      rel="stylesheet">
+    <link rel="stylesheet" href="/stylesheets/ie.css">
+{% endblock %}
+{% block body %}
+
+    {% block naavbarLinks %}
+            {% block Gestionnaire %}{{parent()}}{% endblock %}
+            {% block Client %}{% endblock %}
+
+    {% endblock %}
+
+    {% block login %}
+        {% block loginSignIn %}{% endblock %}
+        {% block logout %}{{parent()}}{% endblock %}
+    {% endblock %}
+
+    <div class="datatable-container">
+        <!-- ======= Header tools ======= -->
+        <div class="header-tools">
+            <div class="tools">
+            <ul>
+                <li>
+                <button>
+                    <i class="material-icons">add_circle</i>
+                </button>
+                </li>
+                <li>
+                <button>
+                    <i class="material-icons">edit</i>
+                </button>
+                </li>
+                <li>
+                <button>
+                    <i class="material-icons">delete</i>
+                </button>
+                </li>
+            </ul>
+            </div>
+
+            <div class="search">
+            <input type="search" class="search-input" placeholder="Search..." />
+            </div>
+        </div>
+
+        <!-- ======= Table ======= -->
+        <table class="datatable">
+            <thead>
+            <tr>
+                <th><input type="checkbox" /></th>
+                <th>Status</th>
+                <th>First name</th>
+                <th>Last name</th>
+                <th>Job title</th>
+                <th>Email</th>
+                <th>Username</th>
+                <th>Location</th>
+                <th>Birthday</th>
+            </tr>
+            </thead>
+
+            <tbody>
+            <tr>
+                <td>
+                <input type="checkbox" />
+                </td>
+                <td><span class="available"></span></td>
+                <td>John</td>
+                <td>Smith</td>
+                <td>Product Owner</td>
+                <td>john.smith@codepen.io</td>
+                <td>JohnSmith</td>
+                <td>Spain</td>
+                <td>January 21, 1984</td>
+            </tr>
+
+            <tr>
+                <td>
+                <input type="checkbox" />
+                </td>
+                <td><span class="away"></span></td>
+                <td>George</td>
+                <td>Lucas</td>
+                <td>Scrum Master</td>
+                <td>george.lucas@codepen.io</td>
+                <td>GeorgeLucas</td>
+                <td>Switzerland</td>
+                <td>July 14, 1974</td>
+            </tr>
+
+            <tr>
+                <td>
+                <input type="checkbox" />
+                </td>
+                <td><span class="offline"></span></td>
+                <td>Peter</td>
+                <td>Rabit</td>
+                <td>Software engineer</td>
+                <td>peter.rabit@codepen.io</td>
+                <td>PeterRabit</td>
+                <td>Ireland</td>
+                <td>September 02, 1977</td>
+            </tr>
+
+            <tr>
+                <td>
+                <input type="checkbox" />
+                </td>
+                <td><span class="offline"></span></td>
+                <td>Elizabeth</td>
+                <td>Taylor</td>
+                <td>UX Designer</td>
+                <td>elizabeth.taylor@codepen.io</td>
+                <td>ElizabethTaylor</td>
+                <td>London</td>
+                <td>February 27, 1982</td>
+            </tr>
+
+            <tr>
+                <td>
+                <input type="checkbox" />
+                </td>
+                <td><span class="offline"></span></td>
+                <td>Catherine</td>
+                <td>Jones</td>
+                <td>QA tester</td>
+                <td>catherine.jones@codepen.io</td>
+                <td>CatherineJones</td>
+                <td>USA</td>
+                <td>December 07, 1978</td>
+            </tr>
+            </tbody>
+        </table>
+
+        <!-- ======= Footer tools ======= -->
+        <div class="footer-tools">
+            <div class="list-items">
+            Show
+            <select name="n-entries" id="n-entries" class="n-entries">
+                <option value="5">5</option>
+                <option value="10" selected>10</option>
+                <option value="15">15</option>
+            </select>
+            entries
+            </div>
+
+            <div class="pages">
+            <ul>
+                <li><span class="active">1</span></li>
+                <li><button>2</button></li>
+                <li><button>3</button></li>
+                <li><button>4</button></li>
+                <li><span>...</span></li>
+                <li><button>9</button></li>
+                <li><button>10</button></li>
+            </ul>
+            </div>
+        </div>
+    </div>
+{% endblock %}
