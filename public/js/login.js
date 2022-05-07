@@ -31,22 +31,13 @@ function checkRequired(inputArray) {// Tester si les champs ne sont pas vides
 function getFieldName(input) {//Retour le nom de chaque input en se basant sur son id
     return input.id.charAt(0).toUpperCase() + input.id.slice(1);
 }
-//
-
 
 //Even listeners--------------------------------------------------------
 form.addEventListener('submit',function(e){
-    
-
     if (isVerify) {
         
     }else{
         e.preventDefault();//Bloquer la soumission du formulaire
         checkRequired([ email, password]);
     }
-    //
-   
-
-
-    
 });

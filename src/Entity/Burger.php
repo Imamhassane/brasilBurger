@@ -27,18 +27,23 @@ class Burger
     #[ORM\OneToMany(mappedBy: 'burger', targetEntity: Commande::class)]
     private $commandes;
 
+    #[ORM\Column(type: 'string', length: 255)]
+    private $etat;
+
     #[ORM\OneToOne(targetEntity: Image::class, cascade: ['persist', 'remove'])]
-    #[ORM\JoinColumn(nullable: false)]
     private $image;
 
     #[ORM\Column(type: 'string', length: 255)]
-    private $etat;
+    private $type;
+
 
     public function __construct()
     {
         $this->menus = new ArrayCollection();
         $this->commandes = new ArrayCollection();
         $this->etat = "non-archive";
+        $this->type = "Burger";
+
     }
 
     public function getId(): ?int
@@ -130,17 +135,6 @@ class Burger
         return $this;
     }
 
-    public function getImage(): ?Image
-    {
-        return $this->image;
-    }
-
-    public function setImage(Image $image): self
-    {
-        $this->image = $image;
-
-        return $this;
-    }
 
     public function getEtat(): ?string
     {
@@ -153,4 +147,31 @@ class Burger
 
         return $this;
     }
+
+    public function getImage(): ?Image
+    {
+        return $this->image;
+    }
+
+    public function setImage(?Image $image): self
+    {
+        $this->image = $image;
+
+        return $this;
+    }
+
+    public function getType(): ?string
+    {
+        return $this->type;
+    }
+
+    public function setType(string $type): self
+    {
+        $this->type = $type;
+
+        return $this;
+    }
+
+    
+    
 }

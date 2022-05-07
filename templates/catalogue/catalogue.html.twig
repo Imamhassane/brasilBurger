@@ -5,7 +5,7 @@
 {% block body %}
 
       {% block naavbarLinks %}
-         {% if role is defined and role == "ROLE_USER" %}
+         {% if role is defined and role == "ROLE_ADMIN" %}
             {% block Gestionnaire %}{{parent()}}{% endblock %}
 
          {% elseif role is defined and role == "ROLE_CLIENT" %}
@@ -17,11 +17,13 @@
       {% block login %}
 
          {% if role is defined and role != "" %}
+
             {% block logout %}{{parent()}}{% endblock %}
 
          {% else %}
 
             {% block loginSignIn %}{{parent()}}{% endblock %}
+
          {% endif %}
 
       {% endblock %}
@@ -67,36 +69,48 @@
 
 <!-- service sectioin ends -->
 
+
 <!-- menu section starts  -->
 
-<section class="menu" id="menu">
-
-   <div class="heading">
-      <img src="images/title-img.png" alt="">
-      <h3 class="btn-shine">Notre menu</h3>
-   </div>
-
-   <div class="box-container">
-        {% for i in 0..10 %}
-            <div class="box" data-aos="zoom-in-down" data-aos-delay="150">
-                <img src="images/product-1.png" alt="">
-                <div class="content">
+      <section class="menu" id="menu">
+         <div class="heading">
+            <img src="images/title-img.png" alt="">
+            <h3 class="btn-shine">Notre menu</h3>
+         </div>
+         <div class="box-container">
+            {% for item in catalogue %}
+               <div class="box" id="main" data-aos="zoom-in-down" data-aos-delay="150">
+                <img src="images/{{item.image.nom}}" alt="">
+                  <div class="content">
                     <div class="stars">
-                    <i class="fas fa-star"></i>
-                    <i class="fas fa-star"></i>
-                    <i class="fas fa-star"></i>
-                    <i class="fas fa-star"></i>
-                    <i class="fas fa-star-half-alt"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star-half-alt"></i>
                     </div>
-                    <h3>cheese hamburger</h3>
-                    <div class="price">${{i}}</div>
-                    <a href="#" class="btn">Commander</a>
-                    <a href="#" class="btn ml-2">Détails</a>
-                </div>
+                    <h3>{{item.nom}}</h3>
+                    <div class="price">F CFA {{item.prix}}</div>
+                     {% if role is defined and role == "ROLE_CLIENT" or role == "" %}
+                        <a href="{{'commande/' ~ item.id}}" class="btn">Commander</a>
+                        <a href="{{'showDetails/' ~ item.id}}" class="btn ml-2">Détails</a>
+                     {% elseif role is defined and role == "ROLE_ADMIN" %}
+                        <button value="{{'archiver/' ~ item.id}}" id="archiver" class="modal-toggle btn btnGest">Archiver</button>
+                        <a href="{{'edit/' ~ item.id}}"  class=" btn btnGest2 ml-2">Modifier</a>
+                        <button value="{{'delete/' ~ item.id}}" id="delete" class="modal-toggle btn btnGest3 ml-2" >Supprimer </button>
+                     {% endif %}
+                  </div>
+               </div>
+            {% endfor %}
+            <div class="validation" id="validation">  
+               <h3 id="action"></h3>
+               <div class="validation-button" id="validation-button"> 
+                  <a  id="annuler" href="#main" style="background-color:red" class="btn"> annuler</a>
+                  <a  id="continuer" href="#"  style="background-color:green" class="btn">continuer</a>
+               </div>
             </div>
-        {% endfor %}
-
-</section>
+         </div>
+      </section>
 
 <!-- about section starts  -->
 
@@ -290,26 +304,12 @@
 <!-- footer section starts  -->
 
 <section class="footer">
-
    <div class="links">
       <a href="#home" class="rounded-circle"><i class="fa-solid fa-angle-up"></i></a>
    </div>
-
    <p class="credit"> created by <span>Imam Hassane</span> | all rights reserved! </p>
-
 </section>
 
 <!-- footer section ends -->
-
-
-
-
-
-
-
-
-
-
-
-
+<script src="/js/catalogue.js"></script>
 {% endblock %}

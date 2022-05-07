@@ -50,19 +50,22 @@ class BurgerRepository extends ServiceEntityRepository
     // /**
     //  * @return Burger[] Returns an array of Burger objects
     //  */
-    /*
-    public function findByExampleField($value)
+
+ /*    public function findByExampleField()
     {
-        return $this->createQueryBuilder('b')
-            ->andWhere('b.exampleField = :val')
-            ->setParameter('val', $value)
-            ->orderBy('b.id', 'ASC')
-            ->setMaxResults(10)
-            ->getQuery()
-            ->getResult()
-        ;
-    }
-    */
+        $qb = $this->createQueryBuilder('b');
+        $qb->select( 'b' );
+            // ->join('App\Entity\Image','i');
+            ->innerJoin(
+                'App\Entity\Image',
+                'i',
+                'WITH',
+                'i.id = d.id'
+            ) 
+            // ->where( 'b.image = ' );
+        return $qb->getQuery()->getResult();
+    } */
+    
 
     /*
     public function findOneBySomeField($value): ?Burger

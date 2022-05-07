@@ -30,11 +30,14 @@ class Complement
     #[ORM\Column(type: 'string', length: 255)]
     private $etat;
 
+    #[ORM\Column(type: 'string', length: 255)]
+    private $type;
+
     public function __construct()
     {
         $this->menus = new ArrayCollection();
         $this->etat = "non-archive";
-
+        $this->type = "complement";
     }
 
     public function getId(): ?int
@@ -113,6 +116,18 @@ class Complement
     public function setEtat(string $etat): self
     {
         $this->etat = $etat;
+
+        return $this;
+    }
+
+    public function getType(): ?string
+    {
+        return $this->type;
+    }
+
+    public function setType(string $type): self
+    {
+        $this->type = $type;
 
         return $this;
     }

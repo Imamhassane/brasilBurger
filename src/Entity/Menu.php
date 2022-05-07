@@ -38,12 +38,15 @@ class Menu
     #[ORM\Column(type: 'string', length: 255)]
     private $etat;
 
+    #[ORM\Column(type: 'string', length: 255)]
+    private $type;
+
     public function __construct()
     {
         $this->commandes = new ArrayCollection();
         $this->complements = new ArrayCollection();
         $this->etat = "non-archive";
-
+        $this->type = "Menu";
     }
 
   
@@ -163,6 +166,18 @@ class Menu
     public function setEtat(string $etat): self
     {
         $this->etat = $etat;
+
+        return $this;
+    }
+
+    public function getType(): ?string
+    {
+        return $this->type;
+    }
+
+    public function setType(string $type): self
+    {
+        $this->type = $type;
 
         return $this;
     }

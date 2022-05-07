@@ -1,4 +1,3 @@
-
 let menuBtn = document.querySelector('#menu-btn');
 let navbar = document.querySelector('.header .navbar');
 
@@ -12,7 +11,4 @@ window.onscroll = () =>{
    menuBtn.classList.remove('fa-times');
    navbar.classList.remove('active');
 }
-
-
-
 

@@ -23,6 +23,7 @@ class Image
     #[ORM\OneToOne(mappedBy: 'image', targetEntity: Complement::class, cascade: ['persist', 'remove'])]
     private $complement;
 
+
     public function getId(): ?int
     {
         return $this->id;
@@ -40,17 +41,7 @@ class Image
         return $this;
     }
 
-    public function getBurger(): ?Burger
-    {
-        return $this->burger;
-    }
-
-    public function setBurger(Burger $burger): self
-    {
-        $this->burger = $burger;
-
-        return $this;
-    }
+   
 
     public function getMenu(): ?Menu
     {
@@ -90,4 +81,7 @@ class Image
 
         return $this;
     }
+
+   
+
 }

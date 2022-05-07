@@ -10,7 +10,7 @@ const complemntChecked = document.getElementById("complemntChecked");
 const burgerChecked = document.getElementById("burgerChecked");   
 
 const com = document.getElementsByClassName('complementName')
-console.log(com);
+
 let isVerify = false
 //Functions-------------------------------------------------------------
 function showError(input, message) {//Afficher les messages d'erreur
@@ -28,9 +28,6 @@ function showError(input, message) {//Afficher les messages d'erreur
     }
     const small = formControl.querySelector('small');
     small.innerText = message;
-    
-    
-
 }
 //
 function showSuccess(input) {
@@ -72,7 +69,6 @@ function getFieldName(input) {//Retour le nom de chaque input en se basant sur s
 
 //Even listeners--------------------------------------------------------
 form.addEventListener('submit',function(e){
-    console.log(com);
 
     if(isVerify){}else{
         e.preventDefault();//Bloquer la soumission du formulaire
@@ -80,6 +76,7 @@ form.addEventListener('submit',function(e){
         checkLength(nom , 3 , 30);
 
         if (image.value == "") {
+        e.preventDefault();//Bloquer la soumission du formulaire
             image.style.border = "2px solid red"
             document.getElementById("errorImage").style.display= "block"
         }else{
@@ -94,12 +91,6 @@ form.addEventListener('submit',function(e){
             burgerChecked.style.border = "2px solid green"
             document.getElementById("errorBurger").style.display= "none"
         }
-
-       /*  if (checked.value == "menu" && complemntChecked.value == "") {
-            document.getElementById("errorComplement").style.display= "block"
-        }else{
-            document.getElementById("errorComplement").style.display= "none"
-        } */
     }
     //
 
