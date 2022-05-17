@@ -1,0 +1,174 @@
+{% extends 'base.html.twig' %}
+{% block stylesheets %}
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons"
+      rel="stylesheet">
+    <link rel="stylesheet" href="/stylesheets/ie.css">
+{% endblock %}
+{% block body %}
+
+    {% block naavbarLinks %}
+            {% block Gestionnaire %}{% endblock %}
+            {% block Client %}{{parent()}}{% endblock %}
+
+    {% endblock %}
+
+    {% block login %}
+        {% block loginSignIn %}{% endblock %}
+        {% block logout %}{{parent()}}{% endblock %}
+    {% endblock %}
+
+    {% if isVide == 0%}
+        <div class="vide">
+            <h1>Vous n'avez enregistré aucune commande! </h1>
+        </div>
+    {% else %}
+        {% if errorNumber is defined and errorNumber != null %}
+            <div  id = "message" class ="alert danger text-center ">{{errorNumber}}</div>
+            {{removeSessionNumber}}
+        {% endif %}
+        
+        {% if errorMontant is defined and errorMontant != null %}
+            <div  id = "message" class ="alert danger text-center ">{{errorMontant}}</div>
+            {{removeSessionMontant}}
+        {% endif %}
+      
+        {% if success is defined and success != "" %}
+            <div  id = "messageSuccess" class ="alert successs text-center">{{success}}</div>
+            {{removeSessionSuccess}}
+        {% endif %}
+
+        {% if successCommande is defined and successCommande != "" %}
+            <div  id = "messageCommande" class ="alert successs text-center ">{{successCommande}}</div>
+            {{removeSessionSuccessCommande}}
+        {% endif %}
+
+        {% if commandeValider is defined and commandeValider != null %}
+            <div  id = "message" class ="alert successs text-center ">{{commandeValider}}</div>
+            {{commandeValider}}
+        {% endif %} 
+        
+        <div class="datatable-container mt-5">
+            <!-- ======= Header tools ======= -->
+            <div class="header-tools">
+                <div class="tools">
+                <ul>
+                    <li>
+                    <button>
+                        <span class="badge badge-warning p-2"><i class="fa-solid fa-triangle-exclamation "></i> Commande non payée</span>
+                    </button>
+                    </li>
+                    <li>
+                    <button>
+                        <span class="badge badge-success p-2"><i class="fas fa-check"></i> Commande payée et acceptée</span>
+                    </button>
+                    </li>
+                    <li>
+                    <button>
+                       <span class="badge badge-danger p-2"><i class="fa-solid fa-circle-xmark"></i> Commande annulée</span>
+                    </button>
+                    </li>
+                    <button id="payer" class="btn ml-auto">Payer une commande</button>
+                </ul>
+                </div>
+
+            </div> 
+
+            <!-- ======= Table ======= -->
+            <table class="datatable mt-4">
+                <thead>
+                <tr>
+                    {# <th><input type="checkbox" /></th> #}
+                    {# <th>Status</th> #}
+                    <th>Numero commande</th>
+                    <th>Date</th>
+                    <th>Commandes</th>
+                    <th>Montant</th>
+                    <th>Etat</th>
+                    <th>Paiement</th>
+                </tr>
+                </thead>
+
+                <tbody>
+                    {% for item in myCommandes %}
+                        <tr>
+                            {# <td>
+                                <input type="checkbox" />
+                            </td> #}
+                            <td>{{item.numero}}</td>
+
+                            <td>{{item.date |date("d/m/Y")}}</td>
+
+                            {% if item.burgers != null or item.menus != null %}
+                                <td>
+                                    {% for itemBurger in item.burgers %}
+                                        <span class="p-2">{{itemBurger.nom }}</span>
+                                    {% endfor %}
+                                    {% for itemMenu in item.menus %}
+                                        <span class="p-2">{{itemMenu.nom }}</span>
+                                    {% endfor %}
+                                </td>
+                            {% endif %}
+
+                             <td>{{item.montant}}</td>
+
+                            <td>{{item.etat}}</td>
+
+                           {% if item.paiement.montant == 0 %}
+                                <td><span class="badge badge-warning ml-4 "><i class="fa-solid fa-triangle-exclamation "></i></span></td>
+                            {% elseif item.paiement.montant != 0 %}
+                                <td><span class="badge badge-success ml-4 "><i class="fas fa-check "></i></span></td>
+                            {% elseif item.etat == "annuler" %}
+                                <td><span class="badge badge-danger ml-4"><i class="fa-solid fa-circle-xmark mt-1"></i></span></td>
+                            {% endif %}
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+
+            <!-- ======= Footer tools ======= -->
+            <div class="footer-tools">
+               
+                {% if isPaginated  %}
+                    <div class="pages">
+                        <ul>
+                        {% if page != 1 %}
+                            <a href="{{path('mescommandes' , {page : page - 1 , nbre : nbre } ) }}" class="aNav"> <span aria-hidden='true'>&laquo;</span></a> 
+                        {% endif %}
+
+                        {% for i in range (1 , nbPage) %}
+                            {% if i != 0 %}
+                                <a href="{{path('mescommandes' , {page : i , nbre : nbre } ) }}" class="aNav">{{i}}</a>    
+                            {% endif %}
+                        {% endfor %} 
+
+                        {% if page != nbPage %}
+                            <a href="{{path('mescommandes' , {page : page + 1 , nbre : nbre } ) }}" class="aNav"><span aria-hidden='true'>&raquo;</span></a>
+                        {% endif %}
+                        </ul>
+                    </div>  
+                {% endif %}
+            </div>
+        </div>
+                <div class="confirmation">
+                    <form id="form" class="form-signin" method="post" action="{{path('paiement')}}">    
+                        <div class="d-flex mb-3">
+                            <button  id="removeModal" class="btn m-3 pl-5" ><i class="fa-solid fa-circle-left"></i> <span>Mes commandes</span></button>
+                        </div>
+                            <div class="control">
+                                <label for="numero">Numéro de commande</label>
+                                <input type="text"  name="numero" id="numero" class="box" data-aos="zoom-in-down" data-aos-delay= "450" value="" >
+                                <small></small>
+                            </div>
+                            <div class="control">
+                                <label for="montant">Montant de la commande</label>
+                                <input type="number"  name="montant" id="montant" class="box" data-aos="zoom-in-down"  data-aos-delay= "750" value="" >
+                                <small></small>
+                            </div>
+                        <input type="submit" value="Payer" class="btn" data-aos-delay= "900">
+                    </form>
+                </div>
+            <script src="/js/paiement.js"></script>
+            <script src="/js/catalogue.js"></script>
+
+    {% endif %}
+{% endblock %}

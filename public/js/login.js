@@ -16,14 +16,15 @@ function showSuccess(input) {
 }
 
 //
-let isVerify = false
+let isVerify = []
 function checkRequired(inputArray) {// Tester si les champs ne sont pas vides
     inputArray.forEach(input => {
         if (input.value.trim() === '') {
             showError(input,`${getFieldName(input)} est obligatoire`);
+            isVerify.push(false)
         }else{
             showSuccess(input);
-            isVerify = true
+            isVerify.push(true)
         }
     });
 }
@@ -34,10 +35,17 @@ function getFieldName(input) {//Retour le nom de chaque input en se basant sur s
 
 //Even listeners--------------------------------------------------------
 form.addEventListener('submit',function(e){
-    if (isVerify) {
-        
-    }else{
-        e.preventDefault();//Bloquer la soumission du formulaire
-        checkRequired([ email, password]);
+
+    isVerify = []
+    checkRequired([ email, password]);
+    for (let i = 0; i < isVerify.length; i++) {
+        if (isVerify[i]==false) {
+            e.preventDefault();//Bloquer la soumission du formulaire
+        }
     }
+
 });
+
+setTimeout(function(){
+    document.getElementById('message').style.display = 'none';
+}, 4000);

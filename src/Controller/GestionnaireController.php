@@ -5,41 +5,69 @@ namespace App\Controller;
 use App\Entity\Menu;
 use App\Entity\Image;
 use App\Entity\Burger;
+use App\Entity\Commande;
+use App\Entity\Paiement;
 use App\Entity\Complement;
 use App\Form\BurgerFormType;
+use App\Repository\MenuRepository;
 use App\Repository\BurgerRepository;
+use App\Repository\ClientRepository;
+use App\Repository\CommandeRepository;
 use App\Controller\CatalogueController;
 use App\Repository\ComplementRepository;
-use App\Repository\MenuRepository;
+use App\Repository\UserRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Component\HttpFoundation\Session\Session;
 use Symfony\Component\String\Slugger\SluggerInterface;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\File\Exception\FileException;
 
+  /**
+   * @Security("is_granted('ROLE_ADMIN') or is_granted('ROLE_CLIENT') or is_granted('ROLE_USER')")
+   */
 class GestionnaireController extends AbstractController
 {
-    #[Route('/commande/{id}', name: 'commande')]
-    public function commande(): Response
+
+    #[Route('/validerCommande/{id}', name: 'validerCommande')]
+    #[Route('/annulerCommande/{id}', name: 'annulerCommande')]
+    public function commande(EntityManagerInterface $entityManager , Request $request, CommandeRepository $commandeRepo): Response
     {
+            $id = array_values(explode ("/", $request->getrequestUri()))[2];
+            $action = array_values(explode ("/", $request->getrequestUri()))[1];
+
+                $commande = $commandeRepo->find($id);
+                if ($action=="validerCommande") {
+                    $commande->setEtat('confirmer');
+                }elseif ($action=="annulerCommande") {
+                    $commande->setEtat('annuler');
+                }
+            
+                $entityManager->persist($commande);
+                $entityManager->flush();
+                return $this->redirectToRoute('listCommande');       
+        
+    } 
+    #[Route('/listCommande/{page?1}/{nbre?3}', name: 'listCommande')]
+    public function ListCommande(CommandeRepository $commandeRepo , $page , $nbre): Response
+    {
+        // $commandes = $commandeRepo->findAll();
+
+        $commandes = $commandeRepo->findBy(["etat" => "en cours"] , [], $nbre , ($page - 1) * $nbre );
+        $nbCommandes =  $commandeRepo->count([]);
+        $nbPage = ceil($nbCommandes / $nbre) ;
         return $this->render('gestionnaire/listCommande.html.twig', [
-            'controller_name' => 'GestionnaireController',
+            'commandes' => $commandes,
+            'isVide'    => count($commandes),
+            'isPaginated'   => true,
+            'nbPage'        => $nbPage,
+            'page'          => $page,
+            'nbre'          => $nbre
         ]);
     }
-
-    #[Route('/listCommande', name: 'listCommande')]
-    public function ListCommande(): Response
-    {
-        return $this->render('gestionnaire/listCommande.html.twig', [
-            'controller_name' => 'GestionnaireController',
-        ]);
-    }
-
-
     
     #[Route('/addMenu', name: 'addMenu')]
     #[Route('/edit/{id}', name: 'edit')]
@@ -53,7 +81,7 @@ class GestionnaireController extends AbstractController
         $form = $this->createForm(BurgerFormType::class, $burger);
         $form->handleRequest($request);
         extract($datas);
-             
+        
         if(!$burger){
             $burger     = new Burger();
         }
@@ -62,11 +90,16 @@ class GestionnaireController extends AbstractController
         }
         $complement = new Complement();
         $image      = new Image();
-        $session    = new Session();
+        $session    = $request->getSession();
+        
         $url= array_values(explode ("/", $request->getrequestUri()));
-        if($method == "GET" && $url[1] != "addMenu"){
+        if($method == "GET" && $url[1] == "edit"){
             $id  = $url[2];
-            $catalogue = CatalogueController::getAllFoods($burgerRepo, $menuRepo,$complementRepo);
+            $Allburgers = $burgerRepo->findAll();
+            $Allmenus = $menuRepo->findAll();
+            $Allcomplement = $complementRepo->findAll();
+
+            $catalogue = array_merge( $Allburgers, $Allmenus,$Allcomplement);
             foreach ($catalogue as $value) {
                 if($value->getId() == $id){
                     if ($value->getType() == "Menu") {
@@ -77,9 +110,9 @@ class GestionnaireController extends AbstractController
                     }else{
                         $element = $complementRepo  ->find($id);
                     }
-                    
                 }
             }
+
             return $this->render('gestionnaire/formMenu.html.twig', [
                 'controller_name' => 'GestionnaireController',
                 'form'          => $form->createView(),
@@ -89,21 +122,15 @@ class GestionnaireController extends AbstractController
                 'complement'    => $complement
             ]);
         }
-
         
-       
-
- 
         if ($form->isSubmitted() && $form->isValid()) {
 
-            
             $session->set("checked" , $checked);
             $session->set("nom" , $nom);
             $session->set("prix" , $prix);
             $session->set("burgerName" , $burgerName);
             // $session->set("image" ,  $form->get('image')->getData());
-
-            if($checked == "menu"){
+            if($checked == "Menu"){
                 $oneBurger = $burgerRepo->find($burgerName);
                 $prixBurgerInMenu = $oneBurger->getPrix();
                 if (!isset($complementName)) {
@@ -126,8 +153,8 @@ class GestionnaireController extends AbstractController
                     $prixMenu = $prixBurgerInMenu + $prixComplementInMenu;
                 }
             }
-
-
+            
+            
             /** @var UploadedFile $brochureFile */
             $brochureFile = $form->get('image')->getData();
             if (empty($brochureFile)){
@@ -166,13 +193,13 @@ class GestionnaireController extends AbstractController
                             // instead of its contents
                     }
             
-            if ($checked == "burger") {
+            if ($checked == "Burger") {
                 $burger->setNom($nom)
                        ->setPrix($prix)
                        ->setImage($image)
                        ->setEtat("non-archive");
                 $entityManager->persist($burger);
-            }elseif($checked == "complement"){
+            }elseif($checked == "Complement"){
                 $complement->setNom($nom)
                            ->setPrix($prix)
                            ->setImage($image)
@@ -195,7 +222,7 @@ class GestionnaireController extends AbstractController
             $entityManager->flush();
             // do anything else you need here, like send an email
 
-                return $this->redirectToRoute('catalogue');
+                return $this->redirectToRoute('listMenu');
         }
         return $this->render('gestionnaire/formMenu.html.twig', [
             'controller_name' => 'GestionnaireController',
@@ -205,11 +232,10 @@ class GestionnaireController extends AbstractController
         ]);
     }
 
-
-
-    /* #[Route('/archiver/{id}', name: 'archiver')]
+    #[Route('/desarchiver/{id}', name: 'desarchiver')]
+    #[Route('/archiver/{id}', name: 'archiver')]
     #[Route('/delete/{id}', name: 'delete')]
-    public function archiveDelete(Request $request , EntityManagerInterface $entityManager, BurgerRepository $burgerRepo , MenuRepository $menuRepo  ): Response
+    public function archiveDelete(Request $request , EntityManagerInterface $entityManager, BurgerRepository $burgerRepo , MenuRepository $menuRepo, ComplementRepository $complementRepo  ): Response
     {
         
         $method         = $request->getMethod();
@@ -218,27 +244,85 @@ class GestionnaireController extends AbstractController
         if($method=="GET" && $url[1] != "addMenu"){
             $id  = $url[2];
             $action  = $url[1];
-            $catalogue = CatalogueController::getAllFoods($burgerRepo, $menuRepo);
+            $burgers = $burgerRepo->findAll();
+            $menus = $menuRepo->findAll();
+            $complement = $complementRepo->findAll();
+            $catalogue = array_merge($burgers , $menus , $complement);
+            // $catalogue = CatalogueController::getAllFoods($burgerRepo, $menuRepo,$complementRepo);
             foreach ($catalogue as $value) {
                 if($value->getId() == $id){
-                    if ($value->getType() == "menu") {
+                    if ($value->getType() == "Menu") {
                         $element = $menuRepo->find($id);
-                    }else{
+                    }elseif ($value->getType() == "Burger"){
                         $element = $burgerRepo->find($id);
+                    }else{
+                        $element = $complementRepo->find($id);
                     }
-
                     if ($action == "archiver") {
                         $element->setEtat("archive");
                         $entityManager->persist($element);
                     }elseif ($action == "delete") {
                         $entityManager->remove($element);
+                    }elseif($action == "desarchiver") {
+                        $element->setEtat("non-archive");
+                        $entityManager->persist($element);
+                        $entityManager->flush();
+                        return $this->redirectToRoute('archiveList');
                     }
                 }
             }
-            // dd($details);
+
             $entityManager->flush();
-            return $this->redirectToRoute('catalogue');
+            return $this->redirectToRoute('listMenu');
         }
        
-    } */
+    }
+
+    #[Route('/archiveList', name: 'archiveList')]
+    public function archiveList(Request $request,BurgerRepository $burgerRepo , MenuRepository $menuRepo, ComplementRepository $complementRepo): Response
+    {
+        $session    = $request->getSession();
+        $role = $session->get('name');
+
+        $burgers = $burgerRepo->findBy(["etat" => "archive"]);
+        $menus = $menuRepo->findBy(["etat" => "archive"]);
+        $complement = $complementRepo->findBy(["etat" => "archive"]);
+        
+        $catalogue = array_merge($burgers , $menus , $complement);
+        $vide = count($catalogue)." élément archivé(s)";
+        if (count($catalogue)==0) {
+            $vide = "Aucun élément n'a été archivé!";
+        }
+        return $this->render('gestionnaire/archives.html.twig', [
+            'catalogue' => $catalogue,
+            'isVide'      => $vide,
+            'role'      => $role,
+            'isPaginated'   => true
+        ]);
+    }
+
+
+    #[Route('/listMenu/{page?1}/{nbre?1}', name: 'listMenu')]
+    public function listMenu($page , $nbre , BurgerRepository $burgerRepo , MenuRepository $menuRepo, ComplementRepository $complementRepo): Response
+    {
+        $burgers = $burgerRepo->findBy(['etat' => "non-archive"] , [], $nbre , ($page - 1) * $nbre );
+        $menus = $menuRepo->findBy(['etat' => "non-archive"] , [], $nbre , ($page - 1) * $nbre );
+        $complements = $complementRepo->findBy(['etat' => "non-archive"] , [], $nbre , ($page - 1) * $nbre );
+        
+        // dd($menus);
+        
+        $catalogue = array_merge( $burgers, $menus, $complements);
+        $nbProduit = count($catalogue);
+        $nbPage = ceil($nbProduit / $nbre)  ;
+        // dd($catalogue);
+        return $this->render('gestionnaire/listMenu.html.twig', [
+            'catalogue'       => $catalogue,
+            'isVide'    => count($catalogue),
+            'isPaginated'   => true,
+            'nbPage'        => $nbPage,
+            'page'          => $page,
+            'nbre'          => $nbre
+
+        ]);
+    }
 }

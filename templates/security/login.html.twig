@@ -4,38 +4,47 @@
 
 {% block body %}
     {% block naavbarLinks %}{% endblock %}
-    {% block login %}
+        {% block login %}
 
-         {% if role is defined and role != "" %}
-            {% block logout %}{{parent()}}{% endblock %}
+            {% if role is defined and role != "" %}
+                {% block logout %}{{parent()}}{% endblock %}
 
-         {% else %}
+            {% else %}
 
-            {% block loginSignIn %}{{parent()}}{% endblock %}
-         {% endif %}
+                {% block loginSignIn %}{{parent()}}{% endblock %}
+            {% endif %}
 
-      {% endblock %}
-    <div class="form-container">
+        {% endblock %}
+
+        
+
+    <div class="form-container" style="height: 92.8vh;">
+        {% if InscriptSuccess is defined and InscriptSuccess != null %}
+            <div  id = "message" class ="alert success text-center  mt-5">{{InscriptSuccess}}</div>
+        {% endif %}
+        {{remove}}
         <form method="post" class="form-login" id="form">
-            <div class="d-flex mb-5">
+            <div class="d-flex mb-1">
                 <a name="" id="" class="btn m-3 pl-5" href="{{path('catalogue')}}" role="button"><i class="fa-solid fa-circle-left"></i> <span>Catalogue</span></a>
-                <h1 class="h3 mb-3 font-weight-bold">Login form</h1>
+            </div>
+            <div class="">
+                <h1 class="h4 font-weight-bold">Connectez-vous pour accéder à plus de fonctionnalités!</h1>
             </div>
             {% if error %}
-                <div class="alert alert-danger">Login ou mot de pass incorrect</div>
+                <div class="alert text-center danger">Login ou mot de pass incorrect</div>
             {% endif %}
             <div class="control">
                 <label for="inputEmail">Email</label>
-                <input type="text" value="{{ last_username }}" name="email" id="email" class="box" data-aos="zoom-in-down" autocomplete="email" autofocus>
+                <input type="text" value="{{ last_username }}" name="email" id="email" class="box"  autocomplete="email" autofocus>
                 <small></small>
             </div>
             <div class="control">
                 <label for="inputPassword">Password</label>
-                <input type="password" name="password" id="password" class="box" data-aos="zoom-in-down" autocomplete="current-password" >
+                <input type="password" name="password" id="password" class="box"  autocomplete="current-password" >
                 <small></small>
             </div>
 
-            <input type="hidden" data-aos="zoom-in-down" data-aos-delay="600" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
+            <input type="hidden"  name="_csrf_token" value="{{ csrf_token('authenticate') }}">
 
             {#
                 Uncomment this section and add a remember_me option below your firewall to activate remember me functionality.
@@ -47,8 +56,10 @@
                     </label>
                 </div>
             #}
-
             <input data-aos="zoom-in-down" data-aos-delay="600" type="submit" value="S'inscrire" class="btn">
+            <div>
+                <a name="" id="" class="d-block" href="{{path('newClient')}}" role="button">Vous n'avez pas de compte ? S'inscrire</a>
+            </div>  
         </form>  
     </div>
 

@@ -92,23 +92,19 @@
                     <h3>{{item.nom}}</h3>
                     <div class="price">F CFA {{item.prix}}</div>
                      {% if role is defined and role == "ROLE_CLIENT" or role == "" %}
-                        <a href="{{'commande/' ~ item.id}}" class="btn">Commander</a>
+                        <a href="{{path('add', {'id':item.id ~ item.type}) }}" class="btn btn-commande ml-2">ajouter au panier </a>
                         <a href="{{'showDetails/' ~ item.id}}" class="btn ml-2">Détails</a>
-                     {% elseif role is defined and role == "ROLE_ADMIN" %}
-                        <button value="{{'archiver/' ~ item.id}}" id="archiver" class="modal-toggle btn btnGest">Archiver</button>
-                        <a href="{{'edit/' ~ item.id}}"  class=" btn btnGest2 ml-2">Modifier</a>
-                        <button value="{{'delete/' ~ item.id}}" id="delete" class="modal-toggle btn btnGest3 ml-2" >Supprimer </button>
                      {% endif %}
                   </div>
                </div>
             {% endfor %}
-            <div class="validation" id="validation">  
-               <h3 id="action"></h3>
-               <div class="validation-button" id="validation-button"> 
-                  <a  id="annuler" href="#main" style="background-color:red" class="btn"> annuler</a>
-                  <a  id="continuer" href="#"  style="background-color:green" class="btn">continuer</a>
+               <div class="validation" id="validation">  
+                  <h3 id="action"></h3>
+                  <div class="validation-button" id="validation-button"> 
+                     <a  id="annuler" href="#main" style="background-color:red" class="btn"> annuler</a>
+                     <a  id="continuer" href="#"  style="background-color:green" class="btn">continuer</a>
+                  </div>
                </div>
-            </div>
          </div>
       </section>
 
@@ -242,7 +238,6 @@
 
    <div class="heading">
       <img src="images/title-img.png" alt="">
-      <h3>daily posts</h3>
    </div>
 
    <div class="box-container">
@@ -251,15 +246,13 @@
          <div class="image">
             <img src="images/blog-1.jpg" alt="">
             <div class="icons">
-               <a href="#"> <i class="fas fa-calendar"></i> 21st may, 2022 </a>
-               <a href="#"> <i class="fas fa-user"></i> by admin </a>
+
             </div>
          </div>
          <div class="content">
             <h3>blog title goes here.</h3>
-            <p>Lorem ipsum dolor sit, amet consectetur adipisicing elit. Voluptas, maxime.</p>
-            <a href="#" class="btn">Commander</a>
-            <a href="#" class="btn ml-2">Détails</a>
+            <p>Avoir une excellente présentation, un sens du contact avec la clientèle, être rapide et réactif en période d'affluence.</p>
+            
          </div>
       </div>
 
@@ -267,15 +260,13 @@
          <div class="image">
             <img src="images/blog-2.jpg" alt="">
             <div class="icons">
-               <a href="#"> <i class="fas fa-calendar"></i> 21st may, 2022 </a>
-               <a href="#"> <i class="fas fa-user"></i> by admin </a>
+              
             </div>
          </div>
          <div class="content">
             <h3>blog title goes here.</h3>
-            <p>Lorem ipsum dolor sit, amet consectetur adipisicing elit. Voluptas, maxime.</p>
-            <a href="#" class="btn">Commander</a>
-            <a href="#" class="btn ml-2">Détails</a>
+            <p>Manger de bons hamburgers à Dakar n’est pas une des choses les plus simples. Les meilleurs burgers c'est ici  </p>
+            
          </div>
       </div>
 
@@ -283,15 +274,12 @@
          <div class="image">
             <img src="images/blog-3.jpg" alt="">
             <div class="icons">
-               <a href="#"> <i class="fas fa-calendar"></i> 21st may, 2022 </a>
-               <a href="#"> <i class="fas fa-user"></i> by admin </a>
             </div>
          </div>
          <div class="content">
             <h3>blog title goes here.</h3>
-            <p>Lorem ipsum dolor sit, amet consectetur adipisicing elit. Voluptas, maxime.</p>
-            <a href="#" class="btn">Commander</a>
-            <a href="#" class="btn ml-2">Détails</a>
+            <p>Brasil Burger est donc l'endroits où l’on mange les meilleurs burgers de la capitale.</p>
+            
          </div>
       </div>
 
@@ -307,7 +295,7 @@
    <div class="links">
       <a href="#home" class="rounded-circle"><i class="fa-solid fa-angle-up"></i></a>
    </div>
-   <p class="credit"> created by <span>Imam Hassane</span> | all rights reserved! </p>
+   <p class="credit"> created by <span>imamniass123@gmail.com</span> | all rights reserved! </p>
 </section>
 
 <!-- footer section ends -->

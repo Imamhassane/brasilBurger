@@ -1,0 +1,79 @@
+{% extends 'base.html.twig' %}
+{% block stylesheets %}
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons"
+      rel="stylesheet">
+    <link rel="stylesheet" href="/stylesheets/ie.css">
+{% endblock %}
+{% block body %}
+    {% block naavbarLinks %}
+            {% block Gestionnaire %}{% endblock %}
+            {% block Client %}{{parent()}}{% endblock %}
+
+    {% endblock %}
+
+    {% block login %}
+        {% block loginSignIn %}{% endblock %}
+        {% block logout %}{{parent()}}{% endblock %}
+    {% endblock %}
+
+
+        <div class="datatable-container">
+            <!-- ======= Header tools ======= -->
+            <div class="header-tools">
+                <div class="tools">
+                </div>  
+            </div> 
+
+            <!-- ======= Table ======= -->
+            {% if items | length > 0 %}
+                <table class="datatable mt-4">
+                    <thead>
+                    <tr>
+                        <th>Type</th>
+                        <th>Nom </th>
+                        <th>Prix</th>
+                        <th>Quantités</th>
+                        <th>Supprimer</th>
+
+                    </tr>
+                    </thead>
+                    <tbody>
+                        {% for item in items %}
+                            <tr>
+                                <td>{{item.produit.type}}</td>
+                                <td>{{item.produit.nom}}</td>
+                                <td>{{item.produit.prix * item.quantite}} F CFA</td>
+                                <td><a  href="{{path('moins', {'id':item.produit.id ~ item.produit.type}) }}" class="btn mr-2 action moins">-</a> {{item.quantite}} <a  href="{{path('addition', {'id':item.produit.id ~ item.produit.type}) }}" class="btn ml-2 action plus">+</a></td>
+                                <td><a class="deleteCommande" value="{{item.quantite}}" href="{{path('remove', {'id':item.produit.id ~ item.produit.type}) }}"> <i class="fa-solid fa-trash-can text-danger"></i><a/></td>
+                            </tr>
+                        {% endfor %}
+                        <tr>
+                            <td class="totalTexte">Total :</td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td class="total">{{total}} FCFA</td>
+                        </tr>
+                    </tbody>
+                </table>
+          
+            <!-- ======= Footer tools ======= -->
+            <div class="footer-tools">
+                <div class="pages">
+                    <ul>
+                        <form action="{{path('validation')}}" method="POST">
+                            <button id="validerCommande" class="btn ml-2">Valider la commande</button>
+                        </form>
+                    </ul>
+                </div>  
+            </div>
+            {% else %}
+                <div class="vide">
+                    <h1> Votre panier est vide! </h1>
+                </div>
+            {% endif %}
+        </div>
+        <script src="/js/reglerPaiement.js"></script>
+        <script src="/js/catalogue.js"></script>
+
+{% endblock %}

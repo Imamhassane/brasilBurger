@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\CommandeRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: CommandeRepository::class)]
@@ -22,21 +24,28 @@ class Commande
     #[ORM\Column(type: 'integer')]
     private $montant;
 
-    #[ORM\Column(type: 'date')]
-    private $dateLivraison;
-
-    #[ORM\ManyToOne(targetEntity: Client::class, inversedBy: 'commandes')]
-    private $client;
-
-    #[ORM\ManyToOne(targetEntity: Menu::class, inversedBy: 'commandes')]
-    private $menus;
-
     #[ORM\OneToOne(mappedBy: 'commande', targetEntity: Paiement::class, cascade: ['persist', 'remove'])]
     private $paiement;
 
-    #[ORM\ManyToOne(targetEntity: Burger::class, inversedBy: 'commandes')]
-    private $burger;
+    #[ORM\Column(type: 'string', length: 255)]
+    private $numero;
 
+    #[ORM\ManyToOne(targetEntity: Client::class, inversedBy: 'commandes')]
+    #[ORM\JoinColumn(nullable: false)]
+    private $client;
+
+    #[ORM\ManyToMany(targetEntity: Burger::class, mappedBy: 'commande')]
+    private $burgers;
+
+    #[ORM\ManyToMany(targetEntity: Menu::class, mappedBy: 'commande')]
+    private $menus;
+
+    public function __construct()
+    {
+        $this->etat="en cours";
+        $this->burgers = new ArrayCollection();
+        $this->menus = new ArrayCollection();
+    }
     public function getId(): ?int
     {
         return $this->id;
@@ -78,42 +87,6 @@ class Commande
         return $this;
     }
 
-    public function getDateLivraison(): ?\DateTimeInterface
-    {
-        return $this->dateLivraison;
-    }
-
-    public function setDateLivraison(\DateTimeInterface $dateLivraison): self
-    {
-        $this->dateLivraison = $dateLivraison;
-
-        return $this;
-    }
-
-    public function getClient(): ?Client
-    {
-        return $this->client;
-    }
-
-    public function setClient(?Client $client): self
-    {
-        $this->client = $client;
-
-        return $this;
-    }
-
-    public function getMenus(): ?Menu
-    {
-        return $this->menus;
-    }
-
-    public function setMenus(?Menu $menus): self
-    {
-        $this->menus = $menus;
-
-        return $this;
-    }
-
     public function getPaiement(): ?Paiement
     {
         return $this->paiement;
@@ -136,14 +109,80 @@ class Commande
         return $this;
     }
 
-    public function getBurger(): ?Burger
+    public function getNumero(): ?string
     {
-        return $this->burger;
+        return $this->numero;
     }
 
-    public function setBurger(?Burger $burger): self
+    public function setNumero(string $numero): self
     {
-        $this->burger = $burger;
+        $this->numero = $numero;
+
+        return $this;
+    }
+
+    public function getClient(): ?Client
+    {
+        return $this->client;
+    }
+
+    public function setClient(?Client $client): self
+    {
+        $this->client = $client;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Burger>
+     */
+    public function getBurgers(): Collection
+    {
+        return $this->burgers;
+    }
+
+    public function addBurger(Burger $burger): self
+    {
+        if (!$this->burgers->contains($burger)) {
+            $this->burgers[] = $burger;
+            $burger->addCommande($this);
+        }
+
+        return $this;
+    }
+
+    public function removeBurger(Burger $burger): self
+    {
+        if ($this->burgers->removeElement($burger)) {
+            $burger->removeCommande($this);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Menu>
+     */
+    public function getMenus(): Collection
+    {
+        return $this->menus;
+    }
+
+    public function addMenu(Menu $menu): self
+    {
+        if (!$this->menus->contains($menu)) {
+            $this->menus[] = $menu;
+            $menu->addCommande($this);
+        }
+
+        return $this;
+    }
+
+    public function removeMenu(Menu $menu): self
+    {
+        if ($this->menus->removeElement($menu)) {
+            $menu->removeCommande($this);
+        }
 
         return $this;
     }

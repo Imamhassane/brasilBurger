@@ -25,8 +25,7 @@ class Menu
     #[ORM\JoinColumn(nullable: false)]
     private $image;
 
-    #[ORM\OneToMany(mappedBy: 'menus', targetEntity: Commande::class)]
-    private $commandes;
+    
 
     #[ORM\ManyToOne(targetEntity: Burger::class, inversedBy: 'menus')]
     #[ORM\JoinColumn(nullable: false)]
@@ -41,15 +40,23 @@ class Menu
     #[ORM\Column(type: 'string', length: 255)]
     private $type;
 
+    #[ORM\ManyToMany(targetEntity: Commande::class, inversedBy: 'menus')]
+    private $commande;
+
+   
     public function __construct()
     {
-        $this->commandes = new ArrayCollection();
         $this->complements = new ArrayCollection();
         $this->etat = "non-archive";
         $this->type = "Menu";
+        $this->commande = new ArrayCollection();
     }
 
-  
+    public function __toString()
+    {
+        return $this->id.' '.$this->nom.' '.$this->prix.' '.$this->etat.' '.$this->getImage()->getNom().' '.$this->type.' '.$this->getBurger()->getNom() ;
+
+    }
 
     public function getId(): ?int
     {
@@ -92,35 +99,9 @@ class Menu
         return $this;
     }
 
-    /**
-     * @return Collection<int, Commande>
-     */
-    public function getCommandes(): Collection
-    {
-        return $this->commandes;
-    }
 
-    public function addCommande(Commande $commande): self
-    {
-        if (!$this->commandes->contains($commande)) {
-            $this->commandes[] = $commande;
-            $commande->setMenus($this);
-        }
+    
 
-        return $this;
-    }
-
-    public function removeCommande(Commande $commande): self
-    {
-        if ($this->commandes->removeElement($commande)) {
-            // set the owning side to null (unless already changed)
-            if ($commande->getMenus() === $this) {
-                $commande->setMenus(null);
-            }
-        }
-
-        return $this;
-    }
 
     public function getBurger(): ?Burger
     {
@@ -181,5 +162,31 @@ class Menu
 
         return $this;
     }
+
+    /**
+     * @return Collection<int, Commande>
+     */
+    public function getCommande(): Collection
+    {
+        return $this->commande;
+    }
+
+    public function addCommande(Commande $commande): self
+    {
+        if (!$this->commande->contains($commande)) {
+            $this->commande[] = $commande;
+        }
+
+        return $this;
+    }
+
+    public function removeCommande(Commande $commande): self
+    {
+        $this->commande->removeElement($commande);
+
+        return $this;
+    }
+
+    
 
 }

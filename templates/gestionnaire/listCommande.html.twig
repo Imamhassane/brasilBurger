@@ -17,146 +17,144 @@
         {% block logout %}{{parent()}}{% endblock %}
     {% endblock %}
 
-    <div class="datatable-container">
-        <!-- ======= Header tools ======= -->
-        <div class="header-tools">
-            <div class="tools">
-            <ul>
-                <li>
-                <button>
-                    <i class="material-icons">add_circle</i>
-                </button>
-                </li>
-                <li>
-                <button>
-                    <i class="material-icons">edit</i>
-                </button>
-                </li>
-                <li>
-                <button>
-                    <i class="material-icons">delete</i>
-                </button>
-                </li>
-            </ul>
-            </div>
+    {% if isVide == 0%}
+        <div class="vide">
+            <h1> Aucune commande n'a été enregistré! </h1>
+        </div>
+    {% else %}
+        <div class="datatable-container">
+            <!-- ======= Header tools ======= -->
+            <div class="header-tools">
+                <div class="tools">
+                    <ul>
+                        <li>
+                        <button>
+                            <span class="badge badge-warning p-2"><i class="fa-solid fa-triangle-exclamation "></i> Commande non payée</span>
+                        </button>
+                        </li>
+                        <li>
+                        <button>
+                            <span class="badge badge-success p-2"><i class="fas fa-check"></i> Commande payée et acceptée</span>
+                        </button>
+                        </li>
+                        <li>
+                        <button>
+                        <span class="badge badge-danger p-2"><i class="fa-solid fa-circle-xmark"></i> Commande annulée</span>
+                        </button>
+                        </li>
+                    <div class="ml-auto">test</div>
+                    </ul>
+                </div>
 
-            <div class="search">
-            <input type="search" class="search-input" placeholder="Search..." />
+            </div> 
+
+            <!-- ======= Table ======= -->
+            <table class="datatable mt-4">
+                <thead>
+                <tr>
+                    {# <th><input type="checkbox" /></th> #}
+                    {# <th>Status</th> #}
+                    <th>Date</xth>
+                    <th>Numero commande</th>
+                    <th>Commandes</th>
+                    <th>Montant</th>
+                    <th>Etat</th>
+                    <th>Paiement</th>
+                    <th>Régler</th>
+                </tr>
+                </thead>
+                <tbody>
+                    {% for item in commandes %}
+                        <tr>
+                            {# <td>
+                                <input type="checkbox" />
+                            </td> #}
+
+                            <td>{{item.date |date("d/m/Y")}}</td>
+                            <td>{{item.numero}}</td>
+
+                            {% if item.burgers != null or item.menus != null %}
+                                <td>
+                                    {% for itemBurger in item.burgers %}
+                                        <span class="p-2">{{itemBurger.nom }}</span>
+                                    {% endfor %}
+                                    {% for itemMenu in item.menus %}
+                                        <span class="p-2">{{itemMenu.nom }}</span>
+                                    {% endfor %}
+                                </td>
+                            {% endif %}
+
+                            <td>{{item.montant}}</td>
+
+                            <td>{{item.etat}}</td>
+
+                            {% if item.paiement.montant == 0 %}
+                                <td><span class="badge badge-warning ml-4 "><i class="fa-solid fa-triangle-exclamation "></i></span></td>
+                            {% elseif item.paiement.montant != 0 %}
+                                <td><span class="badge badge-success ml-4 "><i class="fas fa-check "></i></span></td>
+                            {% elseif item.etat == "annuler" %}
+                                <td><span class="badge badge-danger ml-4"><i class="fa-solid fa-circle-xmark mt-1"></i></span></td>
+                            {% endif %}
+
+
+
+                            {% if item.etat == "en cours" %}
+                                <td><button value="{{item.id}}" style="margin-bottom:0px; margin-top: 0px;padding: 1px 7px;" class="reglerCommande btn">Regler ?</button></td>
+                            {% else %}
+                                <td><button disabled  style="margin-bottom:0px; margin-top: 0px;padding: 1px 7px;" class="btn">Regler ?</button></td>
+                            {% endif %}
+
+
+
+                        </tr>
+                    {% endfor %}
+
+                </tbody>
+            </table>
+                <div class="confirmation">
+                    <div class="form-signin">    
+                        <div class="d-flex mb-3">
+                            <button  id="removeModal" class="btn m-3 pl-5" ><i class="fa-solid fa-circle-left"></i> <span> Liste des commandes </span></button>
+                        </div>
+                        <div class="text-center p-4 h2">Voulez-vous valider ou nnuler cette commande ?</div>
+                        <div class="d-flex justify">
+                            <a href="#"  id="refuser" class="btn ml-2">Annuler</a>
+                            <a href="#"  id="confirmer" class="btn ml-2">Valider</a>
+                        </div>
+                    </div>
+                </div>
+            <!-- ======= Footer tools ======= -->
+            <div class="footer-tools">
+                {# <div class="list-items">
+                Show
+                <select name="n-entries" id="n-entries" class="n-entries">
+                    <option value="5">5</option>
+                    <option value="10" selected>10</option>
+                    <option value="15">15</option>
+                </select>
+                entries
+                </div> #}
+                {% if isPaginated  %}
+                    <div class="pages">
+                        <ul>
+                        {% if page != 1 %}
+                            <a href="{{path('listCommande' , {page : page - 1 , nbre : nbre } ) }}" class="aNav"> <span aria-hidden='true'>&laquo;</span></a> 
+                        {% endif %}
+
+                        {% for i in range (1 , nbPage) %}
+                            {% if i != 0 %}
+                                <a href="{{path('listCommande' , {page : i , nbre : nbre } ) }}" class="aNav">{{i}}</a>    
+                            {% endif %}
+                        {% endfor %} 
+
+                        {% if page != nbPage %}
+                            <a href="{{path('listCommande' , {page : page + 1 , nbre : nbre } ) }}" class="aNav"><span aria-hidden='true'>&raquo;</span></a>
+                        {% endif %}
+                        </ul>
+                    </div>  
+                {% endif %}
             </div>
         </div>
-
-        <!-- ======= Table ======= -->
-        <table class="datatable">
-            <thead>
-            <tr>
-                <th><input type="checkbox" /></th>
-                <th>Status</th>
-                <th>First name</th>
-                <th>Last name</th>
-                <th>Job title</th>
-                <th>Email</th>
-                <th>Username</th>
-                <th>Location</th>
-                <th>Birthday</th>
-            </tr>
-            </thead>
-
-            <tbody>
-            <tr>
-                <td>
-                <input type="checkbox" />
-                </td>
-                <td><span class="available"></span></td>
-                <td>John</td>
-                <td>Smith</td>
-                <td>Product Owner</td>
-                <td>john.smith@codepen.io</td>
-                <td>JohnSmith</td>
-                <td>Spain</td>
-                <td>January 21, 1984</td>
-            </tr>
-
-            <tr>
-                <td>
-                <input type="checkbox" />
-                </td>
-                <td><span class="away"></span></td>
-                <td>George</td>
-                <td>Lucas</td>
-                <td>Scrum Master</td>
-                <td>george.lucas@codepen.io</td>
-                <td>GeorgeLucas</td>
-                <td>Switzerland</td>
-                <td>July 14, 1974</td>
-            </tr>
-
-            <tr>
-                <td>
-                <input type="checkbox" />
-                </td>
-                <td><span class="offline"></span></td>
-                <td>Peter</td>
-                <td>Rabit</td>
-                <td>Software engineer</td>
-                <td>peter.rabit@codepen.io</td>
-                <td>PeterRabit</td>
-                <td>Ireland</td>
-                <td>September 02, 1977</td>
-            </tr>
-
-            <tr>
-                <td>
-                <input type="checkbox" />
-                </td>
-                <td><span class="offline"></span></td>
-                <td>Elizabeth</td>
-                <td>Taylor</td>
-                <td>UX Designer</td>
-                <td>elizabeth.taylor@codepen.io</td>
-                <td>ElizabethTaylor</td>
-                <td>London</td>
-                <td>February 27, 1982</td>
-            </tr>
-
-            <tr>
-                <td>
-                <input type="checkbox" />
-                </td>
-                <td><span class="offline"></span></td>
-                <td>Catherine</td>
-                <td>Jones</td>
-                <td>QA tester</td>
-                <td>catherine.jones@codepen.io</td>
-                <td>CatherineJones</td>
-                <td>USA</td>
-                <td>December 07, 1978</td>
-            </tr>
-            </tbody>
-        </table>
-
-        <!-- ======= Footer tools ======= -->
-        <div class="footer-tools">
-            <div class="list-items">
-            Show
-            <select name="n-entries" id="n-entries" class="n-entries">
-                <option value="5">5</option>
-                <option value="10" selected>10</option>
-                <option value="15">15</option>
-            </select>
-            entries
-            </div>
-
-            <div class="pages">
-            <ul>
-                <li><span class="active">1</span></li>
-                <li><button>2</button></li>
-                <li><button>3</button></li>
-                <li><button>4</button></li>
-                <li><span>...</span></li>
-                <li><button>9</button></li>
-                <li><button>10</button></li>
-            </ul>
-            </div>
-        </div>
-    </div>
+        <script src="/js/reglerPaiement.js"></script>
+    {% endif %}
 {% endblock %}

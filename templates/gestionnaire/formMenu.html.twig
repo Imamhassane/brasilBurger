@@ -14,18 +14,18 @@
         {# <form class="form-add-menu" id="form" method="post" action="{{path('addMenu')}}"> #}
         {{form_start(form , {'attr': {"id":"form" , "class":"form-add-menu" } } )}}  
             <div class="d-flex">
-                <a name="" id="" class="btn m-3 pl-5" href="{{path('catalogue')}}" role="button"><i class="fa-solid fa-circle-left"></i> <span>Catalogue</span></a>
+                <a name="" id="" class="btn m-3 pl-5" href="{{path('listMenu')}}" role="button"><i class="fa-solid fa-circle-left"></i> <span>Liste des prooduits</span></a>
             </div>
             <div class="row">
                 <div class="control col-md-12">
                     <label> Que voulez vous ajouter </label>
-                    <select class="checked" id="checked" name="checked" >
-                        <option value = "{% if restorChecked is defined %}{{restorChecked}}{% elseif element is defined %}{{element.type}}{% else %}notCheched{% endif %}">{% if restorChecked is defined %}{{restorChecked}}{% elseif element is defined %}{{element.type}}{% else  %}Choisir... {% endif  %}</option>
-                        <option value="burger" id="burger">Burger</option>
-                        <option value="menu" id="menu">Menu</option>
-                        <option value="complement" id="complement">Complement</option>
+                    <select class="box" id="checked" name="checked" >
+                        <option value = "{% if restorChecked is defined %}{{restorChecked}}{% elseif element is defined %}{{element.type}}{% else %}{% endif %}">{% if restorChecked is defined %}{{restorChecked}}{% elseif element is defined %}{{element.type}}{% else  %}Choisir... {% endif  %}</option>
+                        <option value="Burger" id="burger">Burger</option>
+                        <option value="Menu" id="menu">Menu</option>
+                        <option value="Complement" id="complement">Complement</option>
                     </select>
-                    <small class="notChecking">Veuillez choisir l'élément à ajouter!</small>
+                    <small></small>
                 </div>  
             </div> 
             <div class="row">
@@ -46,26 +46,26 @@
                 <div class="row">
                     <div class="control col-md-12">
                         <label> ajouter un burger au menu </label>
-                        <select class="checked" id="burgerChecked" name="burgerName">
-                        {# <option value = "{% if restorBurgerName is defined %}{{restorBurgerName.id}}{% elseif element is defined %}{{element.burger.id}}{% else %}notCheched{% endif %}">{% if restorBurgerName is defined %}{{restorBurgerName.nom}}{% elseif element is defined %}{{element.burger.nom}}{% else  %}Choisir... {% endif  %}</option> #}
+                        <select class="box" id="burgerMenu" name="burgerName">
+                            {# <option value = "{{restorBurgerName is defined ? restorBurgerName.id : element is defined ? element.burger.id : "" }}" >{{ restorBurgerName is defined ? restorBurgerName.nom : element is defined ? element.burger.nom : "Choisir..." }}</option> #}
                             {% for item in allBurger %}
                                 <option value="{{item.id}}">{{item.nom}}</option>
                             {% endfor %}
                         </select>
-                        <small id="errorBurger">Veuillez ajouter un burger!</small>
+                        <small></small>
                     </div>  
                 </div> 
                 <div class="row">
                     <div class="control col-md-12">
                         <label class="mb-3"> ajouter des compléments au menu </label>
-                        {# {% if complement is defined %}
+                        {% if complement is defined %}
                             {% for item in complement %}
                                 <div class="form-check ml-4" style="margin: 10px;">
                                     <input type="checkbox" class="form-check-input" name="complementName[]" id="complemntChecked~{{item.id}}" value="{{item.id is defined ? item.id : '' }}" checked>
                                     <label class="form-check-label" style="margin: 1px;margin-left: 3px;" for="complemntChecked~{{item.id}}">{{item.nom}}</label>
                                 </div>
                             {% endfor %}
-                        {% endif %} #}
+                        {% endif %}
                         
                         {% for item in allComplement %}
                             <div class="form-check ml-4" style="margin: 10px;">
@@ -81,8 +81,8 @@
             </div> 
             <div class="row">
                 <div class="control col-md-12">
-                    {{form_row(form.image,{'attr': {"class":"box " , "data-aos":"zoom-in-down" , "value":"",  "data-aos-delay":"300"} } )}}
-                    <small id="errorImage">Veuillez ajouter une image </small>
+                    {{form_row(form.image,{'attr': {"class":"box " , "data-aos":"zoom-in-down" , "value":" ",  "data-aos-delay":"300"} } )}}
+                    <small></small>
                     {% if errorImage is defined  %}
                         <small id="errorImg">{{errorImage}}</small>
                     {% endif %}

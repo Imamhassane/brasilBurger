@@ -110,11 +110,109 @@ body {
   overflow-x: hidden;
 }
 /* line 70, ../sass/screen.scss */
+body .action {
+  margin-top: 0px;
+  margin-bottom: 0px;
+}
+/* line 76, ../sass/screen.scss */
+body .danger {
+  background-color: red;
+  color: #fff;
+}
+/* line 80, ../sass/screen.scss */
+body .successs {
+  background-color: green;
+  color: #fff;
+}
+/* line 84, ../sass/screen.scss */
+body .panier {
+  font-size: 15px;
+  padding-top: 7px;
+  padding-left: 10px;
+}
+/* line 90, ../sass/screen.scss */
+body .container .btn, body .container .btnGest, body .container .btnGest2, body .container .btnGest3 {
+  margin-bottom: 5px;
+}
+/* line 93, ../sass/screen.scss */
+body .container .prix {
+  font-size: 18px;
+  font-weight: bold;
+}
+/* line 97, ../sass/screen.scss */
+body .container .type {
+  text-align: end;
+  font-size: 12px;
+}
+/* line 101, ../sass/screen.scss */
+body .container .total {
+  color: #eacf4f;
+}
+/* line 104, ../sass/screen.scss */
+body .container .resume {
+  height: 30vh;
+}
+/* line 107, ../sass/screen.scss */
+body .container .border-radius {
+  background-color: #000;
+  color: #fff;
+}
+/* line 111, ../sass/screen.scss */
+body .container hr {
+  background: #fff;
+}
+/* line 114, ../sass/screen.scss */
+body .container .btnValide {
+  display: inline-block;
+  margin-top: 10px;
+  cursor: pointer;
+  color: #fff;
+  border: 0.2rem solid rgba(255, 255, 255, 0.3);
+  background: no-repeat;
+  font-size: 1.7rem;
+  padding: 4px 10px;
+  margin-bottom: 2rem;
+}
+/* line 127, ../sass/screen.scss */
+body .container .btnValide:hover {
+  color: #000;
+  background: #eacf4f;
+}
+/* line 132, ../sass/screen.scss */
+body .container .border-radius {
+  border-radius: 5px;
+  /* background-color:#000;
+  color:white */
+}
+/* line 139, ../sass/screen.scss */
+body #compteur {
+  display: none;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  color: #000;
+  border: 0.2rem solid rgba(255, 255, 255, 0.3);
+  background: #eacf4f;
+  height: 20px;
+  position: relative;
+  bottom: 45px;
+  text-decoration: none;
+  width: 20px;
+  border-radius: 50%;
+  font-size: 13px;
+  top: -6vh;
+  right: -1.5vw;
+}
+/* line 158, ../sass/screen.scss */
 body .fa-circle-left {
   margin-left: -16px;
 }
-/* line 73, ../sass/screen.scss */
-body .validation {
+/* line 161, ../sass/screen.scss */
+body #message {
+  transition: 2s ease;
+}
+/* line 164, ../sass/screen.scss */
+body .validation, body .itemExist {
   background-color: black;
   z-index: 1000;
   position: fixed;
@@ -130,8 +228,8 @@ body .validation {
   width: 66%;
   height: 30vh;
 }
-/* line 88, ../sass/screen.scss */
-body .validation.show-modal {
+/* line 179, ../sass/screen.scss */
+body .validation.show-modal, body .show-modal.itemExist {
   display: block;
   /* &::before{
      content:'';
@@ -143,8 +241,8 @@ body .validation.show-modal {
      right: 0;
   } */
 }
-/* line 101, ../sass/screen.scss */
-body .validation h3 {
+/* line 192, ../sass/screen.scss */
+body .validation h3, body .itemExist h3 {
   font-size: 2rem;
   text-transform: initial;
   color: #fff;
@@ -152,46 +250,70 @@ body .validation h3 {
   text-align: center;
   margin-top: 30px;
 }
-/* line 109, ../sass/screen.scss */
-body .validation .validation-button {
+/* line 200, ../sass/screen.scss */
+body .validation .validation-button, body .itemExist .validation-button {
   display: flex;
   justify-content: space-evenly;
   padding: 0;
   margin-top: 20px;
 }
-/* line 116, ../sass/screen.scss */
+/* line 207, ../sass/screen.scss */
+body .itemExist {
+  transform: translate(23vw, 40vh);
+  width: 50%;
+  height: 17vh;
+}
+/* line 212, ../sass/screen.scss */
+body .itemExist h3 {
+  margin-top: 10px;
+}
+/* line 215, ../sass/screen.scss */
+body .itemExist .validation-button {
+  margin-top: 1px;
+}
+/* line 219, ../sass/screen.scss */
 body .form-container {
   background-color: rgba(0, 0, 0, 0.5);
-  z-index: 1000;
+  z-index: 9999;
   height: 100vh;
+  margin-top: -6px;
 }
-/* line 120, ../sass/screen.scss */
+/* line 224, ../sass/screen.scss */
 body .form-container.heighadding {
   height: 120vh;
 }
-/* line 123, ../sass/screen.scss */
-body .form-container .h3 {
-  color: #fff;
-  margin-top: 17px;
-  position: absolute;
-  right: 4rem;
+/* line 230, ../sass/screen.scss */
+body .form-container #divPrix {
+  display: none;
 }
-/* line 129, ../sass/screen.scss */
-body .form-container .alert {
+/* line 234, ../sass/screen.scss */
+body .form-container #ajoutMenu {
+  display: none;
+}
+/* line 238, ../sass/screen.scss */
+body .alert {
   height: 40px;
   font-size: 16px;
   text-align: center;
   margin-bottom: 22px;
 }
-/* line 135, ../sass/screen.scss */
-body .form-container #divPrix {
-  display: none;
+/* line 244, ../sass/screen.scss */
+body .h4 {
+  color: #fff;
+  margin-bottom: 18px;
+  font-size: 13px;
+  margin-left: 30px;
+  display: block;
+  text-align: center;
 }
-/* line 139, ../sass/screen.scss */
-body .form-container #ajoutMenu {
-  display: none;
+/* line 252, ../sass/screen.scss */
+body .h3 {
+  color: #fff;
+  margin-top: 17px;
+  position: absolute;
+  right: 4rem;
 }
-/* line 144, ../sass/screen.scss */
+/* line 258, ../sass/screen.scss */
 body .form-login, body .form-signin, body .form-add-menu {
   z-index: 100;
   background-color: #000;
@@ -201,7 +323,7 @@ body .form-login, body .form-signin, body .form-add-menu {
   border-radius: 15px;
   position: absolute;
   overflow: hidden;
-  top: 20%;
+  top: 24%;
   left: 50%;
   width: 600px;
   max-width: 100%;
@@ -209,19 +331,20 @@ body .form-login, body .form-signin, body .form-add-menu {
   padding: 15px 25px;
   animation-name: modalOpen;
   animation-duration: 2s;
+  box-shadow: #eacf4f 0px 0px 13px 0px;
 }
-/* line 161, ../sass/screen.scss */
+/* line 276, ../sass/screen.scss */
 body .form-login div, body .form-signin div, body .form-add-menu div {
   text-align: left;
   margin-bottom: 5px;
 }
-/* line 164, ../sass/screen.scss */
+/* line 279, ../sass/screen.scss */
 body .form-login div label, body .form-signin div label, body .form-add-menu div label {
   color: #eacf4f;
   font-size: 15px;
 }
-/* line 169, ../sass/screen.scss */
-body .form-login .box, body .form-signin .box, body .form-add-menu .box, body .form-login .control .checked, body .control .form-login .checked, body .form-signin .control .checked, body .control .form-signin .checked, body .form-add-menu .control .checked, body .control .form-add-menu .checked, body .form-login .control2 .checked, body .control2 .form-login .checked, body .form-signin .control2 .checked, body .control2 .form-signin .checked, body .form-add-menu .control2 .checked, body .control2 .form-add-menu .checked {
+/* line 284, ../sass/screen.scss */
+body .form-login .box, body .form-signin .box, body .form-add-menu .box {
   padding: 1.2rem 1.4rem;
   font-size: 1.6rem;
   color: #fff;
@@ -231,24 +354,31 @@ body .form-login .box, body .form-signin .box, body .form-add-menu .box, body .f
   width: 100%;
   margin: .7rem 0;
 }
-/* line 178, ../sass/screen.scss */
-body .form-login .box:focus, body .form-signin .box:focus, body .form-add-menu .box:focus, body .form-login .control .checked:focus, body .control .form-login .checked:focus, body .form-signin .control .checked:focus, body .control .form-signin .checked:focus, body .form-add-menu .control .checked:focus, body .control .form-add-menu .checked:focus, body .form-login .control2 .checked:focus, body .control2 .form-login .checked:focus, body .form-signin .control2 .checked:focus, body .control2 .form-signin .checked:focus, body .form-add-menu .control2 .checked:focus, body .control2 .form-add-menu .checked:focus {
+/* line 293, ../sass/screen.scss */
+body .form-login .box:focus, body .form-signin .box:focus, body .form-add-menu .box:focus {
   border-color: #eacf4f;
 }
-/* line 182, ../sass/screen.scss */
+/* line 297, ../sass/screen.scss */
 body .form-login textarea, body .form-signin textarea, body .form-add-menu textarea {
   height: 15rem;
   resize: none;
 }
-/* line 188, ../sass/screen.scss */
-body .form-signin {
+/* line 301, ../sass/screen.scss */
+body .form-login .d-block, body .form-signin .d-block, body .form-add-menu .d-block {
+  color: #eacf4f;
+  font-size: 12px;
+  float: right;
+  margin-bottom: 7px;
+}
+/* line 306, ../sass/screen.scss */
+body .form-login .d-block:hover, body .form-signin .d-block:hover, body .form-add-menu .d-block:hover {
+  text-decoration: underline;
+}
+/* line 312, ../sass/screen.scss */
+body .form-signin, body .form-add-menu {
   top: 16%;
 }
-/* line 192, ../sass/screen.scss */
-body .form-add-menu {
-  top: 14%;
-}
-/* line 197, ../sass/screen.scss */
+/* line 319, ../sass/screen.scss */
 body .login-button, body .singin-button {
   z-index: 100;
   font-size: 13px;
@@ -264,7 +394,7 @@ body .login-button, body .singin-button {
   overflow: hidden;
   transition: color 0.5s;
 }
-/* line 212, ../sass/screen.scss */
+/* line 334, ../sass/screen.scss */
 body .login-button:hover, body .singin-button:hover {
   color: #000;
   background-color: #ffc107;
@@ -272,100 +402,111 @@ body .login-button:hover, body .singin-button:hover {
   font-weight: bold;
   border: 2px solid #ffc107;
 }
-/* line 223, ../sass/screen.scss */
+/* line 345, ../sass/screen.scss */
 body .singin-button {
   right: 6rem;
 }
-/* line 228, ../sass/screen.scss */
+/* line 349, ../sass/screen.scss */
+body .control, body .control2 {
+  /* .checked{
+     @extend .box ;
+     &.error{
+        border: 2px solid red;
+     }
+     &.success{
+        border: 2px solid green;
+     }
+  }
+  .errorChecking{
+     display: block;
+     color: red;
+     font-size: 13px;
+  } */
+}
+/* line 350, ../sass/screen.scss */
 body .control .errorImg, body .control2 .errorImg {
   border: 2px solid red;
 }
-/* line 231, ../sass/screen.scss */
+/* line 353, ../sass/screen.scss */
 body .control #errorImage, body .control2 #errorImage, body .control #errorBurger, body .control2 #errorBurger {
   display: none;
   color: red;
   font-size: 13px;
 }
-/* line 236, ../sass/screen.scss */
+/* line 358, ../sass/screen.scss */
 body .control #errorComplement, body .control2 #errorComplement {
   display: block;
   color: red;
   font-size: 13px;
 }
-/* line 241, ../sass/screen.scss */
+/* line 363, ../sass/screen.scss */
 body .control #errorImg, body .control2 #errorImg {
   display: block;
   color: red;
   font-size: 13px;
 }
-/* line 246, ../sass/screen.scss */
+/* line 368, ../sass/screen.scss */
 body .control .error, body .control2 .error {
   margin-bottom: 10px;
 }
-/* line 248, ../sass/screen.scss */
+/* line 370, ../sass/screen.scss */
 body .control .error input, body .control2 .error input {
   border: 2px solid red;
 }
-/* line 252, ../sass/screen.scss */
+/* line 374, ../sass/screen.scss */
 body .control .success, body .control2 .success {
   margin-bottom: 10px;
 }
-/* line 254, ../sass/screen.scss */
+/* line 376, ../sass/screen.scss */
 body .control .success input, body .control2 .success input {
   border: 2px solid green;
 }
-/* line 258, ../sass/screen.scss */
+/* line 380, ../sass/screen.scss */
 body .control small, body .control2 small {
   display: none;
 }
-/* line 261, ../sass/screen.scss */
+/* line 383, ../sass/screen.scss */
 body .control.error, body .error.control2 {
   margin-bottom: 10px;
 }
-/* line 264, ../sass/screen.scss */
+/* line 386, ../sass/screen.scss */
 body .control.success input, body .success.control2 input {
   border: 2px solid green;
 }
-/* line 268, ../sass/screen.scss */
+/* line 390, ../sass/screen.scss */
 body .control.error input, body .error.control2 input {
   border: 2px solid red;
 }
-/* line 271, ../sass/screen.scss */
+/* line 393, ../sass/screen.scss */
+body .control.success select, body .success.control2 select {
+  border: 2px solid green;
+}
+/* line 397, ../sass/screen.scss */
+body .control.error select, body .error.control2 select {
+  border: 2px solid red;
+}
+/* line 400, ../sass/screen.scss */
 body .control.error small, body .error.control2 small {
   display: block;
   color: red;
   font-size: 13px;
 }
-/* line 279, ../sass/screen.scss */
-body .control .checked.error, body .control2 .checked.error {
-  border: 2px solid red;
-}
-/* line 282, ../sass/screen.scss */
-body .control .checked.success, body .control2 .checked.success {
-  border: 2px solid green;
-}
-/* line 286, ../sass/screen.scss */
-body .control .errorChecking, body .control2 .errorChecking {
-  display: block;
-  color: red;
-  font-size: 13px;
-}
-/* line 292, ../sass/screen.scss */
+/* line 421, ../sass/screen.scss */
 body .control option, body .control2 option {
   color: #000;
 }
 
-/* line 304, ../sass/screen.scss */
+/* line 433, ../sass/screen.scss */
 section {
   padding: 3rem 9%;
 }
 
-/* line 308, ../sass/screen.scss */
+/* line 437, ../sass/screen.scss */
 .heading {
   text-align: center;
   margin-bottom: 3rem;
 }
-/* line 311, ../sass/screen.scss */
+/* line 440, ../sass/screen.scss */
 .heading .btn-shine {
   font-size: 27px;
   background: linear-gradient(90deg, #000, #fff, #000);
@@ -383,7 +524,7 @@ section {
   letter-spacing: 5px;
 }
 
-/* line 329, ../sass/screen.scss */
+/* line 458, ../sass/screen.scss */
 .btn, .btnGest, .btnGest2, .btnGest3 {
   display: inline-block;
   margin-top: 10px;
@@ -395,31 +536,31 @@ section {
   padding: 4px 10px;
   margin-bottom: 2rem;
 }
-/* line 341, ../sass/screen.scss */
+/* line 470, ../sass/screen.scss */
 .btn:hover, .btnGest:hover, .btnGest2:hover, .btnGest3:hover {
   color: #000;
   background: #eacf4f;
 }
 
-/* line 348, ../sass/screen.scss */
+/* line 478, ../sass/screen.scss */
 .btnGest:hover {
   background: green;
   color: white;
 }
 
-/* line 355, ../sass/screen.scss */
+/* line 485, ../sass/screen.scss */
 .btnGest2:hover {
   background: #eacf4f;
   color: #000;
 }
 
-/* line 363, ../sass/screen.scss */
+/* line 493, ../sass/screen.scss */
 .btnGest3:hover {
   color: #fff;
   background: red;
 }
 
-/* line 370, ../sass/screen.scss */
+/* line 500, ../sass/screen.scss */
 .header {
   position: fixed;
   top: 0;
@@ -435,17 +576,17 @@ section {
   transition: 1s ease;
   height: 70px;
 }
-/* line 384, ../sass/screen.scss */
+/* line 514, ../sass/screen.scss */
 .header .icons {
   font-size: 1.5rem;
   cursor: pointer;
   color: #fff;
 }
-/* line 389, ../sass/screen.scss */
+/* line 519, ../sass/screen.scss */
 .header .icons:hover {
   color: #eacf4f;
 }
-/* line 393, ../sass/screen.scss */
+/* line 523, ../sass/screen.scss */
 .header .icons .loginButton, .header .icons .singinButton {
   z-index: 100;
   font-size: 13px;
@@ -470,44 +611,44 @@ section {
 
         }    */
 }
-/* line 411, ../sass/screen.scss */
+/* line 541, ../sass/screen.scss */
 .header .icons .loginButton:hover, .header .icons .singinButton:hover {
   color: #000;
   background: #eacf4f;
 }
-/* line 435, ../sass/screen.scss */
+/* line 565, ../sass/screen.scss */
 .header #menu-btn {
   display: none;
 }
-/* line 439, ../sass/screen.scss */
+/* line 569, ../sass/screen.scss */
 .header .navbar {
   position: absolute;
   right: 0;
 }
-/* line 442, ../sass/screen.scss */
+/* line 572, ../sass/screen.scss */
 .header .navbar .nav-links {
   color: #fff;
   font-size: 16px;
   margin: 0 10px;
 }
-/* line 447, ../sass/screen.scss */
+/* line 577, ../sass/screen.scss */
 .header .navbar .nav-links:hover {
   text-decoration: underline;
   text-underline-offset: 1rem;
   color: #eacf4f;
 }
-/* line 457, ../sass/screen.scss */
+/* line 587, ../sass/screen.scss */
 .header .logo {
   position: absolute;
   top: 20px;
   transform: translateX(0);
   left: 3rem;
 }
-/* line 463, ../sass/screen.scss */
+/* line 593, ../sass/screen.scss */
 .header .logo img {
   width: 15rem;
 }
-/* line 468, ../sass/screen.scss */
+/* line 598, ../sass/screen.scss */
 .header .search-form {
   height: 7rem;
   padding: 0 2rem;
@@ -521,11 +662,11 @@ section {
   right: 0;
   clip-path: polygon(0 0, 100% 0, 100% 0, 0 0);
 }
-/* line 479, ../sass/screen.scss */
+/* line 609, ../sass/screen.scss */
 .header .search-form.active {
   clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%);
 }
-/* line 483, ../sass/screen.scss */
+/* line 613, ../sass/screen.scss */
 .header .search-form input {
   width: 100%;
   background: none;
@@ -533,12 +674,12 @@ section {
   font-size: 1.6rem;
   color: #fff;
 }
-/* line 492, ../sass/screen.scss */
+/* line 622, ../sass/screen.scss */
 .header .fa-times {
   transform: rotate(180deg);
 }
 
-/* line 497, ../sass/screen.scss */
+/* line 627, ../sass/screen.scss */
 .home {
   margin-top: 0;
   background: url(../images/home-bg.png) no-repeat;
@@ -546,7 +687,7 @@ section {
   background-position: center;
   display: flex;
 }
-/* line 503, ../sass/screen.scss */
+/* line 633, ../sass/screen.scss */
 .home .content {
   max-width: 100vw;
   margin: 0;
@@ -554,21 +695,21 @@ section {
   justify-content: center;
   align-items: center;
 }
-/* line 509, ../sass/screen.scss */
+/* line 639, ../sass/screen.scss */
 .home .content .bienvenue {
   display: block;
 }
-/* line 512, ../sass/screen.scss */
+/* line 642, ../sass/screen.scss */
 .home .content .img-bienvenue {
   right: 8rem;
   display: flex;
   justify-content: end;
 }
-/* line 517, ../sass/screen.scss */
+/* line 647, ../sass/screen.scss */
 .home .content img {
   width: 70%;
 }
-/* line 521, ../sass/screen.scss */
+/* line 651, ../sass/screen.scss */
 .home .content h3 {
   font-size: 4rem;
   text-transform: capitalize;
@@ -579,7 +720,7 @@ section {
   -moz-animation: glow 2s ease-in-out infinite alternate;
   animation: glow 2s ease-in-out infinite alternate;
 }
-/* line 531, ../sass/screen.scss */
+/* line 661, ../sass/screen.scss */
 .home .content p {
   font-size: 1.7rem;
   line-height: 2;
@@ -587,19 +728,19 @@ section {
   padding: 2rem 0;
 }
 
-/* line 538, ../sass/screen.scss */
+/* line 668, ../sass/screen.scss */
 .service {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(31rem, 1fr));
   gap: 2rem;
 }
-/* line 542, ../sass/screen.scss */
-.service .box, .service body .control .checked, body .control .service .checked, .service body .control2 .checked, body .control2 .service .checked {
+/* line 672, ../sass/screen.scss */
+.service .box {
   text-align: center;
   padding: 2rem;
 }
-/* line 546, ../sass/screen.scss */
-.service .box i, .service body .control .checked i, body .control .service .checked i, .service body .control2 .checked i, body .control2 .service .checked i {
+/* line 676, ../sass/screen.scss */
+.service .box i {
   height: 7rem;
   width: 7rem;
   line-height: 7rem;
@@ -609,122 +750,122 @@ section {
   margin-bottom: 1rem;
   border-radius: 50%;
 }
-/* line 557, ../sass/screen.scss */
-.service .box h3, .service body .control .checked h3, body .control .service .checked h3, .service body .control2 .checked h3, body .control2 .service .checked h3 {
+/* line 687, ../sass/screen.scss */
+.service .box h3 {
   padding: 1rem 0;
   font-size: 2rem;
   text-transform: capitalize;
   color: #fff;
 }
-/* line 562, ../sass/screen.scss */
-.service .box p, .service body .control .checked p, body .control .service .checked p, .service body .control2 .checked p, body .control2 .service .checked p {
+/* line 692, ../sass/screen.scss */
+.service .box p {
   font-size: 1.5rem;
   line-height: 2;
   color: #aaa;
 }
 
-/* line 570, ../sass/screen.scss */
+/* line 700, ../sass/screen.scss */
 .menu .box-container {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(31rem, 1fr));
   gap: 2rem;
 }
-/* line 573, ../sass/screen.scss */
-.menu .box-container .box, .menu .box-container body .control .checked, body .control .menu .box-container .checked, .menu .box-container body .control2 .checked, body .control2 .menu .box-container .checked {
+/* line 703, ../sass/screen.scss */
+.menu .box-container .box {
   text-align: center;
   /* box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
   background-color: #000;
   border-radius: 10px; */
 }
-/* line 579, ../sass/screen.scss */
-.menu .box-container .box:hover img, .menu .box-container body .control .checked:hover img, body .control .menu .box-container .checked:hover img, .menu .box-container body .control2 .checked:hover img, body .control2 .menu .box-container .checked:hover img {
+/* line 709, ../sass/screen.scss */
+.menu .box-container .box:hover img {
   transform: translateY(1rem);
 }
-/* line 583, ../sass/screen.scss */
-.menu .box-container .box img, .menu .box-container body .control .checked img, body .control .menu .box-container .checked img, .menu .box-container body .control2 .checked img, body .control2 .menu .box-container .checked img {
+/* line 713, ../sass/screen.scss */
+.menu .box-container .box img {
   height: 10rem;
   cursor: pointer;
 }
-/* line 586, ../sass/screen.scss */
-.menu .box-container .box img:hover, .menu .box-container body .control .checked img:hover, body .control .menu .box-container .checked img:hover, .menu .box-container body .control2 .checked img:hover, body .control2 .menu .box-container .checked img:hover {
+/* line 716, ../sass/screen.scss */
+.menu .box-container .box img:hover {
   transform: scale(1.5);
 }
-/* line 591, ../sass/screen.scss */
-.menu .box-container .box .content, .menu .box-container body .control .checked .content, body .control .menu .box-container .checked .content, .menu .box-container body .control2 .checked .content, body .control2 .menu .box-container .checked .content {
+/* line 721, ../sass/screen.scss */
+.menu .box-container .box .content {
   padding: 1rem 0;
 }
-/* line 594, ../sass/screen.scss */
-.menu .box-container .box .content .stars, .menu .box-container body .control .checked .content .stars, body .control .menu .box-container .checked .content .stars, .menu .box-container body .control2 .checked .content .stars, body .control2 .menu .box-container .checked .content .stars {
+/* line 724, ../sass/screen.scss */
+.menu .box-container .box .content .stars {
   margin-bottom: 2rem;
 }
-/* line 597, ../sass/screen.scss */
-.menu .box-container .box .content .stars i, .menu .box-container body .control .checked .content .stars i, body .control .menu .box-container .checked .content .stars i, .menu .box-container body .control2 .checked .content .stars i, body .control2 .menu .box-container .checked .content .stars i {
+/* line 727, ../sass/screen.scss */
+.menu .box-container .box .content .stars i {
   font-size: 1.7rem;
   color: #eacf4f;
 }
-/* line 603, ../sass/screen.scss */
-.menu .box-container .box .content h3, .menu .box-container body .control .checked .content h3, body .control .menu .box-container .checked .content h3, .menu .box-container body .control2 .checked .content h3, body .control2 .menu .box-container .checked .content h3 {
+/* line 733, ../sass/screen.scss */
+.menu .box-container .box .content h3 {
   font-size: 2rem;
   text-transform: capitalize;
   color: #fff;
 }
-/* line 607, ../sass/screen.scss */
-.menu .box-container .box .content .price, .menu .box-container body .control .checked .content .price, body .control .menu .box-container .checked .content .price, .menu .box-container body .control2 .checked .content .price, body .control2 .menu .box-container .checked .content .price {
+/* line 737, ../sass/screen.scss */
+.menu .box-container .box .content .price {
   font-size: 2rem;
   line-height: 2;
   color: #aaa;
 }
 
-/* line 615, ../sass/screen.scss */
+/* line 745, ../sass/screen.scss */
 .about {
   display: flex;
   align-items: center;
   flex-wrap: wrap;
   gap: 3rem;
 }
-/* line 621, ../sass/screen.scss */
+/* line 751, ../sass/screen.scss */
 .about .image {
   flex: 1 1 40rem;
 }
-/* line 624, ../sass/screen.scss */
+/* line 754, ../sass/screen.scss */
 .about .image img {
   width: 100%;
 }
-/* line 628, ../sass/screen.scss */
+/* line 758, ../sass/screen.scss */
 .about .img-details:hover {
   cursor: zoom-in;
   transform: scale(1.3);
 }
-/* line 633, ../sass/screen.scss */
+/* line 763, ../sass/screen.scss */
 .about .content {
   flex: 1 1 40rem;
 }
-/* line 635, ../sass/screen.scss */
+/* line 765, ../sass/screen.scss */
 .about .content .name {
   color: #eacf4f;
 }
-/* line 638, ../sass/screen.scss */
+/* line 768, ../sass/screen.scss */
 .about .content .title {
   font-size: 2.5rem;
   text-transform: capitalize;
   color: #fff;
   text-align: center;
 }
-/* line 643, ../sass/screen.scss */
+/* line 773, ../sass/screen.scss */
 .about .content p {
   font-size: 1.5rem;
   line-height: 2;
   color: #aaa;
   padding: 2rem 0;
 }
-/* line 647, ../sass/screen.scss */
+/* line 777, ../sass/screen.scss */
 .about .content h1 {
   font-size: 7rem;
   color: #eacf4f;
   text-align: center;
   padding: 20px 0;
 }
-/* line 653, ../sass/screen.scss */
+/* line 783, ../sass/screen.scss */
 .about .content .icons {
   display: flex;
   flex-wrap: wrap;
@@ -732,94 +873,94 @@ section {
   margin-bottom: 2rem;
   margin-top: 1rem;
 }
-/* line 660, ../sass/screen.scss */
+/* line 790, ../sass/screen.scss */
 .about .content .icons h3 {
   flex: 1 1 16rem;
   font-size: 1.5rem;
   text-transform: capitalize;
   color: #fff;
 }
-/* line 664, ../sass/screen.scss */
+/* line 794, ../sass/screen.scss */
 .about .content .icons h3 i {
   padding-right: .5rem;
   color: #eacf4f;
 }
 
-/* line 676, ../sass/screen.scss */
+/* line 806, ../sass/screen.scss */
 .reviews .box-container {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(31rem, 1fr));
   gap: 2rem;
 }
-/* line 679, ../sass/screen.scss */
-.reviews .box-container .box, .reviews .box-container body .control .checked, body .control .reviews .box-container .checked, .reviews .box-container body .control2 .checked, body .control2 .reviews .box-container .checked {
+/* line 809, ../sass/screen.scss */
+.reviews .box-container .box {
   text-align: center;
   padding: 2rem;
 }
-/* line 683, ../sass/screen.scss */
-.reviews .box-container .box img, .reviews .box-container body .control .checked img, body .control .reviews .box-container .checked img, .reviews .box-container body .control2 .checked img, body .control2 .reviews .box-container .checked img {
+/* line 813, ../sass/screen.scss */
+.reviews .box-container .box img {
   height: 10rem;
   width: 10rem;
   border-radius: 50%;
   margin-bottom: 1rem;
 }
-/* line 690, ../sass/screen.scss */
-.reviews .box-container .box h3, .reviews .box-container body .control .checked h3, body .control .reviews .box-container .checked h3, .reviews .box-container body .control2 .checked h3, body .control2 .reviews .box-container .checked h3 {
+/* line 820, ../sass/screen.scss */
+.reviews .box-container .box h3 {
   font-size: 2rem;
   text-transform: capitalize;
   color: #fff;
 }
-/* line 694, ../sass/screen.scss */
-.reviews .box-container .box p, .reviews .box-container body .control .checked p, body .control .reviews .box-container .checked p, .reviews .box-container body .control2 .checked p, body .control2 .reviews .box-container .checked p {
+/* line 824, ../sass/screen.scss */
+.reviews .box-container .box p {
   font-size: 1.4rem;
   line-height: 2;
   color: #aaa;
   padding: 1rem 0;
 }
-/* line 699, ../sass/screen.scss */
-.reviews .box-container .box .stars, .reviews .box-container body .control .checked .stars, body .control .reviews .box-container .checked .stars, .reviews .box-container body .control2 .checked .stars, body .control2 .reviews .box-container .checked .stars {
+/* line 829, ../sass/screen.scss */
+.reviews .box-container .box .stars {
   padding-top: .5rem;
 }
-/* line 702, ../sass/screen.scss */
-.reviews .box-container .box .stars i, .reviews .box-container body .control .checked .stars i, body .control .reviews .box-container .checked .stars i, .reviews .box-container body .control2 .checked .stars i, body .control2 .reviews .box-container .checked .stars i {
+/* line 832, ../sass/screen.scss */
+.reviews .box-container .box .stars i {
   font-size: 1.7rem;
   color: #eacf4f;
 }
 
-/* line 711, ../sass/screen.scss */
+/* line 841, ../sass/screen.scss */
 .contact {
   padding: 0;
 }
-/* line 713, ../sass/screen.scss */
+/* line 843, ../sass/screen.scss */
 .contact .row {
   display: flex;
   flex-wrap: wrap;
   gap: 3rem;
 }
-/* line 718, ../sass/screen.scss */
+/* line 848, ../sass/screen.scss */
 .contact .row .map {
   /* flex:1 1 40rem;
   width: 100%; */
   width: 100%;
   height: 550px;
 }
-/* line 726, ../sass/screen.scss */
+/* line 856, ../sass/screen.scss */
 .contact .row .form {
   flex: 1 1 40rem;
 }
-/* line 729, ../sass/screen.scss */
+/* line 859, ../sass/screen.scss */
 .contact .row .form .icons-container {
   display: flex;
   flex-wrap: wrap;
   gap: 2rem;
   margin-bottom: 3rem;
 }
-/* line 735, ../sass/screen.scss */
+/* line 865, ../sass/screen.scss */
 .contact .row .form .icons-container .icons {
   flex: 1 1 17rem;
   text-align: center;
 }
-/* line 739, ../sass/screen.scss */
+/* line 869, ../sass/screen.scss */
 .contact .row .form .icons-container .icons i {
   height: 6rem;
   width: 6rem;
@@ -830,46 +971,46 @@ section {
   font-size: 2rem;
   margin-bottom: 1rem;
 }
-/* line 750, ../sass/screen.scss */
+/* line 880, ../sass/screen.scss */
 .contact .row .form .icons-container .icons h3 {
   padding: 1rem 0;
   font-size: 2rem;
   text-transform: capitalize;
   color: #fff;
 }
-/* line 755, ../sass/screen.scss */
+/* line 885, ../sass/screen.scss */
 .contact .row .form .icons-container .icons p {
   font-size: 1.5rem;
   line-height: 2;
   color: #aaa;
 }
 
-/* line 768, ../sass/screen.scss */
+/* line 898, ../sass/screen.scss */
 .blogs .box-container {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(31rem, 1fr));
   gap: 2rem;
 }
-/* line 771, ../sass/screen.scss */
-.blogs .box-container .box, .blogs .box-container body .control .checked, body .control .blogs .box-container .checked, .blogs .box-container body .control2 .checked, body .control2 .blogs .box-container .checked {
+/* line 901, ../sass/screen.scss */
+.blogs .box-container .box {
   position: relative;
 }
-/* line 775, ../sass/screen.scss */
-.blogs .box-container .box:hover .image img, .blogs .box-container body .control .checked:hover .image img, body .control .blogs .box-container .checked:hover .image img, .blogs .box-container body .control2 .checked:hover .image img, body .control2 .blogs .box-container .checked:hover .image img {
+/* line 905, ../sass/screen.scss */
+.blogs .box-container .box:hover .image img {
   transform: scale(1.1);
 }
-/* line 778, ../sass/screen.scss */
-.blogs .box-container .box:hover .image .icons, .blogs .box-container body .control .checked:hover .image .icons, body .control .blogs .box-container .checked:hover .image .icons, .blogs .box-container body .control2 .checked:hover .image .icons, body .control2 .blogs .box-container .checked:hover .image .icons {
+/* line 908, ../sass/screen.scss */
+.blogs .box-container .box:hover .image .icons {
   transform: translateY(0);
 }
-/* line 783, ../sass/screen.scss */
-.blogs .box-container .box .image, .blogs .box-container body .control .checked .image, body .control .blogs .box-container .checked .image, .blogs .box-container body .control2 .checked .image, body .control2 .blogs .box-container .checked .image {
+/* line 913, ../sass/screen.scss */
+.blogs .box-container .box .image {
   height: 25rem;
   overflow: hidden;
   position: relative;
 }
-/* line 788, ../sass/screen.scss */
-.blogs .box-container .box .image .icons, .blogs .box-container body .control .checked .image .icons, body .control .blogs .box-container .checked .image .icons, .blogs .box-container body .control2 .checked .image .icons, body .control2 .blogs .box-container .checked .image .icons {
+/* line 918, ../sass/screen.scss */
+.blogs .box-container .box .image .icons {
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -882,51 +1023,51 @@ section {
   z-index: 10;
   transform: translateY(10rem);
 }
-/* line 799, ../sass/screen.scss */
-.blogs .box-container .box .image .icons a, .blogs .box-container body .control .checked .image .icons a, body .control .blogs .box-container .checked .image .icons a, .blogs .box-container body .control2 .checked .image .icons a, body .control2 .blogs .box-container .checked .image .icons a {
+/* line 929, ../sass/screen.scss */
+.blogs .box-container .box .image .icons a {
   font-size: 1.5rem;
   color: #fff;
 }
-/* line 803, ../sass/screen.scss */
-.blogs .box-container .box .image .icons a i, .blogs .box-container body .control .checked .image .icons a i, body .control .blogs .box-container .checked .image .icons a i, .blogs .box-container body .control2 .checked .image .icons a i, body .control2 .blogs .box-container .checked .image .icons a i {
+/* line 933, ../sass/screen.scss */
+.blogs .box-container .box .image .icons a i {
   padding-right: .5rem;
   color: #eacf4f;
 }
-/* line 808, ../sass/screen.scss */
-.blogs .box-container .box .image .icons a:hover, .blogs .box-container body .control .checked .image .icons a:hover, body .control .blogs .box-container .checked .image .icons a:hover, .blogs .box-container body .control2 .checked .image .icons a:hover, body .control2 .blogs .box-container .checked .image .icons a:hover {
+/* line 938, ../sass/screen.scss */
+.blogs .box-container .box .image .icons a:hover {
   color: #eacf4f;
 }
-/* line 814, ../sass/screen.scss */
-.blogs .box-container .box .image img, .blogs .box-container body .control .checked .image img, body .control .blogs .box-container .checked .image img, .blogs .box-container body .control2 .checked .image img, body .control2 .blogs .box-container .checked .image img {
+/* line 944, ../sass/screen.scss */
+.blogs .box-container .box .image img {
   height: 100%;
   width: 100%;
   object-fit: cover;
 }
-/* line 821, ../sass/screen.scss */
-.blogs .box-container .box .content, .blogs .box-container body .control .checked .content, body .control .blogs .box-container .checked .content, .blogs .box-container body .control2 .checked .content, body .control2 .blogs .box-container .checked .content {
+/* line 951, ../sass/screen.scss */
+.blogs .box-container .box .content {
   text-align: center;
   padding: 2rem;
 }
-/* line 825, ../sass/screen.scss */
-.blogs .box-container .box .content h3, .blogs .box-container body .control .checked .content h3, body .control .blogs .box-container .checked .content h3, .blogs .box-container body .control2 .checked .content h3, body .control2 .blogs .box-container .checked .content h3 {
+/* line 955, ../sass/screen.scss */
+.blogs .box-container .box .content h3 {
   font-size: 2rem;
   text-transform: capitalize;
   color: #fff;
 }
-/* line 829, ../sass/screen.scss */
-.blogs .box-container .box .content p, .blogs .box-container body .control .checked .content p, body .control .blogs .box-container .checked .content p, .blogs .box-container body .control2 .checked .content p, body .control2 .blogs .box-container .checked .content p {
+/* line 959, ../sass/screen.scss */
+.blogs .box-container .box .content p {
   font-size: 1.5rem;
   line-height: 2;
   color: #aaa;
   padding: 1.5rem 0;
 }
 
-/* line 838, ../sass/screen.scss */
+/* line 968, ../sass/screen.scss */
 .footer {
   text-align: center;
   background: linear-gradient(transparent, #000);
 }
-/* line 843, ../sass/screen.scss */
+/* line 973, ../sass/screen.scss */
 .footer .links a {
   display: flex;
   justify-content: center;
@@ -942,51 +1083,51 @@ section {
   right: 10px;
   width: 30px;
 }
-/* line 858, ../sass/screen.scss */
+/* line 988, ../sass/screen.scss */
 .footer .links a i {
   font-size: 2rem;
 }
-/* line 864, ../sass/screen.scss */
+/* line 994, ../sass/screen.scss */
 .footer .credit {
   font-size: 2rem;
   line-height: 2;
   color: #aaa;
   padding-top: 2rem;
 }
-/* line 868, ../sass/screen.scss */
+/* line 998, ../sass/screen.scss */
 .footer .credit span {
   color: #eacf4f;
 }
 
 @media (max-width: 1200px) {
-  /* line 889, ../sass/screen.scss */
+  /* line 1019, ../sass/screen.scss */
   .header {
     padding: 3rem;
   }
 
-  /* line 893, ../sass/screen.scss */
+  /* line 1023, ../sass/screen.scss */
   section {
     padding: 3rem 2rem;
   }
 }
 @media (max-width: 991px) {
-  /* line 901, ../sass/screen.scss */
+  /* line 1031, ../sass/screen.scss */
   html {
     font-size: 55%;
   }
 
-  /* line 905, ../sass/screen.scss */
+  /* line 1035, ../sass/screen.scss */
   .header {
     justify-content: flex-end;
     gap: 2rem;
   }
-  /* line 909, ../sass/screen.scss */
+  /* line 1039, ../sass/screen.scss */
   .header #menu-btn {
     display: inline-block;
     font-size: 25px;
     margin-top: -8px;
   }
-  /* line 915, ../sass/screen.scss */
+  /* line 1045, ../sass/screen.scss */
   .header .navbar {
     position: absolute;
     top: 99%;
@@ -996,33 +1137,33 @@ section {
     clip-path: polygon(0 0, 100% 0, 100% 0, 0 0);
     transition: 1s ease;
   }
-  /* line 922, ../sass/screen.scss */
+  /* line 1052, ../sass/screen.scss */
   .header .navbar.active {
     clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%);
   }
-  /* line 926, ../sass/screen.scss */
+  /* line 1056, ../sass/screen.scss */
   .header .navbar a {
     display: block;
     margin: 3rem 2rem;
   }
-  /* line 931, ../sass/screen.scss */
+  /* line 1061, ../sass/screen.scss */
   .header .navbar .space {
     display: none;
   }
 }
 @media (max-width: 768px) {
-  /* line 939, ../sass/screen.scss */
+  /* line 1069, ../sass/screen.scss */
   .home .content h3 {
     font-size: 2.5rem;
   }
 
-  /* line 944, ../sass/screen.scss */
+  /* line 1075, ../sass/screen.scss */
   body .form-container {
     height: 112vh;
   }
 }
 @media (max-width: 450px) {
-  /* line 952, ../sass/screen.scss */
+  /* line 1083, ../sass/screen.scss */
   html {
     font-size: 50%;
   }

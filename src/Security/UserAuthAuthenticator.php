@@ -2,9 +2,11 @@
 
 namespace App\Security;
 
+use App\Repository\ClientRepository;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\Session\Session;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\Security;
@@ -46,7 +48,11 @@ class UserAuthAuthenticator extends AbstractLoginFormAuthenticator
     public function onAuthenticationSuccess(Request $request, TokenInterface $token, string $firewallName): ?Response
     {
         if ($targetPath = $this->getTargetPath($request->getSession(), $firewallName)) {
-            return new RedirectResponse($targetPath);
+       
+            $session = new Session();
+            $session->set('targetPath' , $targetPath);
+           
+           return new RedirectResponse($this->urlGenerator->generate('redirection'));
         }
         
         // For example:

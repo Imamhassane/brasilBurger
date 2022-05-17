@@ -7,33 +7,29 @@ const burger = document.getElementById('burger')
 const menu = document.getElementById('menu');
 const complement = document.getElementById('complement');
 const complemntChecked = document.getElementById("complemntChecked");   
-const burgerChecked = document.getElementById("burgerChecked");   
+const burgerChecked = document.getElementById("burgerMenu");   
 
 const com = document.getElementsByClassName('complementName')
 
-let isVerify = false
+let isVerify = []
 //Functions-------------------------------------------------------------
 function showError(input, message) {//Afficher les messages d'erreur
     const formControl = input.parentElement;
     formControl.classList.add("error");
+    formControl.classList.remove("success");
     document.querySelector('.form-container').classList.add("heighadding");
-    
-    if (checked.value=="notCheched") {
-        document.querySelector('.checked').classList.add("error");
-        document.querySelector(".notChecking").classList.add("errorChecking");
-    }else{
-        document.querySelector('.checked').classList.add("success");
-        document.querySelector(".notChecking").classList.remove("errorChecking");
-
-    }
+    isVerify.push(false)
+   
     const small = formControl.querySelector('small');
     small.innerText = message;
 }
 //
 function showSuccess(input) {
-    
     const formControl = input.parentElement;
     formControl.classList.add("success");
+    formControl.classList.remove("error");
+    isVerify.push(true)
+
 }
 
 function checkLength(input, min, max) {//Tester la longueur de la valeur  d'un input
@@ -43,7 +39,6 @@ function checkLength(input, min, max) {//Tester la longueur de la valeur  d'un i
         showError(input, `${getFieldName(input)} doit contenir au plus ${max} caractéres !`);
     }else{
         showSuccess(input);
-        isVerify = true
     }
 }
 
@@ -56,7 +51,6 @@ function checkRequired(inputArray) {// Tester si les champs ne sont pas vides
             showError(input,`${getFieldName(input)} est obligatoire`);
         }else{
             showSuccess(input);
-            isVerify = true
         }
     });
 }
@@ -70,40 +64,33 @@ function getFieldName(input) {//Retour le nom de chaque input en se basant sur s
 //Even listeners--------------------------------------------------------
 form.addEventListener('submit',function(e){
 
-    if(isVerify){}else{
-        e.preventDefault();//Bloquer la soumission du formulaire
-        checkRequired([  nom , prix  ]);      
-        checkLength(nom , 3 , 30);
-
-        if (image.value == "") {
-        e.preventDefault();//Bloquer la soumission du formulaire
-            image.style.border = "2px solid red"
-            document.getElementById("errorImage").style.display= "block"
-        }else{
-            image.style.border = "2px solid green"
-            document.getElementById("errorImage").style.display= "none"
-        }
-
-        if (checked.value == "menu" && burgerChecked.value == "") {
-            burgerChecked.style.border = "2px solid red"
-            document.getElementById("errorBurger").style.display= "block"
-        }else{
-            burgerChecked.style.border = "2px solid green"
-            document.getElementById("errorBurger").style.display= "none"
+    isVerify = []
+    checkRequired([ nom , checked ]); 
+    checkLength(nom , 3 , 30);
+    if (checked.value == "Burger" || checked.value == "Complement") {
+        checkRequired([ prix ]);
+        checkLength(prix , 4 , 6);
+    }
+    if (checked.value == "Menu"){
+        checkRequired([ burgerChecked ]);
+    } 
+    for (let i = 0; i < isVerify.length; i++) {
+        if (isVerify[i]==false) {
+            e.preventDefault();//Bloquer la soumission du formulaire
         }
     }
-    //
 
+   
 });
 
 checked.addEventListener("change",(e)=>{
     let isChecked = checked.value;
     
-    if (isChecked == "burger" || isChecked == "complement" ) {
+    if (isChecked == "Burger" || isChecked == "Complement" ) {
         document.getElementById('divPrix').style.display="block"
         document.getElementById('ajoutMenu').style.display="none"
     }  
-    if (isChecked == "menu"  ) {
+    if (isChecked == "Menu"  ) {
         document.getElementById('ajoutMenu').style.display="block"
         document.querySelector('.form-container').classList.add("heighadding");
         document.getElementById('divPrix').style.display="none"

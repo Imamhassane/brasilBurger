@@ -3,19 +3,20 @@
  * <!--[if IE]>
  *   <link href="/stylesheets/ie.css" media="screen, projection" rel="stylesheet" type="text/css" />
  * <![endif]--> */
-/* line 11, ../sass/ie.scss */
+@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@200;300;400;500;600;700&display=swap");
+/* line 13, ../sass/ie.scss */
 :root {
   --primary-color: white;
   --secondary-color: #3d4449;
   --highlight-color: #eacf4f;
-  --dt-status-available-color: greenyellow;
+  --dt-status-available-color: #eacf4f;
   --dt-status-away-color: lightsalmon;
   --dt-status-offline-color: lightgray;
   --dt-padding: 12px;
   --dt-padding-s: 6px;
   --dt-padding-xs: 2px;
   --dt-border-radius: 3px;
-  --dt-background-color-container: #2a3338;
+  --dt-background-color-container: rgba(0, 0, 0, 0.7);
   --dt-border-color: var(--secondary-color);
   --dt-bg-color: var(--highlight-color);
   --dt-text-color: var(--primary-color);
@@ -29,29 +30,41 @@
   --dt-input-color: var(--primary-color);
 }
 
-/* line 42, ../sass/ie.scss */
+/* line 44, ../sass/ie.scss */
 body {
   overflow: auto;
+  font-family: 'Poppins', sans-serif;
 }
 
-/* line 46, ../sass/ie.scss */
+/* line 49, ../sass/ie.scss */
+.vide {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 27px;
+  color: #fff;
+  opacity: 0.7;
+  z-index: 0;
+  height: 20vh;
+}
+
+/* line 60, ../sass/ie.scss */
 .material-icons {
   font-size: 16px;
 }
 
-/* line 50, ../sass/ie.scss */
+/* line 64, ../sass/ie.scss */
 .datatable-container {
-  font-family: sans-serif;
   background-color: var(--dt-background-color-container);
-  border-radius: var(--dt-border-radius);
+  border-radius: 10px;
   color: var(--dt-text-color);
   max-width: 1140px;
   min-width: 950px;
   margin: 0 auto;
-  font-size: 12px;
+  font-size: 14px;
 }
 
-/* line 62, ../sass/ie.scss */
+/* line 75, ../sass/ie.scss */
 .datatable-container .header-tools {
   border-bottom: solid 1px var(--dt-border-color);
   padding: var(--dt-padding);
@@ -60,34 +73,12 @@ body {
   align-items: baseline;
 }
 
-/* line 70, ../sass/ie.scss */
-.datatable-container .header-tools .search {
-  width: 30%;
-}
-
-/* line 76, ../sass/ie.scss */
-.datatable-container .header-tools .search .search-input {
-  width: 100%;
-  height: calc(1.5em + 0.75rem + 2px);
-  padding: 0.375rem 0.75rem;
-  background-color: var(--dt-input-background-color);
-  display: block;
-  box-sizing: border-box;
-  border-radius: var(--dt-border-radius);
-  border: solid 1px var(--dt-border-color);
-  color: var(--dt-input-color);
-}
 /* line 86, ../sass/ie.scss */
-.datatable-container .header-tools .search .search-input:focus {
-  border: 2px solid #eacf4f;
-}
-
-/* line 92, ../sass/ie.scss */
 .datatable-container .header-tools .tools {
-  width: 70%;
+  width: 100%;
 }
 
-/* line 96, ../sass/ie.scss */
+/* line 90, ../sass/ie.scss */
 .datatable-container .header-tools .tools ul {
   margin: 0;
   padding: 0;
@@ -96,33 +87,26 @@ body {
   align-items: baseline;
 }
 
-/* line 104, ../sass/ie.scss */
-.datatable-container .header-tools .tools ul li {
-  display: inline-block;
-  margin: 0 var(--dt-padding-xs);
-  align-items: baseline;
-}
-
-/* line 110, ../sass/ie.scss */
+/* line 100, ../sass/ie.scss */
 .datatable-container .footer-tools {
   padding: var(--dt-padding);
   display: flex;
   align-items: baseline;
 }
 
-/* line 116, ../sass/ie.scss */
+/* line 106, ../sass/ie.scss */
 .datatable-container .footer-tools .list-items {
   width: 50%;
 }
 
-/* line 120, ../sass/ie.scss */
+/* line 110, ../sass/ie.scss */
 .datatable-container .footer-tools .pages {
   margin-left: auto;
   margin-right: 0;
   width: 50%;
 }
 
-/* line 126, ../sass/ie.scss */
+/* line 116, ../sass/ie.scss */
 .datatable-container .footer-tools .pages ul {
   margin: 0;
   padding: 0;
@@ -131,15 +115,9 @@ body {
   justify-content: flex-end;
 }
 
-/* line 134, ../sass/ie.scss */
-.datatable-container .footer-tools .pages ul li {
-  display: inline-block;
-  margin: 0 var(--dt-padding-xs);
-}
-
-/* line 139, ../sass/ie.scss */
+/* line 126, ../sass/ie.scss */
 .datatable-container .footer-tools .pages ul li button,
-.datatable-container .header-tools .tools ul li button {
+.datatable-container .header-tools .tools ul li button, .aNav {
   color: var(--dt-text-color-button);
   width: 100%;
   box-sizing: border-box;
@@ -149,63 +127,70 @@ body {
   cursor: pointer;
 }
 
-/* line 150, ../sass/ie.scss */
-.datatable-container .footer-tools .pages ul li button:hover,
-.datatable-container .header-tools .tools ul li button:hover {
-  background: var(--dt-bg-active-button);
-  color: var(--dt-text-color-active-button);
-}
-
-/* line 156, ../sass/ie.scss */
+/* line 139, ../sass/ie.scss */
 .datatable-container .footer-tools .pages ul li span.active {
   background-color: var(--dt-bg-color);
   border-radius: var(--dt-border-radius);
 }
 
-/* line 161, ../sass/ie.scss */
+/* line 144, ../sass/ie.scss */
 .datatable-container .footer-tools .pages ul li button,
 .datatable-container .footer-tools .pages ul li span,
-.datatable-container .header-tools .tools ul li button {
+.datatable-container .header-tools .tools ul li button, .aNav {
   padding: var(--dt-padding-s) var(--dt-padding);
 }
 
-/* line 167, ../sass/ie.scss */
+/* line 149, ../sass/ie.scss */
+.aNav {
+  width: 8%;
+  text-align: center;
+}
+/* line 152, ../sass/ie.scss */
+.aNav:hover {
+  background-color: #eacf4f;
+}
+/* line 155, ../sass/ie.scss */
+.aNav.active {
+  background-color: #eacf4f;
+}
+
+/* line 160, ../sass/ie.scss */
 .datatable-container .datatable {
   border-collapse: collapse;
   width: 100%;
 }
 
-/* line 172, ../sass/ie.scss */
+/* line 165, ../sass/ie.scss */
 .datatable-container .datatable,
 .datatable-container .datatable th,
 .datatable-container .datatable td {
-  padding: var(--dt-padding) var(--dt-padding);
+  padding: 20px 0;
 }
 
-/* line 178, ../sass/ie.scss */
+/* line 171, ../sass/ie.scss */
 .datatable-container .datatable th {
   font-weight: bolder;
-  text-align: left;
   border-bottom: solid 1px var(--dt-border-color);
+  text-align: center;
+  font-size: 15px;
 }
 
-/* line 184, ../sass/ie.scss */
+/* line 179, ../sass/ie.scss */
 .datatable-container .datatable td {
   border-bottom: solid 1px var(--dt-border-color);
+  text-align: center;
 }
 
-/* line 188, ../sass/ie.scss */
+/* line 185, ../sass/ie.scss */
 .datatable-container .datatable tbody tr:nth-child(even) {
   background-color: var(--dt-even-row-color);
 }
 
-/* line 192, ../sass/ie.scss */
-.datatable-container .datatable tbody tr:hover {
+/* .datatable-container .datatable tbody tr:hover {
   background-color: var(--dt-hover-cell-color);
-  color: #000;
-}
-
-/* line 197, ../sass/ie.scss */
+  color:#000
+} */
+/* line 194, ../sass/ie.scss */
 .datatable-container .datatable tbody tr .available::after,
 .datatable-container .datatable tbody tr .away::after,
 .datatable-container .datatable tbody tr .offline::after {
@@ -213,25 +198,25 @@ body {
   vertical-align: middle;
 }
 
-/* line 204, ../sass/ie.scss */
+/* line 201, ../sass/ie.scss */
 .datatable-container .datatable tbody tr .available::after {
   content: "Online";
   color: var(--dt-status-available-color);
 }
 
-/* line 209, ../sass/ie.scss */
+/* line 206, ../sass/ie.scss */
 .datatable-container .datatable tbody tr .away::after {
   content: "Away";
   color: var(--dt-status-away-color);
 }
 
-/* line 214, ../sass/ie.scss */
+/* line 211, ../sass/ie.scss */
 .datatable-container .datatable tbody tr .offline::after {
   content: "Offline";
   color: var(--dt-status-offline-color);
 }
 
-/* line 219, ../sass/ie.scss */
+/* line 216, ../sass/ie.scss */
 .datatable-container .datatable tbody tr .available::before,
 .datatable-container .datatable tbody tr .away::before,
 .datatable-container .datatable tbody tr .offline::before {
@@ -244,22 +229,104 @@ body {
   vertical-align: middle;
 }
 
-/* line 231, ../sass/ie.scss */
+/* line 228, ../sass/ie.scss */
 .datatable-container .datatable tbody tr .available::before {
   background-color: var(--dt-status-available-color);
 }
 
-/* line 235, ../sass/ie.scss */
+/* line 232, ../sass/ie.scss */
 .datatable-container .datatable tbody tr .away::before {
   background-color: var(--dt-status-away-color);
 }
 
-/* line 239, ../sass/ie.scss */
+/* line 236, ../sass/ie.scss */
 .datatable-container .datatable tbody tr .offline::before {
   background-color: var(--dt-status-offline-color);
 }
 
-/* line 243, ../sass/ie.scss */
+/* line 240, ../sass/ie.scss */
 input[type=checkbox] {
   cursor: pointer;
+}
+
+/* line 244, ../sass/ie.scss */
+.confirmation {
+  display: none;
+  position: fixed;
+  background-color: rgba(0, 0, 0, 0.9);
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  animation-name: modalOpen;
+  animation-duration: 1s;
+  z-index: 1000;
+}
+/* line 256, ../sass/ie.scss */
+.confirmation .form-signin {
+  top: 18%;
+  box-shadow: #eacf4f 0px 0px 13px 0px;
+}
+/* line 260, ../sass/ie.scss */
+.confirmation.show-modal {
+  display: block;
+  /* &::before{
+     content:'';
+     background:rgba(0, 0, 0, 0.8);
+     position: absolute;
+     left: 0;
+     top: 0;
+     bottom: 0;
+     right: 0;
+  } */
+}
+/* line 273, ../sass/ie.scss */
+.confirmation h3 {
+  font-size: 2rem;
+  text-transform: initial;
+  color: #fff;
+  padding: 10px;
+  text-align: center;
+  margin-top: 30px;
+}
+/* line 281, ../sass/ie.scss */
+.confirmation .validation-button {
+  display: flex;
+  justify-content: space-evenly;
+  padding: 0;
+  margin-top: 16px;
+}
+
+/* line 288, ../sass/ie.scss */
+.justify {
+  justify-content: space-evenly;
+}
+
+/* line 292, ../sass/ie.scss */
+.box {
+  font-size: 1.6rem;
+  color: #fff;
+  background: none;
+  border: 0.2rem solid rgba(255, 255, 255, 0.3);
+  text-transform: none;
+  width: 30%;
+  padding: 5px;
+  margin: .7rem 3rem;
+}
+/* line 302, ../sass/ie.scss */
+.box:focus {
+  border-color: #eacf4f;
+}
+
+/* line 306, ../sass/ie.scss */
+.total {
+  color: #eacf4f;
+  font-size: 21px;
+  font-weight: bold;
+  font-style: italic;
+}
+
+/* line 312, ../sass/ie.scss */
+.totalTexte {
+  font-size: 23px;
 }

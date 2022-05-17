@@ -1,0 +1,116 @@
+{% extends 'base.html.twig' %}
+{% block stylesheets %}
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons"
+      rel="stylesheet">
+    <link rel="stylesheet" href="/stylesheets/ie.css">
+{% endblock %}
+{% block body %}
+
+    {% block naavbarLinks %}
+            {% block Gestionnaire %}{{parent()}}{% endblock %}
+            {% block Client %}{% endblock %}
+
+    {% endblock %}
+
+    {% block login %}
+        {% block loginSignIn %}{% endblock %}
+        {% block logout %}{{parent()}}{% endblock %}
+    {% endblock %}
+
+    {% if isVide == 0%}
+        <div class="vide">
+            <h1> Aucune commande n'a été enregistré! </h1>
+        </div>
+    {% else %}
+        <div class="datatable-container">
+            <!-- ======= Header tools ======= -->
+            <div class="header-tools">
+                <div class="tools">
+                {# <form>
+                    <div class="control">
+                    <label for=""></label>
+                    <select class="box" name="" id="">
+                        <option></option>
+                        <option></option>
+                        <option></option>
+                    </select>
+                    </div>
+                <form> #}
+
+                    
+                </form>
+
+                </div> 
+
+            </div> 
+
+            <!-- ======= Table ======= -->
+            <table class="datatable mt-4">
+                <thead>
+                <tr>
+                    <th>Image</th>
+                    <th>Type</th>
+                    <th>Nom </th>
+                    <th>Prix</th>
+                    <th>Composants</th>
+                    <th>Action</th>
+                </tr>
+                </thead>
+                <tbody>
+                    {% for item in catalogue %}
+                        <tr>
+                            <td><img src="/images/{{item.image.nom}}" width="45"/></td>
+                            <td>{{item.type}}</td>
+                            <td>{{item.nom}}</td>
+                            <td>{{item.prix}}</td>
+                            <td>
+                                {% if item.type == "Menu" %}
+                                        {{item.burger.nom }}
+                                    {% for item in item.complements  %}
+                                        {{item.nom}}
+                                    {% endfor %}
+                                {% endif %}
+                            </td>
+                            <td>
+                                <button value="{{'archiver/' ~ item.id}}"  id="archiver" class="btn action modal-toggle">Archiver <i class="fa-solid fa-box-archive"></i></button>
+                                <a href="{{'edit/' ~ item.id}}"  class="btn action">Modifier <i class="fa-solid fa-pen-to-square"></i></a>
+                            </td>
+                        </tr>
+                    {% endfor %}
+
+                </tbody>
+            </table>
+                <div class="validation" id="validation">  
+                  <h3 id="action"></h3>
+                  <div class="validation-button" id="validation-button"> 
+                     <a  id="annuler" href="#main" style="background-color:red" class="btn"> annuler</a>
+                     <a  id="continuer" href="#"  style="background-color:green" class="btn">continuer</a>
+                  </div>
+               </div>
+            <!-- ======= Footer tools ======= -->
+            <div class="footer-tools">
+                {% if isPaginated  %}
+                    <div class="pages">
+                        <ul>
+                        {% if page != 1 %}
+                            <a href="{{path('listMenu' , {page : page - 1 , nbre : nbre } ) }}" class="aNav"> <span aria-hidden='true'>&laquo;</span></a> 
+                        {% endif %}
+
+                        {% for i in range (1 , nbPage) %}
+                            {% if i != 0 %}
+                                <a href="{{path('listMenu' , {page : i , nbre : nbre } ) }}" class="aNav">{{i}}</a>    
+                            {% endif %}
+                        {% endfor %} 
+
+                        {% if page != nbPage %}
+                            <a href="{{path('listMenu' , {page : page + 1 , nbre : nbre } ) }}" class="aNav"><span aria-hidden='true'>&raquo;</span></a>
+                        {% endif %}
+                        </ul>
+                    </div>  
+                {% endif %}
+            </div>
+        </div>
+        <script src="/js/reglerPaiement.js"></script>
+        <script src="/js/catalogue.js"></script>
+    {% endif %}
+{% endblock %}

@@ -67,8 +67,99 @@ body{
    background-position: center;
    font-family: 'Poppins', sans-serif;
    overflow-x: hidden;
+   .action{
+      
+         margin-top: 0px;
+         margin-bottom: 0px;
+   
+   }
+   .danger{
+      background-color:red;
+      color: #fff;
+   }
+   .successs{
+      background-color:green;
+      color: #fff;
+   }
+   .panier{
+      font-size: 15px;
+      padding-top: 7px;
+      padding-left: 10px;
+   }
+   .container{
+      .btn{
+         margin-bottom: 5px;
+      }
+      .prix{
+         font-size: 18px;
+         font-weight: bold;
+      }
+      .type{
+         text-align: end;
+         font-size: 12px;
+      }
+      .total{
+         color:$yellow;
+      }
+      .resume{
+         height: 30vh;
+      }
+      .border-radius{
+         background-color:$black;
+         color: $white;
+      }
+      hr{
+         background:$white ;
+      }
+      .btnValide{
+      //   margin-top: 10%;
+        display: inline-block;
+        margin-top: 10px;
+        cursor: pointer;
+        color:$white;
+        border:$border;
+        background: no-repeat;
+        font-size: 1.7rem;
+        // padding: 5px 25px;
+        padding: 4px 10px;
+        margin-bottom: 2rem;
+     
+        &:hover{
+           color:$black;
+           background: $yellow;
+        }
+      }
+      .border-radius{
+         border-radius:5px;
+         /* background-color:#000;
+         color:white */
+      }
+   }
+
+   #compteur{
+      display: none;
+      justify-content: center;
+      align-items: center;
+      cursor: pointer;
+      color: #000;
+      border: 0.2rem solid rgba(255, 255, 255, 0.3);
+      background: #eacf4f;
+      height: 20px;
+      position: relative;
+      bottom: 45px;
+      text-decoration: none;
+      width: 20px;
+      border-radius: 50%;
+      font-size: 13px;
+      top: -6vh;
+      right: -1.5vw;
+   }  
+
    .fa-circle-left{
       margin-left: -16px;
+   }
+   #message{
+      transition: 2s ease;
    }
    .validation{
       background-color: black;
@@ -113,25 +204,29 @@ body{
          margin-top: 20px;
       }
    }
-   .form-container{
+   .itemExist{
+      @extend .validation;
+      transform: translate(23vw, 40vh);
+      width: 50%;
+      height: 17vh;
+      h3{
+         margin-top: 10px;
+      }
+      .validation-button {
+         margin-top: 1px;
+      }
+   }
+   .form-container{  
       background-color: rgba(0, 0, 0, 0.5);
-      z-index: 1000;
+      z-index: 9999;
       height:100vh;
+      margin-top: -6px;
       &.heighadding{
         height: 120vh;
       }
-      .h3{
-         color: #fff;
-         margin-top: 17px;
-         position: absolute;
-         right: 4rem;
-      }
-      .alert{
-         height: 40px;
-         font-size: 16px;
-         text-align: center;
-         margin-bottom: 22px
-      }
+      
+      
+   
       #divPrix{
          display: none;
       }
@@ -140,7 +235,26 @@ body{
          display: none;
       }
    }
-
+   .alert{
+      height: 40px;
+      font-size: 16px;
+      text-align: center;
+      margin-bottom: 22px
+   }
+   .h4{
+      color: #fff;
+      margin-bottom: 18px;
+      font-size: 13px;
+      margin-left: 30px;
+      display: block;
+      text-align: center;
+   }
+   .h3{
+      color: #fff;
+      margin-top: 17px;
+      position: absolute;
+      right: 4rem;
+   }
    .form-login{
       z-index: 100;
       background-color: #000;
@@ -150,7 +264,7 @@ body{
       border-radius: 15px;
       position: absolute;
       overflow: hidden;
-      top: 20%;
+      top: 24%;
       left: 50%;
       width: 600px;
       max-width: 100%;
@@ -158,6 +272,7 @@ body{
       padding: 15px 25px;
       animation-name: modalOpen;
       animation-duration: 2s;   
+      box-shadow: #eacf4f 0px 0px 13px 0px;
         div{
             text-align: left;
             margin-bottom: 5px;
@@ -183,16 +298,23 @@ body{
             height: 15rem;
             resize: none;
          }
+         .d-block{
+            color: $yellow;
+            font-size: 12px;
+            float: right;
+            margin-bottom: 7px;
+            &:hover{
+               text-decoration: underline
+            }
+         }
          
    }
-   .form-signin{
+   .form-signin , .form-add-menu{
       @extend .form-login;
       top: 16%;
+
    }
-   .form-add-menu{
-      @extend .form-login;
-      top: 14%;
-   }
+  
    
    .login-button {
       z-index: 100;
@@ -268,13 +390,20 @@ body{
       &.error input {
          border:2px solid red ;
       }
+      &.success select {
+         border:2px solid green ;
+      }
+
+      &.error select {
+         border:2px solid red ;
+      }
       &.error small{
          display: block;
          color: red;
          font-size: 13px;
       }
 
-      .checked{
+      /* .checked{
          @extend .box ;
          &.error{
             border: 2px solid red;
@@ -287,7 +416,7 @@ body{
          display: block;
          color: red;
          font-size: 13px;
-      }
+      } */
 
       option{
          color:#000;
@@ -342,6 +471,7 @@ section{
       color:$black;
       background: $yellow;
    }
+   
 }
 .btnGest{
    @extend .btn;
@@ -938,6 +1068,7 @@ section{
 @media (max-width:768px){
    .home .content h3{
       font-size: 2.5rem;
+      // font-size: 4.5rem;
    }
    body{
 

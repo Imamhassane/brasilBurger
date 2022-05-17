@@ -12,11 +12,14 @@
          {% endif %}
 
       {% endblock %}
-    <div class="form-container">  
+    <div class="form-container" style="height: 92.8vh;">  
         <form id="form" class="form-signin" method="post" action="{{path('newClient')}}">    
             <div class="d-flex">
                 <a name="" id="" class="btn m-3 pl-5" href="{{path('catalogue')}}" role="button"><i class="fa-solid fa-circle-left"></i> <span>Catalogue</span></a>
                 <h1 class="h3 mb-3 font-weight-bold">Devenez client chez Brasil Burger !</h1>             
+            </div>
+            <div>
+                <p style="font-size: 14px;color: red;text-align:center; margin-bottom:15px">{{error is defined ? error : ''}}</p>
             </div>
             <div class="row">
                 <div class="control col-md-6">
@@ -34,7 +37,7 @@
             <div class="row">
                 <div class="control col-md-6">
                     <label for="email">Email</label>
-                    <input type="text"  name="email" id="email" class="box" data-aos="zoom-in-down" data-aos-delay= "450" >
+                    <input type="text"  name="email" id="email" class="box" data-aos="zoom-in-down" data-aos-delay= "450" value="{{restorNom is defined ? restorNom : ''}}" >
                     <small></small>
                     <p style="font-size: 14px;color: red;margin-left: 4px;">{{emailExist is defined ? emailExist : ''}}</p>
                 </div>

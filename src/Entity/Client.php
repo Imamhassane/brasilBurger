@@ -6,6 +6,7 @@ use App\Repository\ClientRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: ClientRepository::class)]
 class Client extends User
@@ -24,9 +25,11 @@ class Client extends User
     #[ORM\OneToMany(mappedBy: 'client', targetEntity: Commande::class)]
     private $commandes;
 
+
     public function __construct()
     {
         parent::__construct();
+        $this->commande = new ArrayCollection();
         $this->commandes = new ArrayCollection();
     }
 
@@ -89,8 +92,5 @@ class Client extends User
 
         return $this;
     }
-
-   
-
     
 }
