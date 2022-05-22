@@ -49,7 +49,7 @@
             <h3> <i class="fas fa-check"></i> vegetal ou non </h3>
          </div>
          <div class="d-flex justify-content-center">
-            <button value="{{details.id ~ details.type}}"  class="btn btn-commande">Commander</button>
+            <a href="{{path('add', {'id':details.id ~ details.type}) }}" class="btn btn-commande">ajouter au panier </a>
          </div>
       </div>
    {% endif %}

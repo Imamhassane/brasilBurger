@@ -65,15 +65,18 @@
                             <td>{{item.prix}}</td>
                             <td>
                                 {% if item.type == "Menu" %}
-                                        {{item.burger.nom }}
+                                        {{item.burger.nom }} 
                                     {% for item in item.complements  %}
-                                        {{item.nom}}
+                                      ,  {{item.nom}}
                                     {% endfor %}
+                                {% else %}
+                                    -
                                 {% endif %}
+
                             </td>
                             <td>
-                                <button value="{{'archiver/' ~ item.id}}"  id="archiver" class="btn action modal-toggle">Archiver <i class="fa-solid fa-box-archive"></i></button>
-                                <a href="{{'edit/' ~ item.id}}"  class="btn action">Modifier <i class="fa-solid fa-pen-to-square"></i></a>
+                                <button value="{{'/archiver/' ~ item.id}}"  id="archiver" style="font-size: 12px;" class="btn action modal-toggle">archiver <i class="fa-solid fa-box-archive"></i></button>
+                                <a href="{{'/edit/' ~ item.id ~ item.type}}" style="font-size: 12px;"  class="btn action">modifier <i class="fa-solid fa-pen-to-square"></i></a>
                             </td>
                         </tr>
                     {% endfor %}

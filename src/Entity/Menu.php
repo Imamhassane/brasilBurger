@@ -41,7 +41,9 @@ class Menu
     private $type;
 
     #[ORM\ManyToMany(targetEntity: Commande::class, inversedBy: 'menus')]
-    private $commande;
+    private $commandes;
+
+
 
    
     public function __construct()
@@ -49,7 +51,7 @@ class Menu
         $this->complements = new ArrayCollection();
         $this->etat = "non-archive";
         $this->type = "Menu";
-        $this->commande = new ArrayCollection();
+        $this->commandes = new ArrayCollection();
     }
 
     public function __toString()
@@ -166,15 +168,15 @@ class Menu
     /**
      * @return Collection<int, Commande>
      */
-    public function getCommande(): Collection
+    public function getCommandes(): Collection
     {
-        return $this->commande;
+        return $this->commandes;
     }
 
     public function addCommande(Commande $commande): self
     {
-        if (!$this->commande->contains($commande)) {
-            $this->commande[] = $commande;
+        if (!$this->commandes->contains($commande)) {
+            $this->commandes[] = $commande;
         }
 
         return $this;
@@ -182,11 +184,10 @@ class Menu
 
     public function removeCommande(Commande $commande): self
     {
-        $this->commande->removeElement($commande);
+        $this->commandes->removeElement($commande);
 
         return $this;
     }
 
     
-
 }

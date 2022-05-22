@@ -29,6 +29,7 @@
                 <nav class="navbar">
                     {% block naavbarLinks %}
                         {% block Gestionnaire %}
+                            <a href="{{path('dashboard')}}" class="nav-links">Dashboard</a>
                             <a href="{{path('listMenu')}}" class="nav-links">Liste des produits</a>
                             <a href="{{path('listCommande')}}" class="nav-links">commandes</a>
                             <a href="{{path('addMenu')}}" class="nav-links">ajouter un menu</a>

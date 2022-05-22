@@ -16,7 +16,37 @@
         {% block loginSignIn %}{% endblock %}
         {% block logout %}{{parent()}}{% endblock %}
     {% endblock %}
+    <div class=" overflow-auto">
+        <form class="filtre mt-2 d-block" method="POST" action="{{path('listCommande')}}">
+            <label> Etat </label>
+            <select name="choiceEtat" class="box m-0" id="option">
+                <option value="">Choisr...</option>
+                <option value="en cours">En cours</option>
+                <option value="valider">Validée</option>
+                <option value="annuler">Annulée</option>
+            </select>
 
+            <label class=""> Produits </label>
+            <select name="choiceProduit" class="box m-0" id="option">
+                <option value="">Choisr...</option>
+                <option value="Burger">Burger</option>
+                <option value="Menu">Menu</option>
+            </select>
+
+            <label class=""> Client </label>
+            <select name="choiceClient" class="box m-0" id="option">
+                <option value="">Choisr...</option>
+                {% for item in clients %}
+                    <option value="{{item.id}}">{{item.prenom ~ ' ' ~ item.nom}}</option>
+                {% endfor %}
+            </select>
+
+            <label class="">Date</label>
+            <input type="date" class="box" name="choiceDate">
+
+            <button class="btn ml-5" style="margin-top:18px">Valider</button>
+        </form>
+    </div>
     {% if isVide == 0%}
         <div class="vide">
             <h1> Aucune commande n'a été enregistré! </h1>
@@ -42,7 +72,6 @@
                         <span class="badge badge-danger p-2"><i class="fa-solid fa-circle-xmark"></i> Commande annulée</span>
                         </button>
                         </li>
-                    <div class="ml-auto">test</div>
                     </ul>
                 </div>
 
@@ -119,7 +148,7 @@
                         <div class="text-center p-4 h2">Voulez-vous valider ou nnuler cette commande ?</div>
                         <div class="d-flex justify">
                             <a href="#"  id="refuser" class="btn ml-2">Annuler</a>
-                            <a href="#"  id="confirmer" class="btn ml-2">Valider</a>
+                            <a href="#"  id="valider" class="btn ml-2">Valider</a>
                         </div>
                     </div>
                 </div>

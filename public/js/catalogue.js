@@ -10,7 +10,6 @@ const svg = document.getElementById("svg");
 const deleteCommande = document.getElementsByClassName("deleteCommande");
 const validerCommande = document.getElementById('validerCommande');
 
-
 //archive
 for (let i = 0; i < elements.length; i++) {
     elements[i].addEventListener("click",(e)=>{
@@ -54,7 +53,7 @@ function addInPanier(params) {
 //
 for (let i = 0; i < deleteCommande.length; i++) {
     deleteCommande[i].addEventListener("click",(e)=>{//Evens de suppression
-        // console.log(deleteCommande[i].value);
+        // 
         let params = 1
         updateCompteur(params)
     })
@@ -89,6 +88,7 @@ validerCommande.addEventListener("click",()=>{
     localStorage.setItem("nbrCommande" , 0)
 })
 //
+
 
 
 

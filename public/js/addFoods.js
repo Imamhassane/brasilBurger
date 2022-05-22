@@ -69,7 +69,7 @@ form.addEventListener('submit',function(e){
     checkLength(nom , 3 , 30);
     if (checked.value == "Burger" || checked.value == "Complement") {
         checkRequired([ prix ]);
-        checkLength(prix , 4 , 6);
+        checkLength(prix , 3 , 6);
     }
     if (checked.value == "Menu"){
         checkRequired([ burgerChecked ]);
@@ -94,6 +94,5 @@ checked.addEventListener("change",(e)=>{
         document.getElementById('ajoutMenu').style.display="block"
         document.querySelector('.form-container').classList.add("heighadding");
         document.getElementById('divPrix').style.display="none"
-
     } 
 })

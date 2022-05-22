@@ -15,7 +15,7 @@ class Commande
     #[ORM\Column(type: 'integer')]
     private $id;
 
-    #[ORM\Column(type: 'date')]
+    #[ORM\Column(type: 'string', length: 255)]
     private $date;
 
     #[ORM\Column(type: 'string', length: 255)]
@@ -34,10 +34,10 @@ class Commande
     #[ORM\JoinColumn(nullable: false)]
     private $client;
 
-    #[ORM\ManyToMany(targetEntity: Burger::class, mappedBy: 'commande')]
+    #[ORM\ManyToMany(targetEntity: Burger::class, mappedBy: 'commandes')]
     private $burgers;
 
-    #[ORM\ManyToMany(targetEntity: Menu::class, mappedBy: 'commande')]
+    #[ORM\ManyToMany(targetEntity: Menu::class, mappedBy: 'commandes')]
     private $menus;
 
     public function __construct()
@@ -51,12 +51,12 @@ class Commande
         return $this->id;
     }
 
-    public function getDate(): ?\DateTimeInterface
+    public function getDate(): ?string
     {
         return $this->date;
     }
 
-    public function setDate(\DateTimeInterface $date): self
+    public function setDate(string $date): self
     {
         $this->date = $date;
 

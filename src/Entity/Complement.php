@@ -37,7 +37,7 @@ class Complement
     {
         $this->menus = new ArrayCollection();
         $this->etat = "non-archive";
-        $this->type = "complement";
+        $this->type = "Complement";
     }
 
     public function getId(): ?int

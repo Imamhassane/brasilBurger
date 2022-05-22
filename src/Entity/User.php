@@ -34,12 +34,8 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(type: 'string', length: 255)]
     private $prenom;
 
-    #[ORM\OneToMany(mappedBy: 'user', targetEntity: Client::class)]
-    private $clients;
-
     public function __construct()
     {
-        $this->clients = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -136,35 +132,4 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
-    /**
-     * @return Collection<int, Client>
-     */
-    public function getClients(): Collection
-    {
-        return $this->clients;
-    }
-
-    public function addClient(Client $client): self
-    {
-        if (!$this->clients->contains($client)) {
-            $this->clients[] = $client;
-            $client->setUser($this);
-        }
-
-        return $this;
-    }
-
-    public function removeClient(Client $client): self
-    {
-        if ($this->clients->removeElement($client)) {
-            // set the owning side to null (unless already changed)
-            if ($client->getUser() === $this) {
-                $client->setUser(null);
-            }
-        }
-
-        return $this;
-    }
-
-    
 }

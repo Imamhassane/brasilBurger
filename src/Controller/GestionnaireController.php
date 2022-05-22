@@ -2,7 +2,9 @@
 
 namespace App\Controller;
 
+use DateTime;
 use App\Entity\Menu;
+use App\Entity\User;
 use App\Entity\Image;
 use App\Entity\Burger;
 use App\Entity\Commande;
@@ -10,12 +12,13 @@ use App\Entity\Paiement;
 use App\Entity\Complement;
 use App\Form\BurgerFormType;
 use App\Repository\MenuRepository;
+use App\Repository\UserRepository;
 use App\Repository\BurgerRepository;
 use App\Repository\ClientRepository;
 use App\Repository\CommandeRepository;
 use App\Controller\CatalogueController;
+use App\Entity\Client;
 use App\Repository\ComplementRepository;
-use App\Repository\UserRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -41,7 +44,7 @@ class GestionnaireController extends AbstractController
 
                 $commande = $commandeRepo->find($id);
                 if ($action=="validerCommande") {
-                    $commande->setEtat('confirmer');
+                    $commande->setEtat('valider');
                 }elseif ($action=="annulerCommande") {
                     $commande->setEtat('annuler');
                 }
@@ -52,11 +55,44 @@ class GestionnaireController extends AbstractController
         
     } 
     #[Route('/listCommande/{page?1}/{nbre?3}', name: 'listCommande')]
-    public function ListCommande(CommandeRepository $commandeRepo , $page , $nbre): Response
+    public function ListCommande( Request $request,CommandeRepository $commandeRepo , $page , $nbre, ClientRepository $clientRepo): Response
     {
-        // $commandes = $commandeRepo->findAll();
+        $method = $request->getMethod();
+        $datas = $request->request->all();
+        extract($datas);
 
+
+        $clients = $clientRepo->findAll();
         $commandes = $commandeRepo->findBy(["etat" => "en cours"] , [], $nbre , ($page - 1) * $nbre );
+        
+       
+        if($method == "POST"){
+           
+            $choiceEtat != '' ? $commandes = $commandeRepo->findBy(["etat" => $choiceEtat]) : '';
+            // 
+            if ($choiceProduit != '') {
+                if($choiceProduit == "Menu"){
+                    $commandes = $commandeRepo->findMenusAndCommande();
+                }else{
+                    $commandes = $commandeRepo->findBurgersAndCommande();
+                }
+            }
+            // 
+            $choiceClient != '' ? $commandes = $commandeRepo->findBy(["client" => $choiceClient]) :  '';
+            $choiceDate != '' ? $commandes = $commandeRepo->findBy(["date" => $choiceDate]) : ''; 
+
+            if ($choiceDate != '' && $choiceEtat != '') {
+                $commandes = $commandeRepo->findCommandeByDateAndEtat($choiceDate , $choiceEtat);
+            }
+            if ($choiceDate != '' && $choiceEtat != '' && $choiceClient != '') {
+                $commandes = $commandeRepo->findCommandeByDateAndEtatAndClient($choiceDate , $choiceEtat,$choiceClient);
+            }
+
+            if ($choiceEtat != '' && $choiceClient != '') {
+                $commandes = $commandeRepo->findCommandeByEtatAndClient($choiceEtat,$choiceClient);
+            }
+        }
+
         $nbCommandes =  $commandeRepo->count([]);
         $nbPage = ceil($nbCommandes / $nbre) ;
         return $this->render('gestionnaire/listCommande.html.twig', [
@@ -65,13 +101,14 @@ class GestionnaireController extends AbstractController
             'isPaginated'   => true,
             'nbPage'        => $nbPage,
             'page'          => $page,
-            'nbre'          => $nbre
+            'nbre'          => $nbre,
+            'clients'       => $clients
         ]);
     }
     
     #[Route('/addMenu', name: 'addMenu')]
     #[Route('/edit/{id}', name: 'edit')]
-    public function addMenu(Burger $burger = null , Menu $menu = null , Request $request , EntityManagerInterface $entityManager, SluggerInterface $slugger , BurgerRepository $burgerRepo , MenuRepository $menuRepo , ComplementRepository $complementRepo): Response
+    public function addMenu(Burger $burger = null , Menu $menu = null , Complement $complement =null,  Request $request , EntityManagerInterface $entityManager, SluggerInterface $slugger , BurgerRepository $burgerRepo , MenuRepository $menuRepo , ComplementRepository $complementRepo): Response
     {
         
         $method         = $request->getMethod();
@@ -88,7 +125,9 @@ class GestionnaireController extends AbstractController
         if (!$menu) {
             $menu       = new Menu();
         }
-        $complement = new Complement();
+        if (!$complement) {
+            $complement = new Complement();
+        }
         $image      = new Image();
         $session    = $request->getSession();
         
@@ -98,17 +137,18 @@ class GestionnaireController extends AbstractController
             $Allburgers = $burgerRepo->findAll();
             $Allmenus = $menuRepo->findAll();
             $Allcomplement = $complementRepo->findAll();
-
+            $newId =  (int) filter_var($id, FILTER_SANITIZE_NUMBER_INT);
+            $element = [];
             $catalogue = array_merge( $Allburgers, $Allmenus,$Allcomplement);
             foreach ($catalogue as $value) {
-                if($value->getId() == $id){
-                    if ($value->getType() == "Menu") {
-                        $element = $menuRepo->find($id);
+                if($value->getId() == $newId){
+                    if (str_contains($id , "Menu")) {
+                        $element = $menuRepo->find($newId);
                         $complement =  $element->getComplements()->toArray();
-                    }elseif($value->getType() == "Burger"){
-                        $element = $burgerRepo->find($id);
-                    }else{
-                        $element = $complementRepo  ->find($id);
+                    }elseif(str_contains($id , "Burger")){
+                        $element = $burgerRepo->find($newId);
+                    }elseif(str_contains($id , "Complement")){
+                        $element = $complementRepo  ->find($newId);
                     }
                 }
             }
@@ -124,13 +164,12 @@ class GestionnaireController extends AbstractController
         }
         
         if ($form->isSubmitted() && $form->isValid()) {
-
             $session->set("checked" , $checked);
             $session->set("nom" , $nom);
             $session->set("prix" , $prix);
-            $session->set("burgerName" , $burgerName);
             // $session->set("image" ,  $form->get('image')->getData());
             if($checked == "Menu"){
+                $session->set("burgerName" , $burgerName);
                 $oneBurger = $burgerRepo->find($burgerName);
                 $prixBurgerInMenu = $oneBurger->getPrix();
                 if (!isset($complementName)) {
@@ -205,15 +244,14 @@ class GestionnaireController extends AbstractController
                            ->setImage($image)
                            ->setEtat("non-archive");
                 $entityManager->persist($complement);
-            }else{
+            }elseif($checked == "Menu"){
                 $menu->setNom($nom)
                      ->setBurger($oneBurger)
                      ->setPrix($prixMenu)
                      ->setImage($image)
                      ->setEtat("non-archive");
                      foreach($complementName as $value) {
-                        $manyComplement = $complementRepo->find($value);
-                        $menu->addComplement($manyComplement);
+                        $menu->addComplement($complementRepo->find($value));
                     }
                 $entityManager->persist($menu);
             }
@@ -224,12 +262,12 @@ class GestionnaireController extends AbstractController
 
                 return $this->redirectToRoute('listMenu');
         }
-        return $this->render('gestionnaire/formMenu.html.twig', [
-            'controller_name' => 'GestionnaireController',
-            'form'          => $form->createView(),
-            'allBurger'     => $allBurger,
-            'allComplement' => $allComplement,            
-        ]);
+            return $this->render('gestionnaire/formMenu.html.twig', [
+                'controller_name' => 'GestionnaireController',
+                'form'          => $form->createView(),
+                'allBurger'     => $allBurger,
+                'allComplement' => $allComplement,            
+            ]);
     }
 
     #[Route('/desarchiver/{id}', name: 'desarchiver')]
@@ -302,19 +340,17 @@ class GestionnaireController extends AbstractController
     }
 
 
-    #[Route('/listMenu/{page?1}/{nbre?1}', name: 'listMenu')]
+    #[Route('/listMenu/{page?1}/{nbre?2}', name: 'listMenu')]
     public function listMenu($page , $nbre , BurgerRepository $burgerRepo , MenuRepository $menuRepo, ComplementRepository $complementRepo): Response
     {
         $burgers = $burgerRepo->findBy(['etat' => "non-archive"] , [], $nbre , ($page - 1) * $nbre );
         $menus = $menuRepo->findBy(['etat' => "non-archive"] , [], $nbre , ($page - 1) * $nbre );
         $complements = $complementRepo->findBy(['etat' => "non-archive"] , [], $nbre , ($page - 1) * $nbre );
-        
-        // dd($menus);
-        
+                
         $catalogue = array_merge( $burgers, $menus, $complements);
         $nbProduit = count($catalogue);
-        $nbPage = ceil($nbProduit / $nbre)  ;
-        // dd($catalogue);
+        $nbPage = ceil($nbProduit / $nbre) ;
+
         return $this->render('gestionnaire/listMenu.html.twig', [
             'catalogue'       => $catalogue,
             'isVide'    => count($catalogue),
@@ -323,6 +359,26 @@ class GestionnaireController extends AbstractController
             'page'          => $page,
             'nbre'          => $nbre
 
+        ]);
+    }
+
+    #[Route('/dashboard', name: 'dashboard')]
+    public function dashboard(Request $request,BurgerRepository $burgerRepo , MenuRepository $menuRepo, ComplementRepository $complementRepo , CommandeRepository $commandes): Response
+    {
+        $commandeJournee = $commandes->findBy(["date" => date_format(date_create(),'Y-m-d')]);
+        $recettes = 0 ;
+        foreach ($commandeJournee as $value) {
+            $recettes += $value->getMontant();
+        }
+        return $this->render('gestionnaire/dashboard.html.twig', [
+            'burgers'           => count($burgerRepo->findAll()),
+            'menus'             => count($menuRepo->findAll()),
+            'complements'       => count($complementRepo->findAll()),
+            'commandeEncours'   => $commandes->findBy(["etat"=>"en cours" , "date" => date_format(date_create(),'Y-m-d')]),
+            'commandeValider'   => $commandes->findBy(["etat"=>"valider" , "date" => date_format(date_create(),'Y-m-d')]),
+            'commandeAnnuler'   => $commandes->findBy(["etat"=>"annuler" , "date" => date_format(date_create(),'Y-m-d')]),
+            'date'              => date_format(date_create() , 'd-m-Y'),
+            'recettes'          => $recettes,
         ]);
     }
 }

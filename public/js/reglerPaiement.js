@@ -1,7 +1,7 @@
 const reglerCommande = document.getElementsByClassName("reglerCommande");
 const  confirmation = document.querySelector(".confirmation");
 const refuser = document.getElementById('refuser');
-const confirmer = document.getElementById('confirmer');
+const valider = document.getElementById('valider');
 
 const removeModal = document.getElementById('removeModal');
 
@@ -48,9 +48,8 @@ for (let i = 0; i < reglerCommande.length; i++) {
         // action[0]=="a"?document.getElementById("action").innerHTML="Voulez-vous vraiment continuer l'archivage ?": action[2]=="l"? document.getElementById("action").innerHTML="Voulez-vous vraiment continuer la suppression ?":document.getElementById("action").innerHTML="Voulez-vous vraiment continuer le désarchivage ?";
         
         refuser.href = '/annulerCommande/'+url;
-        confirmer.href = '/validerCommande/'+url;
-        console.log(refuser);
-        console.log(confirmer);
+        valider.href = '/validerCommande/'+url;
+
     });
 }
 //

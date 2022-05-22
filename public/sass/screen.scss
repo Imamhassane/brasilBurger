@@ -67,6 +67,33 @@ body{
    background-position: center;
    font-family: 'Poppins', sans-serif;
    overflow-x: hidden;
+
+   .h-50{
+      color: $yellow;
+   }
+   .activate{
+      color: $yellow;
+      font-size: 16px;
+      margin: 0 10px;
+   }
+   .filtre{
+    color: var(--dt-text-color);
+    max-width: 1187px;
+    min-width: 1100px;
+    margin: 0 auto;
+    font-size: 14px;
+      option{
+         color:#fff;
+         background-color:#000;
+      }
+      .box{
+         width: 15%;
+         margin: 0;
+      }
+      label{
+         margin-left: 3%;
+      }
+   }
    .action{
       
          margin-top: 0px;

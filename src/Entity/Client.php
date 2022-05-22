@@ -19,24 +19,18 @@ class Client extends User
     #[ORM\Column(type: 'integer')]
     private $telephone;
 
-    #[ORM\ManyToOne(targetEntity: User::class, inversedBy: 'clients')]
-    private $user;
-
     #[ORM\OneToMany(mappedBy: 'client', targetEntity: Commande::class)]
     private $commandes;
 
+    #[ORM\OneToOne(targetEntity: User::class, cascade: ['persist', 'remove'])]
+    #[ORM\JoinColumn(nullable: false)]
+    private $user;
 
     public function __construct()
     {
         parent::__construct();
         $this->commande = new ArrayCollection();
         $this->commandes = new ArrayCollection();
-    }
-
-
-    public function getId(): ?int
-    {
-        return $this->id;
     }
 
     public function getTelephone(): ?int
@@ -47,18 +41,6 @@ class Client extends User
     public function setTelephone(int $telephone): self
     {
         $this->telephone = $telephone;
-
-        return $this;
-    }
-
-    public function getUser(): ?User
-    {
-        return $this->user;
-    }
-
-    public function setUser(?User $user): self
-    {
-        $this->user = $user;
 
         return $this;
     }
@@ -92,5 +74,17 @@ class Client extends User
 
         return $this;
     }
-    
+
+    public function getUser(): ?User
+    {
+        return $this->user;
+    }
+
+    public function setUser(User $user): self
+    {
+        $this->user = $user;
+
+        return $this;
+    }
+
 }

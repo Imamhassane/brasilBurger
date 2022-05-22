@@ -6,6 +6,9 @@
 {% endblock %}
 {% block body %}
 
+    
+
+
     {% block naavbarLinks %}
             {% block Gestionnaire %}{% endblock %}
             {% block Client %}{{parent()}}{% endblock %}
@@ -16,12 +19,13 @@
         {% block loginSignIn %}{% endblock %}
         {% block logout %}{{parent()}}{% endblock %}
     {% endblock %}
-
-    {% if isVide == 0%}
+        
+    {% if isVide == 0 %}
         <div class="vide">
             <h1>Vous n'avez enregistré aucune commande! </h1>
         </div>
     {% else %}
+
         {% if errorNumber is defined and errorNumber != null %}
             <div  id = "message" class ="alert danger text-center ">{{errorNumber}}</div>
             {{removeSessionNumber}}
@@ -42,12 +46,29 @@
             {{removeSessionSuccessCommande}}
         {% endif %}
 
+        {% if errorValidation is defined and errorValidation != null %}
+            <div  id = "message" class ="alert danger text-center ">{{errorValidation}}</div>
+            {{removeErrorValidation}}
+        {% endif %} 
+        {% if alreadyPayed is defined and alreadyPayed != null %}
+            <div  id = "message" class ="alert danger text-center ">{{alreadyPayed}}</div>
+            {{removeAlreadyPayed}}
+        {% endif %} 
         {% if commandeValider is defined and commandeValider != null %}
             <div  id = "message" class ="alert successs text-center ">{{commandeValider}}</div>
-            {{commandeValider}}
+            {{removecommandeValider}}
         {% endif %} 
-        
-        <div class="datatable-container mt-5">
+        <form class="filtre" method="POST" action="{{path('mescommandes')}}">
+            <label> Etat </label>
+            <select name="choice" class="box m-0" id="option">
+                <option value="en cours">En cours</option>
+                <option value="valider">Validée</option>
+                <option value="annuler">Annulée</option>
+            </select>
+            <button class="btn" style="margin-top:18px">Ok</button>
+        </form>
+       
+        <div class="datatable-container">
             <!-- ======= Header tools ======= -->
             <div class="header-tools">
                 <div class="tools">
@@ -101,7 +122,7 @@
                             {% if item.burgers != null or item.menus != null %}
                                 <td>
                                     {% for itemBurger in item.burgers %}
-                                        <span class="p-2">{{itemBurger.nom }}</span>
+                                        <span class="p-2">{{itemBurger.nom}}</span>
                                     {% endfor %}
                                     {% for itemMenu in item.menus %}
                                         <span class="p-2">{{itemMenu.nom }}</span>

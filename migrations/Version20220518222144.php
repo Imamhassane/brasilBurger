@@ -10,7 +10,7 @@ use Doctrine\Migrations\AbstractMigration;
 /**
  * Auto-generated Migration: Please modify to your needs!
  */
-final class Version20220510202736 extends AbstractMigration
+final class Version20220518222144 extends AbstractMigration
 {
     public function getDescription(): string
     {
@@ -20,16 +20,14 @@ final class Version20220510202736 extends AbstractMigration
     public function up(Schema $schema): void
     {
         // this up() migration is auto-generated, please modify it to your needs
-        $this->addSql('ALTER TABLE commande ADD client_id INT NOT NULL');
-        $this->addSql('ALTER TABLE commande ADD CONSTRAINT FK_6EEAA67D19EB6921 FOREIGN KEY (client_id) REFERENCES client (id)');
-        $this->addSql('CREATE INDEX IDX_6EEAA67D19EB6921 ON commande (client_id)');
+        $this->addSql('ALTER TABLE client DROP INDEX IDX_C7440455A76ED395, ADD UNIQUE INDEX UNIQ_C7440455A76ED395 (user_id)');
+        $this->addSql('ALTER TABLE client CHANGE user_id user_id INT NOT NULL');
     }
 
     public function down(Schema $schema): void
     {
         // this down() migration is auto-generated, please modify it to your needs
-        $this->addSql('ALTER TABLE commande DROP FOREIGN KEY FK_6EEAA67D19EB6921');
-        $this->addSql('DROP INDEX IDX_6EEAA67D19EB6921 ON commande');
-        $this->addSql('ALTER TABLE commande DROP client_id');
+        $this->addSql('ALTER TABLE client DROP INDEX UNIQ_C7440455A76ED395, ADD INDEX IDX_C7440455A76ED395 (user_id)');
+        $this->addSql('ALTER TABLE client CHANGE user_id user_id INT DEFAULT NULL');
     }
 }

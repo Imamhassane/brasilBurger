@@ -34,22 +34,19 @@ class Burger
     private $type;
 
     #[ORM\ManyToMany(targetEntity: Commande::class, inversedBy: 'burgers')]
-    private $commande;
-
+    private $commandes;
 
     public function __construct()
     {
         $this->menus = new ArrayCollection();
         $this->etat = "non-archive";
         $this->type = "Burger";
-        $this->commande = new ArrayCollection();
-
+        $this->commandes = new ArrayCollection();
     }
 
     public function __toString()
     {
         return $this->id.' '.$this->nom.' '.$this->prix.' '.$this->etat.' '.$this->getImage()->getNom().' '.$this->type ;
-
     }
 
     public function getId(): ?int
@@ -111,8 +108,6 @@ class Burger
         return $this;
     }
     
-
-
     public function getEtat(): ?string
     {
         return $this->etat;
@@ -152,15 +147,15 @@ class Burger
     /**
      * @return Collection<int, Commande>
      */
-    public function getCommande(): Collection
+    public function getCommandes(): Collection
     {
-        return $this->commande;
+        return $this->commandes;
     }
 
     public function addCommande(Commande $commande): self
     {
-        if (!$this->commande->contains($commande)) {
-            $this->commande[] = $commande;
+        if (!$this->commandes->contains($commande)) {
+            $this->commandes[] = $commande;
         }
 
         return $this;
@@ -168,11 +163,9 @@ class Burger
 
     public function removeCommande(Commande $commande): self
     {
-        $this->commande->removeElement($commande);
+        $this->commandes->removeElement($commande);
 
         return $this;
     }
-
-  
 
 }
