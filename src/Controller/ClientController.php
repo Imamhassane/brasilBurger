@@ -8,18 +8,16 @@ use App\Repository\MenuRepository;
 use App\Repository\BurgerRepository;
 use App\Repository\ClientRepository;
 use App\Repository\CommandeRepository;
-use DateTime;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
-use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
- /**
+/**
    * @Security("is_granted('ROLE_ADMIN') or is_granted('ROLE_CLIENT') or is_granted('ROLE_USER')")
-   */
+*/
 
 class ClientController extends AbstractController
 {
@@ -28,7 +26,6 @@ class ClientController extends AbstractController
     #[Route('/mescommandes/{page?1}/{nbre?3}', name: 'mescommandes')]
     public function mesCommande($page , $nbre , Request $request , CommandeRepository $commandeRepo, ClientRepository $clientRepo, BurgerRepository $burgerRepo , MenuRepository $menuRepo, EntityManagerInterface $entityManager):Response{
         
-        $dateTime = new DateTime();
         $method = $request->getMethod();
         $datas = $request->request->all();
         extract($datas);
@@ -44,18 +41,18 @@ class ClientController extends AbstractController
         $alreadyPayed = $session->get('alreadyPayed');
 
 
-        $UserCommande = $commandeRepo->findBy(['client' => $userConnect, 'etat' => "en cours"]);
+        $UserCommande = $commandeRepo->findBy(['client' => $userConnect, 'etat' => "valider"]);
 
-        $myCommandes = $commandeRepo->findBy(['client' => $userConnect, 'etat' => "en cours"] , [], $nbre , ($page - 1) * $nbre );
+        $myCommandes = $commandeRepo->findBy(['client' => $userConnect, 'etat' => "valider"] , [], $nbre , ($page - 1) * $nbre );
         if($method == "POST"){
-            if($choice == "valider"){
-                $UserCommande = $commandeRepo->findBy(['client' => $userConnect, 'etat' => "valider"]);        
-                $myCommandes = $commandeRepo->findBy(['client' => $userConnect, 'etat' => "valider"] , [], $nbre , ($page - 1) * $nbre );
+            if($choice == "en cours"){
+                $UserCommande = $commandeRepo->findBy(['client' => $userConnect, 'etat' => "en cours"]);        
+                $myCommandes = $commandeRepo->findBy(['client' => $userConnect, 'etat' => "en cours"]  );
             }elseif($choice == "annuler"){
                 $UserCommande = $commandeRepo->findBy(['client' => $userConnect, 'etat' => "annuler"]);
-                $myCommandes = $commandeRepo->findBy(['client' => $userConnect, 'etat' => "annuler"] , [], $nbre , ($page - 1) * $nbre );
+                $myCommandes = $commandeRepo->findBy(['client' => $userConnect, 'etat' => "annuler"]  );
             }else{
-                $myCommandes = $commandeRepo->findBy(['client' => $userConnect, 'etat' => "en cours"] , [], $nbre , ($page - 1) * $nbre );
+                $myCommandes = $commandeRepo->findBy(['client' => $userConnect, 'etat' => "valider"]  );
             }
         }
         $nbCommandes = count($UserCommande);
@@ -95,27 +92,37 @@ class ClientController extends AbstractController
         $errorMontant = "";
         $montant = (int)$montant;
         
-        if($commande == null){
+        if($commande == null)
+        {
             $errorNumber = "Ce numéro de commande n'existe pas!";
             $session->set('errorNumber',$errorNumber);
-        }else{
-            if($commande->getMontant() != $montant ){
+        }
+        else
+        {
+            if($commande->getMontant() != $montant )
+            {
                 $errorMontant = 'Le montant saisi ne correspond pas!';
                 $session->set('errorMontant',$errorMontant);
-            }elseif($commande->getEtat() == "en cours" ){
+            }
+            elseif($commande->getEtat() == "en cours" )
+            {
                 $errorValidation = 'Votre commande n\'a pas encore été validée!';
                 $session->set('errorValidation',$errorValidation);
-            }elseif($commande->getPaiement()->getMontant() == $montant ){
+            }
+            elseif ($commande->getPaiement()->getMontant() == $montant )
+            {
                 $alreadyPayed = 'Votre commande n\'a été déjà payée!';
                 $session->set('alreadyPayed',$alreadyPayed);
-            }else{
+            }
+            else
+            {
                 $paiement  = $commande->getPaiement();
                 $paiement->setMontant($montant);
         
                 $entityManager->persist($paiement);
                 $entityManager->flush();
         
-                $success = "La numéro de commnade ".$numero." à été avec succés!" ;
+                $success = "La numéro de commnade ".$numero." à été payé avec succés!" ;
                 $session->set('success',$success);
 
             }
@@ -124,17 +131,15 @@ class ClientController extends AbstractController
         return $this->redirectToRoute('mescommandes');
     }
 
-    #[Route('/validation', name: 'validation')]
-    public function validateCommande(EntityManagerInterface $entityManager , ClientRepository $clientRepo  , Request $request , SessionInterface $session , BurgerRepository $burgerRepo , MenuRepository $menuRepo):Response{
+    #[Route('/commandeValidate', name: 'commandeValidate')]
+    public function commandeValidate(Request $request , ClientRepository $clientRepo, BurgerRepository $burgerRepo , MenuRepository $menuRepo, EntityManagerInterface $entityManager):Response{
        
         $commande = new Commande();
         $paiement = new Paiement();
+        $session    = $request->getSession();
 
         $numero = substr(str_shuffle(str_repeat($x='023456789ABCDEFGHKMNOPQRSTUVWXYZ', ceil(4/strlen($x)) )),1,3);
         $userConnect = $clientRepo->findOneBy(['user' => $session->get('idUser')]);
-        $method         = $request->getMethod();
-        $session    = $request->getSession();
-        $role = $session->get('name');
 
         $panier =   $session->get("panier",[]);
         $data = []; 
@@ -151,8 +156,7 @@ class ClientController extends AbstractController
             $totalItems =   $item['produit']->getPrix() *  $item['quantite'];
             $total += $totalItems;
         }
-
-        if($method == "POST"){
+        
             $commande->setDate(date_format(date_create(),'Y-m-d '))
                     ->setMontant($total)
                     ->setNumero('BrasiL'.$numero)
@@ -169,26 +173,18 @@ class ClientController extends AbstractController
             
             $paiement->setMontant(0)
                      ->setCommande($commande);
-
+    
             $entityManager->persist($commande);
             $entityManager->persist($paiement);
             $entityManager->flush();
-
+    
             $panier =   $session->remove("panier",[]);
-
+    
             $commandeValider = "Votre commande a été enregistré avec succés!" ;
             $session->set('commandeValider',$commandeValider);
             
             return $this->redirectToRoute("mescommandes");
-        }
-
-        return $this->render('client/validateCommande.html.twig', [
-           'items'            => $data  ,
-            'total'     => $total,
-            'role'      => $role
-         
-        ]);
+        
+    
     }
-
-
 }

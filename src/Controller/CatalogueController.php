@@ -2,23 +2,18 @@
 
 namespace App\Controller;
 
-use App\Entity\Burger;
 use App\Entity\User;
 use App\Entity\Client;
-use App\Entity\Commande;
-use App\Entity\Paiement;
 use App\Repository\MenuRepository;
 use App\Repository\BurgerRepository;
 use App\Repository\ClientRepository;
 use App\Repository\ComplementRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\Console\Command\Command;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\HttpFoundation\Session\Session;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 
 class CatalogueController extends AbstractController
@@ -54,7 +49,6 @@ class CatalogueController extends AbstractController
 
         ]);
     }
-    
 
     #[Route('/showDetails/{id}', name: 'showDetails')]
     public function showDetails(Request $request , BurgerRepository $burgerRepo , MenuRepository $menuRepo , ComplementRepository $complementRepo): Response
@@ -82,7 +76,6 @@ class CatalogueController extends AbstractController
 
         ]);
     }
-
 
     #[Route('/newClient', name: 'newClient')]
     public function formClient(Request $request , EntityManagerInterface $entityManager , UserPasswordHasherInterface $userPasswordHasher , ClientRepository $clientRepo): Response
@@ -177,6 +170,7 @@ class CatalogueController extends AbstractController
         return $this->redirectToRoute('catalogue');
 
     }
+
     #[Route('/panier/moins/{id}', name: 'moins')]
     public function moins($id , SessionInterface $session){
         $panier = $session->get("panier", []);
@@ -189,8 +183,9 @@ class CatalogueController extends AbstractController
             $panier[$id] =  0;
         }
         $session->set("panier", $panier);
-        return $this->redirectToRoute('validation');
+        return $this->redirectToRoute('panier');
     }
+
     #[Route('/panier/addition/{id}', name: 'addition')]
     public function addition($id , SessionInterface $session){
         $panier = $session->get("panier", []);
@@ -200,9 +195,9 @@ class CatalogueController extends AbstractController
             $panier[$id] =  1;
         }
         $session->set("panier", $panier);
-        return $this->redirectToRoute('validation');
+        return $this->redirectToRoute('panier');
     }
- 
+
     #[Route('/panier/remove/{id}', name: 'remove')]
     public function remove($id , SessionInterface $session){
         $panier = $session->get('panier', []);
@@ -211,6 +206,37 @@ class CatalogueController extends AbstractController
             unset($panier[$id]);
         }
         $session->set("panier",$panier);
-        return $this->redirectToRoute("validation");
+        return $this->redirectToRoute("panier");
     }
+
+    #[Route('/panier', name: 'panier')]
+    public function panier(Request $request , SessionInterface $session , BurgerRepository $burgerRepo , MenuRepository $menuRepo):Response{
+       
+        $session    = $request->getSession();
+        $role = $session->get('name');
+
+        $panier =   $session->get("panier",[]);
+        $data = []; 
+        foreach ($panier as $id => $quantite) {
+            $idChecked = (int) filter_var($id, FILTER_SANITIZE_NUMBER_INT);
+            $data [] = [
+                'produit' => str_contains($id, 'Burger') ? $burgerRepo->find($idChecked) : $menuRepo->find($idChecked),
+                'quantite'=> $quantite
+            ];
+        }
+        
+        $total = 0;
+        foreach ($data as $item) {
+            $totalItems =   $item['produit']->getPrix() *  $item['quantite'];
+            $total += $totalItems;
+        }
+
+        return $this->render('client/validateCommande.html.twig', [
+           'items'            => $data  ,
+            'total'     => $total,
+            'role'      => $role
+         
+        ]);
+    }
+
 }

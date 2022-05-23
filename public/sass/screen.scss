@@ -94,6 +94,23 @@ body{
          margin-left: 3%;
       }
    }
+   .filtre2{
+      color: var(--dt-text-color);
+      
+      font-size: 14px;
+        option{
+           color:#fff;
+           background-color:#000;
+        }
+        .box{
+           width: 15%;
+           margin: 0;
+        }
+        label{
+           margin-left: 3%;
+        }
+     }
+
    .action{
       
          margin-top: 0px;
@@ -599,7 +616,7 @@ section{
         .nav-links{
          color: #fff;
          font-size: 16px;
-         margin: 0 10px;
+         margin: 5px 10px;
 
          &:hover{
             text-decoration: underline;

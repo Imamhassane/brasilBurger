@@ -22,7 +22,7 @@
         
     {% if isVide == 0 %}
         <div class="vide">
-            <h1>Vous n'avez enregistré aucune commande! </h1>
+            <h1>Aucune commande! </h1>
         </div>
     {% else %}
 
@@ -37,12 +37,12 @@
         {% endif %}
       
         {% if success is defined and success != "" %}
-            <div  id = "messageSuccess" class ="alert successs text-center">{{success}}</div>
+            <div  id = "message" class ="alert successs text-center">{{success}}</div>
             {{removeSessionSuccess}}
         {% endif %}
 
         {% if successCommande is defined and successCommande != "" %}
-            <div  id = "messageCommande" class ="alert successs text-center ">{{successCommande}}</div>
+            <div  id = "message" class ="alert successs text-center ">{{successCommande}}</div>
             {{removeSessionSuccessCommande}}
         {% endif %}
 
@@ -58,14 +58,15 @@
             <div  id = "message" class ="alert successs text-center ">{{commandeValider}}</div>
             {{removecommandeValider}}
         {% endif %} 
-        <form class="filtre" method="POST" action="{{path('mescommandes')}}">
+        <form class="filtre2" method="POST" action="{{path('mescommandes')}}">
             <label> Etat </label>
             <select name="choice" class="box m-0" id="option">
+                <option value="">Choisir...</option>
                 <option value="en cours">En cours</option>
                 <option value="valider">Validée</option>
                 <option value="annuler">Annulée</option>
             </select>
-            <button class="btn" style="margin-top:18px">Ok</button>
+            <button class="btn" style="margin-top:17.5px">Ok</button>
         </form>
        
         <div class="datatable-container">
@@ -80,7 +81,7 @@
                     </li>
                     <li>
                     <button>
-                        <span class="badge badge-success p-2"><i class="fas fa-check"></i> Commande payée et acceptée</span>
+                        <span class="badge badge-success p-2"><i class="fas fa-check"></i> Commande validée et payée</span>
                     </button>
                     </li>
                     <li>
@@ -190,6 +191,7 @@
                 </div>
             <script src="/js/paiement.js"></script>
             <script src="/js/catalogue.js"></script>
+            <style>#link-mescommandes{color:#eacf4f;}</style>
 
     {% endif %}
 {% endblock %}

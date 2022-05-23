@@ -56,3 +56,7 @@ for (let i = 0; i < reglerCommande.length; i++) {
 removeModal.addEventListener("click",()=>{
     confirmation.classList.remove("show-modal");
 })
+//
+setTimeout(function(){
+    document.getElementById('message').style.display = 'none';
+}, 4000);

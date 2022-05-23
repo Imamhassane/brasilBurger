@@ -104,6 +104,18 @@ class CommandeRepository extends ServiceEntityRepository
             ->getResult()
         ;
     }
+
+    public function CalculRecetteByJournee($value,$value3)
+    {
+        return $this->createQueryBuilder('c')
+            ->innerJoin(Order::class)
+            ->andWhere('c.client = :val3')
+            ->setParameter('val', $value)
+            ->setParameter('val3', $value3)
+            ->getQuery()
+            ->getResult()
+        ;
+    }
     /*
     public function findOneBySomeField($value): ?Commande
     {

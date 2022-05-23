@@ -16,6 +16,14 @@
         {% block loginSignIn %}{% endblock %}
         {% block logout %}{{parent()}}{% endblock %}
     {% endblock %}
+    {% if commandeValiderByGest is defined and commandeValiderByGest != null %}
+        <div  id = "message" class ="alert successs text-center ">{{commandeValiderByGest}}</div>
+        {{removecommandeValiderByGest}}
+    {% endif %} 
+    {% if commandeAnnulerByGest is defined and commandeAnnulerByGest != null %}
+        <div  id = "message" class ="alert danger text-center ">{{commandeAnnulerByGest}}</div>
+        {{removecommandeAnnulerByGest}}
+    {% endif %} 
     <div class=" overflow-auto">
         <form class="filtre mt-2 d-block" method="POST" action="{{path('listCommande')}}">
             <label> Etat </label>
@@ -145,7 +153,7 @@
                         <div class="d-flex mb-3">
                             <button  id="removeModal" class="btn m-3 pl-5" ><i class="fa-solid fa-circle-left"></i> <span> Liste des commandes </span></button>
                         </div>
-                        <div class="text-center p-4 h2">Voulez-vous valider ou nnuler cette commande ?</div>
+                        <div class="text-center p-4 h2">Voulez-vous valider ou annuler cette commande ?</div>
                         <div class="d-flex justify">
                             <a href="#"  id="refuser" class="btn ml-2">Annuler</a>
                             <a href="#"  id="valider" class="btn ml-2">Valider</a>
@@ -185,5 +193,7 @@
             </div>
         </div>
         <script src="/js/reglerPaiement.js"></script>
+        <style>#link-commandes{color:#eacf4f;}</style>
+
     {% endif %}
 {% endblock %}

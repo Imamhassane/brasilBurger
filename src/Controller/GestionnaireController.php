@@ -3,10 +3,12 @@
 namespace App\Controller;
 
 use DateTime;
+use DateTimeZone;
 use App\Entity\Menu;
 use App\Entity\User;
 use App\Entity\Image;
 use App\Entity\Burger;
+use App\Entity\Client;
 use App\Entity\Commande;
 use App\Entity\Paiement;
 use App\Entity\Complement;
@@ -17,7 +19,6 @@ use App\Repository\BurgerRepository;
 use App\Repository\ClientRepository;
 use App\Repository\CommandeRepository;
 use App\Controller\CatalogueController;
-use App\Entity\Client;
 use App\Repository\ComplementRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
@@ -41,16 +42,22 @@ class GestionnaireController extends AbstractController
     {
             $id = array_values(explode ("/", $request->getrequestUri()))[2];
             $action = array_values(explode ("/", $request->getrequestUri()))[1];
+            $session    = $request->getSession();
 
                 $commande = $commandeRepo->find($id);
                 if ($action=="validerCommande") {
                     $commande->setEtat('valider');
+                    $commandeValiderByGest = "le numéro de commande ".$commande->getNumero()."  été validé avec succés!" ;
+                    $session->set('commandeValiderByGest',$commandeValiderByGest);      
                 }elseif ($action=="annulerCommande") {
                     $commande->setEtat('annuler');
+                    $commandeAnnulerByGest = "le numéro de commande ".$commande->getNumero()."  été annulé avec succés!" ;
+                    $session->set('commandeAnnulerByGest',$commandeAnnulerByGest);
                 }
             
                 $entityManager->persist($commande);
                 $entityManager->flush();
+                
                 return $this->redirectToRoute('listCommande');       
         
     } 
@@ -60,11 +67,14 @@ class GestionnaireController extends AbstractController
         $method = $request->getMethod();
         $datas = $request->request->all();
         extract($datas);
+        $session    = $request->getSession();
 
 
         $clients = $clientRepo->findAll();
         $commandes = $commandeRepo->findBy(["etat" => "en cours"] , [], $nbre , ($page - 1) * $nbre );
         
+        $commandeValiderByGest = $session->get('commandeValiderByGest');
+        $commandeAnnulerByGest = $session->get('commandeAnnulerByGest');
        
         if($method == "POST"){
            
@@ -102,7 +112,11 @@ class GestionnaireController extends AbstractController
             'nbPage'        => $nbPage,
             'page'          => $page,
             'nbre'          => $nbre,
-            'clients'       => $clients
+            'clients'       => $clients,
+            'commandeValiderByGest'=>$commandeValiderByGest,
+            'removecommandeValiderByGest'   => $session->remove('commandeValiderByGest'),
+            'commandeAnnulerByGest'=>$commandeAnnulerByGest,
+            'removecommandeAnnulerByGest'   => $session->remove('commandeAnnulerByGest'),
         ]);
     }
     
@@ -339,7 +353,6 @@ class GestionnaireController extends AbstractController
         ]);
     }
 
-
     #[Route('/listMenu/{page?1}/{nbre?2}', name: 'listMenu')]
     public function listMenu($page , $nbre , BurgerRepository $burgerRepo , MenuRepository $menuRepo, ComplementRepository $complementRepo): Response
     {
@@ -365,7 +378,11 @@ class GestionnaireController extends AbstractController
     #[Route('/dashboard', name: 'dashboard')]
     public function dashboard(Request $request,BurgerRepository $burgerRepo , MenuRepository $menuRepo, ComplementRepository $complementRepo , CommandeRepository $commandes): Response
     {
-        $commandeJournee = $commandes->findBy(["date" => date_format(date_create(),'Y-m-d')]);
+       
+        $date = new DateTime("now", new DateTimeZone('Africa/Dakar') );
+        $cureentDate = $date->format('Y-m-d');
+        
+        $commandeJournee = $commandes->findBy(["date" => $cureentDate]);
         $recettes = 0 ;
         foreach ($commandeJournee as $value) {
             $recettes += $value->getMontant();
@@ -374,10 +391,10 @@ class GestionnaireController extends AbstractController
             'burgers'           => count($burgerRepo->findAll()),
             'menus'             => count($menuRepo->findAll()),
             'complements'       => count($complementRepo->findAll()),
-            'commandeEncours'   => $commandes->findBy(["etat"=>"en cours" , "date" => date_format(date_create(),'Y-m-d')]),
-            'commandeValider'   => $commandes->findBy(["etat"=>"valider" , "date" => date_format(date_create(),'Y-m-d')]),
-            'commandeAnnuler'   => $commandes->findBy(["etat"=>"annuler" , "date" => date_format(date_create(),'Y-m-d')]),
-            'date'              => date_format(date_create() , 'd-m-Y'),
+            'commandeEncours'   => $commandes->findBy(["etat"=>"en cours" , "date" => $cureentDate]),
+            'commandeValider'   => $commandes->findBy(["etat"=>"valider" , "date" => $cureentDate]),
+            'commandeAnnuler'   => $commandes->findBy(["etat"=>"annuler" , "date" => $cureentDate]),
+            'date'              => $date->format('d-m-Y'),
             'recettes'          => $recettes,
         ]);
     }

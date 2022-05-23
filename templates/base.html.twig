@@ -29,24 +29,24 @@
                 <nav class="navbar">
                     {% block naavbarLinks %}
                         {% block Gestionnaire %}
-                            <a href="{{path('dashboard')}}" class="nav-links">Dashboard</a>
-                            <a href="{{path('listMenu')}}" class="nav-links">Liste des produits</a>
-                            <a href="{{path('listCommande')}}" class="nav-links">commandes</a>
-                            <a href="{{path('addMenu')}}" class="nav-links">ajouter un menu</a>
-                            <a href="{{path('archiveList')}}" class="nav-links"> archives </a>
+                            <a href="{{path('dashboard')}}" id="link-dashoard" class="nav-links">Dashboard</a>
+                            <a href="{{path('listMenu')}}" id="link-produitList" class="nav-links">Liste des produits</a>
+                            <a href="{{path('listCommande')}}" id="link-commandes" class="nav-links">commandes</a>
+                            <a href="{{path('addMenu')}}" id="link-addMenu" class="nav-links">ajouter un menu</a>
+                            <a href="{{path('archiveList')}}" id="link-archives" class="nav-links"> archives </a>
                         {% endblock %}
                         {% block Client %}
-                            <a href="{{path('catalogue')}}" class="nav-links">Catalogue</a>
-                            <a href="{{path('mescommandes')}}" class="nav-links">mes commandes</a>
-                            <a href="{{path('validation')}}" id=""  class="nav-links"><svg id="svg" class=" mr-3" xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="currentColor" class="bi bi-cart" viewBox="0 0 16 16"><path d="M0 1.5A.5.5 0 0 1 .5 1H2a.5.5 0 0 1 .485.379L2.89 3H14.5a.5.5 0 0 1 .491.592l-1.5 8A.5.5 0 0 1 13 12H4a.5.5 0 0 1-.491-.408L2.01 3.607 1.61 2H.5a.5.5 0 0 1-.5-.5zM3.102 4l1.313 7h8.17l1.313-7H3.102zM5 12a2 2 0 1 0 0 4 2 2 0 0 0 0-4zm7 0a2 2 0 1 0 0 4 2 2 0 0 0 0-4zm-7 1a1 1 0 1 1 0 2 1 1 0 0 1 0-2zm7 0a1 1 0 1 1 0 2 1 1 0 0 1 0-2z"/></svg>
+                            <a href="{{path('catalogue')}}" id="link-catalogue" class="nav-links">Catalogue</a>
+                            <a href="{{path('mescommandes')}}" id="link-mescommandes" class="nav-links">mes commandes</a>
+                            <a href="{{path('panier')}}" id="link-panier"  class="nav-links"><svg id="svg" class=" mr-3" xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="currentColor" class="bi bi-cart" viewBox="0 0 16 16"><path d="M0 1.5A.5.5 0 0 1 .5 1H2a.5.5 0 0 1 .485.379L2.89 3H14.5a.5.5 0 0 1 .491.592l-1.5 8A.5.5 0 0 1 13 12H4a.5.5 0 0 1-.491-.408L2.01 3.607 1.61 2H.5a.5.5 0 0 1-.5-.5zM3.102 4l1.313 7h8.17l1.313-7H3.102zM5 12a2 2 0 1 0 0 4 2 2 0 0 0 0-4zm7 0a2 2 0 1 0 0 4 2 2 0 0 0 0-4zm-7 1a1 1 0 1 1 0 2 1 1 0 0 1 0-2zm7 0a1 1 0 1 1 0 2 1 1 0 0 1 0-2z"/></svg>
                             <span id="compteur" name="compteur" value=""></span></a>
                         {% endblock %}
                     {% endblock %}
-                    {# <a href="#" class="fas fa-shopping-cart icons"></a> #}
+                    {# <a href="#" class="fas fa-shopping-cart fa-3x"></a>  #}
                     {% block login %}
                         <div class="icons d-flex justify-content-end ml-auto mt-3">
                             {% block loginSignIn %}
-                                <a href="{{path('validation')}}" style="margin-top:-12px" id="showCommandeToken"  class="nav-links">
+                                <a href="{{path('panier')}}" id="link-paniernotconnected" style="margin-top:-12px" id="showCommandeToken"  class="nav-links">
                                 <svg id="svg" class=" mr-3" xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="currentColor" class="bi bi-cart" viewBox="0 0 16 16"><path d="M0 1.5A.5.5 0 0 1 .5 1H2a.5.5 0 0 1 .485.379L2.89 3H14.5a.5.5 0 0 1 .491.592l-1.5 8A.5.5 0 0 1 13 12H4a.5.5 0 0 1-.491-.408L2.01 3.607 1.61 2H.5a.5.5 0 0 1-.5-.5zM3.102 4l1.313 7h8.17l1.313-7H3.102zM5 12a2 2 0 1 0 0 4 2 2 0 0 0 0-4zm7 0a2 2 0 1 0 0 4 2 2 0 0 0 0-4zm-7 1a1 1 0 1 1 0 2 1 1 0 0 1 0-2zm7 0a1 1 0 1 1 0 2 1 1 0 0 1 0-2z"/></svg>
                                 <span id="compteur" name="compteur" value=""></span></a>
                                 <a id="loginButton" href="{{path('login')}}" class="btn mr-md-4">Se connecter</a>
@@ -68,12 +68,7 @@
             <!-- custom js file link      -->
             <script src="/js/script.js"></script>
             <script src="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.js"></script>
-            
-            <script>
-                AOS.init({
-                duration: 800,
-                });
-            </script>
+            <script>AOS.init({duration: 800,});</script>
         </body>
     </html>
 

@@ -377,3 +377,8 @@ section {
 .box:focus {
   border-color: #eacf4f;
 }
+
+/* line 336, ../sass/print.scss */
+.btn {
+  margin-bottom: 3rem;
+}

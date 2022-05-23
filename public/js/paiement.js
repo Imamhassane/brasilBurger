@@ -61,10 +61,3 @@ setTimeout(function(){
     document.getElementById('message').style.display = 'none';
 }, 4000);
 //
-setTimeout(function(){
-    document.getElementById('messageCommande').style.display = 'none';
-}, 4000);
-//
-setTimeout(function(){
-    document.getElementById('messageSuccess').style.display = 'none';
-}, 4000);

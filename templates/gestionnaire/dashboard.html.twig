@@ -46,18 +46,10 @@
 
                 <div class="table-data">
                     <div class="order">
-                        <div class="head">
-                            <h3>Recent Orders</h3>
-                                <form class="mt-2 d-block ml-auto" method="POST" action="{{path('listCommande')}}">
-                                    <label class="d-block"> Etat </label>
-                                    <select name="choiceEtat" class="box m-0" id="option">
-                                        <option value="">Choisr...</option>
-                                        <option value="en cours">En cours</option>
-                                        <option value="valider">Validée</option>
-                                        <option value="annuler">Annulée</option>
-                                    </select>
-                                    <button class="btn ml-2" style="margin-top:18px">Valider</button>
-                                </form>
+                        <div class="d-flex justify-content-between">
+                            <a href="#" id="commandeValider" class="btn">Commandes validées</a>
+                            <a href="#" id="commandeEncours" class="btn">Commandes en cours</a>
+                            <a href="#" id="commandeAnnuler" class="btn">Commandes annulées</a>
                         </div>
                         <table>
                             <thead>
@@ -70,7 +62,7 @@
                             </thead>
                             <tbody>
                                 {% for item in commandeEncours %}
-                                <tr>
+                                <tr id="enCours">
                                     <td>{{item.numero}}</td>
 
                                     {% if item.burgers != null or item.menus != null %}
@@ -95,8 +87,63 @@
                                         <td><span class="badge badge-danger ml-4"><i class="fa-solid fa-circle-xmark mt-1"></i></span></td>
                                     {% endif %}
 
+                                </tr>
+                                {% endfor %}
+
+                                {% for item in commandeValider %}
+                                <tr id="Valide">
+                                    <td>{{item.numero}}</td>
+
+                                    {% if item.burgers != null or item.menus != null %}
+                                        <td>
+                                            {% for itemBurger in item.burgers %}
+                                                <span class="p-2">{{itemBurger.nom }}</span>
+                                            {% endfor %}
+                                            {% for itemMenu in item.menus %}
+                                                <span class="p-2">{{itemMenu.nom }}</span>
+                                            {% endfor %}
+                                        </td>
+                                    {% endif %}
+
+                                    <td>{{item.montant}}</td>
 
 
+                                    {% if item.paiement.montant == 0 %}
+                                        <td><span class="badge badge-warning ml-4 "><i class="fa-solid fa-triangle-exclamation "></i></span></td>
+                                    {% elseif item.paiement.montant != 0 %}
+                                        <td><span class="badge badge-success ml-4 "><i class="fas fa-check "></i></span></td>
+                                    {% elseif item.etat == "annuler" %}
+                                        <td><span class="badge badge-danger ml-4"><i class="fa-solid fa-circle-xmark mt-1"></i></span></td>
+                                    {% endif %}
+
+                                </tr>
+                                {% endfor %}
+
+                                {% for item in commandeAnnuler %}
+                                <tr id="annule">
+                                    <td>{{item.numero}}</td>
+
+                                    {% if item.burgers != null or item.menus != null %}
+                                        <td>
+                                            {% for itemBurger in item.burgers %}
+                                                <span class="p-2">{{itemBurger.nom }}</span>
+                                            {% endfor %}
+                                            {% for itemMenu in item.menus %}
+                                                <span class="p-2">{{itemMenu.nom }}</span>
+                                            {% endfor %}
+                                        </td>
+                                    {% endif %}
+
+                                    <td>{{item.montant}}</td>
+
+
+                                    {% if item.paiement.montant == 0 %}
+                                        <td><span class="badge badge-warning ml-4 "><i class="fa-solid fa-triangle-exclamation "></i></span></td>
+                                    {% elseif item.paiement.montant != 0 %}
+                                        <td><span class="badge badge-success ml-4 "><i class="fas fa-check "></i></span></td>
+                                    {% elseif item.etat == "annuler" %}
+                                        <td><span class="badge badge-danger ml-4"><i class="fa-solid fa-circle-xmark mt-1"></i></span></td>
+                                    {% endif %}
 
                                 </tr>
                                 {% endfor %}
@@ -119,5 +166,6 @@
             <!-- MAIN -->
         </section>
 	<!-- CONTENT -->
+    <style>#link-dashoard{color:#eacf4f;}</style>
     <script src="/js/dashboard.js"></script>
 {% endblock %}
