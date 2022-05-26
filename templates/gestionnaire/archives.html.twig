@@ -52,21 +52,17 @@
             <table class="datatable mt-4">
                 <thead>
                 <tr>
-                    <th>Action</th>
                     <th>Type</th>
                     <th>Nom </th>
                     <th>Prix</th>
                     <th>Composants</th>
+                    <th>Action</th>
 
                 </tr>
                 </thead>
                 <tbody>
                     {% for item in catalogue %}
                         <tr>
-                            <td>
-                                <button value="{{'desarchiver/' ~ item.id}}"  id="archiver" class="btn action modal-toggle">Desarchiver <i class="fa-solid fa-box-archive"></i></button>
-                                <a href="{{'edit/' ~ item.id}}"  class="btn action">Modifier <i class="fa-solid fa-pen-to-square"></i></a>
-                            </td>
                             <td>{{item.type}}</td>
                             <td>{{item.nom}}</td>
                             <td>{{item.prix}} F CFA</td>
@@ -76,7 +72,14 @@
                                     {% for item in item.complements  %}
                                         {{' , ' ~ item.nom}}
                                     {% endfor %}
+                                {% else %}
+                                    -
                                 {% endif %}
+                                
+                            </td>
+                            <td>
+                                <button value="{{'desarchiver/' ~ item.id}}"  id="archiver" class="btn action modal-toggle">Desarchiver <i class="fa-solid fa-box-archive"></i></button>
+                                <a href="{{'edit/' ~ item.id}}"  class="btn action">Modifier <i class="fa-solid fa-pen-to-square"></i></a>
                             </td>
                         </tr>
                     {% endfor %}

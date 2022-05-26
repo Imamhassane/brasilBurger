@@ -1,0 +1,86 @@
+{% extends 'base.html.twig' %}
+{% block stylesheets %}
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons"
+      rel="stylesheet">
+    <link rel="stylesheet" href="/stylesheets/ie.css">
+{% endblock %}
+{% block body %}
+
+    {% block naavbarLinks %}
+            {% block Gestionnaire %}{% endblock %}
+            {% block Client %}{{parent()}}{% endblock %}
+
+    {% endblock %}
+
+    {% block login %}
+        {% block loginSignIn %}{% endblock %}
+        {% block logout %}{{parent()}}{% endblock %}
+    {% endblock %}
+ 
+        <!-- ======= Form ======= -->
+        <form method = "POST" action="{{path('paiement')}}" id="form">
+
+            <div class="confirmation">
+                <div class="paiement ">
+                    <div class="datatable-container">           
+                            <div class="d-flex mb-3">
+                                <a  href="{{path('mescommandes')}}" class="btn m-3 pl-5" ><i class="fa-solid fa-circle-left"></i> <span>mes commandes</span></a>
+                            </div>
+                            <!-- ======= Table ======= -->
+                            <table class="datatable mt-4">
+                                <thead>
+                                <tr>
+                                    <th>Numero commande</th>
+                                    {# <th>Date</th> #}
+                                    <th>Commandes</th>
+                                    <th>Montant</th>
+                                    {# <th>Etat</th> #}
+                                    {# <th>Paiement</th> #}
+                                </tr>
+                                </thead>
+            
+                                <tbody>
+                                    {% for item in commandes %}
+                                        <tr>
+                                            <td>{{item.numero}}</td>
+            
+                                            {# <td>{{item.date |date("d/m/Y")}}</td> #}
+            
+                                            {% if item.burgers != null or item.menus != null %}
+                                                <td>
+                                                    {% for itemBurger in item.burgers %}
+                                                        <span class="p-2">{{itemBurger.nom}}</span>
+                                                    {% endfor %}
+                                                    {% for itemMenu in item.menus %}
+                                                        <span class="p-2">{{itemMenu.nom }}</span>
+                                                    {% endfor %}
+                                                </td>
+                                            {% endif %}
+            
+                                            <td>{{item.montant}}</td>
+            
+                                            {# <td>{{item.etat}}</td> #}
+            
+                                            {# {% if item.paiement.montant == 0 %}
+                                                    <td><span class="badge badge-warning ml-4 "><i class="fa-solid fa-triangle-exclamation "></i></span></td>
+                                                {% elseif item.paiement.montant != 0 %}
+                                                    <td><span class="badge badge-success ml-4 "><i class="fas fa-check "></i></span></td>
+                                                {% elseif item.etat == "annuler" %}
+                                                    <td><span class="badge badge-danger ml-4"><i class="fa-solid fa-circle-xmark mt-1"></i></span></td>
+                                            {% endif %} #}
+                                        </tr>
+                                    {% endfor %}
+                                    
+                                </tbody>
+                            </table>
+                            <input type="submit" value="Valider le paiement" class="btn mt-4" data-aos-delay= "900">
+                            <button class="btn float-right mt-4" disabled >Total : <span class="total">{{total}} F CFA </span>  </button>
+                        </div>
+                </div>
+            </div>
+        </form>
+        <!-- ======= EndForm ======= -->
+            <script src="/js/paiement.js"></script>
+            <script src="/js/catalogue.js"></script>
+
+{% endblock %}

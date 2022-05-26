@@ -3,6 +3,7 @@
 namespace App\Repository;
 
 use App\Entity\Commande;
+use App\Entity\Paiement;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\ORM\OptimisticLockException;
 use Doctrine\ORM\ORMException;
@@ -108,7 +109,7 @@ class CommandeRepository extends ServiceEntityRepository
     public function CalculRecetteByJournee($value,$value3)
     {
         return $this->createQueryBuilder('c')
-            ->innerJoin(Order::class)
+            ->innerJoin(Paiement::class , 'p')
             ->andWhere('c.client = :val3')
             ->setParameter('val', $value)
             ->setParameter('val3', $value3)

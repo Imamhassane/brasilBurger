@@ -3,11 +3,11 @@ const validCommande = document.getElementsByClassName("btn-commande");
 const validation = document.getElementById("validation");
 const annuler = document.getElementById("annuler");
 const continuer = document.getElementById("continuer");
+let deleteCommande = document.getElementsByName("deleteCommande");
 
 //
 const compteur = document.getElementById("compteur");
 const svg = document.getElementById("svg");
-const deleteCommande = document.getElementsByClassName("deleteCommande");
 const validerCommande = document.getElementById('validerCommande');
 
 //archive
@@ -34,7 +34,7 @@ function updateCompteur(params = null) {
     if (params == null) {
         nbrCommande++
     }else{
-        nbrCommande--
+        nbrCommande -= params 
     }
     compteur.style.display = "flex";
     compteur.innerHTML = nbrCommande;
@@ -49,17 +49,13 @@ function addInPanier(params) {
         });
     }
 }
-
 //
-for (let i = 0; i < deleteCommande.length; i++) {
-    deleteCommande[i].addEventListener("click",(e)=>{//Evens de suppression
-        // 
-        let params = 1
-        updateCompteur(params)
+deleteCommande.forEach(input => {
+    input.addEventListener("click",()=>{
+            let value       = input.getAttribute('value');
+            updateCompteur(value)
     })
-
-}
-
+});
 //Rechargement de page 
 let currpage    = window.location.href;
 let lasturl     = sessionStorage.getItem("last_url");
@@ -84,12 +80,13 @@ function update(params) {
          compteur.style.display = "none";
      }
 }
+
+
+//
 validerCommande.addEventListener("click",()=>{
     localStorage.setItem("nbrCommande" , 0)
 })
 //
-
-
 
 
 

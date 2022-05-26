@@ -4,12 +4,9 @@ const nom = document.getElementById('nom');
 const image = document.getElementById('burger_form_image');
 const checked = document.getElementById('checked');
 const burger = document.getElementById('burger')
-const menu = document.getElementById('menu');
-const complement = document.getElementById('complement');
-const complemntChecked = document.getElementById("complemntChecked");   
 const burgerChecked = document.getElementById("burgerMenu");   
+const complementName = document.getElementById("complementName")
 
-const com = document.getElementsByClassName('complementName')
 
 let isVerify = []
 //Functions-------------------------------------------------------------
@@ -55,6 +52,20 @@ function checkRequired(inputArray) {// Tester si les champs ne sont pas vides
     });
 }
 //
+function checkRequired2(inputArray) {// Tester si les champs ne sont pas vides
+    inputArray.forEach(input => {
+        if (input.value.trim() === '') {
+            const formControl = input.parentElement;
+            formControl.classList.add("error");
+            document.getElementById("errorImg").innerHTML="L'image est obligatoire"
+        }else{
+            const formControl = input.parentElement;
+            formControl.classList.add("success");
+            document.getElementById("errorImg").innerHTML=''
+        }
+    });
+}
+//
 function getFieldName(input) {//Retour le nom de chaque input en se basant sur son id
     return input.id.charAt(0).toUpperCase() + input.id.slice(1);
 }
@@ -63,9 +74,9 @@ function getFieldName(input) {//Retour le nom de chaque input en se basant sur s
 
 //Even listeners--------------------------------------------------------
 form.addEventListener('submit',function(e){
-
     isVerify = []
     checkRequired([ nom , checked ]); 
+    checkRequired2([ image ]);
     checkLength(nom , 3 , 30);
     if (checked.value == "Burger" || checked.value == "Complement") {
         checkRequired([ prix ]);
@@ -73,6 +84,9 @@ form.addEventListener('submit',function(e){
     }
     if (checked.value == "Menu"){
         checkRequired([ burgerChecked ]);
+        if (complementName.value == "") {
+            checkRequired([ complementName ]);
+        }
     } 
     for (let i = 0; i < isVerify.length; i++) {
         if (isVerify[i]==false) {
@@ -96,3 +110,5 @@ checked.addEventListener("change",(e)=>{
         document.getElementById('divPrix').style.display="none"
     } 
 })
+
+

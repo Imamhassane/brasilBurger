@@ -2,8 +2,10 @@ const reglerCommande = document.getElementsByClassName("reglerCommande");
 const  confirmation = document.querySelector(".confirmation");
 const refuser = document.getElementById('refuser');
 const valider = document.getElementById('valider');
-
 const removeModal = document.getElementById('removeModal');
+const choiceEtat = document.getElementById('choiceEtat');
+const choiceProduit = document.getElementById('choiceProduit');
+const choiceDate = document.getElementById('choiceDate');
 
 //Functions-------------------------------------------------------------
 function showError(input, message) {//Afficher les messages d'erreur
@@ -52,6 +54,35 @@ for (let i = 0; i < reglerCommande.length; i++) {
 
     });
 }
+//
+
+//
+let tab = []
+let tabId = []
+let addComplement = document.getElementsByName('addComplement');
+addComplement.forEach((complement) => {
+    complement.addEventListener("click",()=>{
+        if (complement.checked) {
+            tabId.push(complement.id)
+            localStorage.setItem("tabId", tabId)
+                
+            tab.push(complement.value)
+            href = '/panier/'+tab.toString()
+
+            document.location.replace('panier')
+            // alert(`You selected: ${complement.value}`)
+        }
+    })
+});
+//
+choiceEtat.addEventListener("change",(e)=>{
+    let val = choiceEtat.value.replace(' ',"")
+    document.location.replace("/commande"+val)
+})
+//
+choiceProduit.addEventListener("change",(e)=>{
+    document.location.replace("/commande"+choiceProduit.value)
+})
 //
 removeModal.addEventListener("click",()=>{
     confirmation.classList.remove("show-modal");

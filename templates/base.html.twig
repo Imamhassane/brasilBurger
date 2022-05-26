@@ -15,7 +15,9 @@
             <link rel="stylesheet" href="/stylesheets/screen.css">
             <!-- cdn link   -->
             <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" integrity="sha512-9usAa10IRO0HhonpyAIVpjrylPvoDwiPUiKdWk5t3PyolY1cOd4DSE0Ga+ri4AuTroPR5aQvXU9xC6qOPnzFeg==" crossorigin="anonymous" referrerpolicy="no-referrer"/>
-            
+            <!--select2 -->
+            <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+
             {% block stylesheets %}
             {% endblock %}
 
@@ -32,8 +34,8 @@
                             <a href="{{path('dashboard')}}" id="link-dashoard" class="nav-links">Dashboard</a>
                             <a href="{{path('listMenu')}}" id="link-produitList" class="nav-links">Liste des produits</a>
                             <a href="{{path('listCommande')}}" id="link-commandes" class="nav-links">commandes</a>
-                            <a href="{{path('addMenu')}}" id="link-addMenu" class="nav-links">ajouter un menu</a>
-                            <a href="{{path('archiveList')}}" id="link-archives" class="nav-links"> archives </a>
+                            <a href="{{path('addMenu')}}" id="link-addMenu" class="nav-links">Produits</a>
+                            <a href="{{path('archiveList')}}" id="link-archives" class="nav-links"> Archives </a>
                         {% endblock %}
                         {% block Client %}
                             <a href="{{path('catalogue')}}" id="link-catalogue" class="nav-links">Catalogue</a>
@@ -65,10 +67,18 @@
                 </form> #}
             </header>
             {% block body %}{% endblock %}
+            <!-- AOS     -->
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.js"></script>
+            <script> AOS.init({duration: 800,});</script>
+            <script>function filterByDaye(e) {
+                document.location.replace("/commande+"+choiceDate.value)
+            }</script>
             <!-- custom js file link      -->
             <script src="/js/script.js"></script>
-            <script src="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.js"></script>
-            <script>AOS.init({duration: 800,});</script>
+            <script src="/js/reglerPaiement.js"></script>
+            {# <script src="http://code.jquery.com/jquery-1.11.0.min.js"></script> #}
+            <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+
         </body>
     </html>
 

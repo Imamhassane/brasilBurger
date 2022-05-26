@@ -58,16 +58,15 @@
             <div  id = "message" class ="alert successs text-center ">{{commandeValider}}</div>
             {{removecommandeValider}}
         {% endif %} 
-        <form class="filtre2" method="POST" action="{{path('mescommandes')}}">
+        <div class="filtre2">
             <label> Etat </label>
             <select name="choice" class="box m-0" id="option">
-                <option value="">Choisir...</option>
+                <option id="test1">Choisir...</option>
                 <option value="en cours">En cours</option>
                 <option value="valider">Validée</option>
                 <option value="annuler">Annulée</option>
             </select>
-            <button class="btn" style="margin-top:17.5px">Ok</button>
-        </form>
+        </div>
        
         <div class="datatable-container">
             <!-- ======= Header tools ======= -->
@@ -89,109 +88,111 @@
                        <span class="badge badge-danger p-2"><i class="fa-solid fa-circle-xmark"></i> Commande annulée</span>
                     </button>
                     </li>
-                    <button id="payer" class="btn ml-auto">Payer une commande</button>
+                    <li>
+                    <button>
+                        <span class="badge badge-dark p-2"><input type="checkbox" disabled/> Commande non validée ou déjà payé</span>
+                    </button>
+                        
+                    </li>
                 </ul>
                 </div>
 
             </div> 
 
-            <!-- ======= Table ======= -->
-            <table class="datatable mt-4">
-                <thead>
-                <tr>
-                    {# <th><input type="checkbox" /></th> #}
-                    {# <th>Status</th> #}
-                    <th>Numero commande</th>
-                    <th>Date</th>
-                    <th>Commandes</th>
-                    <th>Montant</th>
-                    <th>Etat</th>
-                    <th>Paiement</th>
-                </tr>
-                </thead>
+            <!-- ======= Form ======= -->
+            <form method = "POST" action="{{path('paiement')}}" id="form">
 
-                <tbody>
-                    {% for item in myCommandes %}
-                        <tr>
-                            {# <td>
-                                <input type="checkbox" />
-                            </td> #}
-                            <td>{{item.numero}}</td>
+                <!-- ======= Table ======= -->
+                <table class="datatable mt-4">
+                    <thead>
+                    <tr>
+                        <th>Choisir</th>
+                        {# <th>Status</th> #}
+                        <th>Numero commande</th>
+                        <th>Date</th>
+                        <th>Commandes</th>
+                        <th>Montant</th>
+                        <th>Etat</th>
+                        <th>Paiement</th>
+                    </tr>
+                    </thead>
 
-                            <td>{{item.date |date("d/m/Y")}}</td>
-
-                            {% if item.burgers != null or item.menus != null %}
+                    <tbody>
+                        {% for item in myCommandes %}
+                            <tr>
                                 <td>
-                                    {% for itemBurger in item.burgers %}
-                                        <span class="p-2">{{itemBurger.nom}}</span>
-                                    {% endfor %}
-                                    {% for itemMenu in item.menus %}
-                                        <span class="p-2">{{itemMenu.nom }}</span>
-                                    {% endfor %}
+                                    {% if item.etat == "valider" and item.paiement.montant == 0 %}
+                                        <input type="checkbox" name="commandeAPayer[]"  value="{{item.id}}"/>
+                                    {% else %}
+                                        <input type="checkbox" disabled/>                                    
+                                    {% endif %}
                                 </td>
+                                <td>{{item.numero}}</td>
+
+                                <td>{{item.date |date("d/m/Y")}}</td>
+
+                                {% if item.burgers != null or item.menus != null %}
+                                    <td>
+                                        {% for itemBurger in item.burgers %}
+                                            <span class="p-2">{{itemBurger.nom}}</span>
+                                        {% endfor %}
+                                        {% for itemMenu in item.menus %}
+                                            <span class="p-2">{{itemMenu.nom }}</span>
+                                        {% endfor %}
+                                    </td>
+                                {% endif %}
+
+                                <td>{{item.montant}}</td>
+
+                                <td>{{item.etat}}</td>
+
+                            {% if item.paiement.montant == 0 %}
+                                    <td><span class="badge badge-warning ml-4 "><i class="fa-solid fa-triangle-exclamation "></i></span></td>
+                                {% elseif item.paiement.montant != 0 %}
+                                    <td><span class="badge badge-success ml-4 "><i class="fas fa-check "></i></span></td>
+                                {% elseif item.etat == "annuler" %}
+                                    <td><span class="badge badge-danger ml-4"><i class="fa-solid fa-circle-xmark mt-1"></i></span></td>
+                            {% endif %}
+                            </tr>
+                        {% endfor %}
+                        
+                    </tbody>
+                </table>
+                <!-- ======= EndForm ======= -->
+
+                <!-- ======= Footer tools ======= -->
+                <div class="footer-tools">
+                    <button id="payer" disabled class="btn pl-5 pr-5" >Payer</button>
+                
+                    {% if isPaginated  %}
+                        <div class="pages">
+                            <ul>
+                            {% if page != 1 %}
+                                <a href="{{path('mescommandes' , {page : page - 1 , nbre : nbre } ) }}" class="aNav"> <span aria-hidden='true'>&laquo;</span></a> 
                             {% endif %}
 
-                             <td>{{item.montant}}</td>
+                            {% for i in range (1 , nbPage) %}
+                                {% if i != 0 %}
+                                    <a href="{{path('mescommandes' , {page : i , nbre : nbre } ) }}" class="aNav">{{i}}</a>    
+                                {% endif %}
+                            {% endfor %} 
 
-                            <td>{{item.etat}}</td>
-
-                           {% if item.paiement.montant == 0 %}
-                                <td><span class="badge badge-warning ml-4 "><i class="fa-solid fa-triangle-exclamation "></i></span></td>
-                            {% elseif item.paiement.montant != 0 %}
-                                <td><span class="badge badge-success ml-4 "><i class="fas fa-check "></i></span></td>
-                            {% elseif item.etat == "annuler" %}
-                                <td><span class="badge badge-danger ml-4"><i class="fa-solid fa-circle-xmark mt-1"></i></span></td>
+                            {% if page != nbPage %}
+                                <a href="{{path('mescommandes' , {page : page + 1 , nbre : nbre } ) }}" class="aNav"><span aria-hidden='true'>&raquo;</span></a>
                             {% endif %}
-                        </tr>
-                    {% endfor %}
-                </tbody>
-            </table>
-
-            <!-- ======= Footer tools ======= -->
-            <div class="footer-tools">
-               
-                {% if isPaginated  %}
-                    <div class="pages">
-                        <ul>
-                        {% if page != 1 %}
-                            <a href="{{path('mescommandes' , {page : page - 1 , nbre : nbre } ) }}" class="aNav"> <span aria-hidden='true'>&laquo;</span></a> 
-                        {% endif %}
-
-                        {% for i in range (1 , nbPage) %}
-                            {% if i != 0 %}
-                                <a href="{{path('mescommandes' , {page : i , nbre : nbre } ) }}" class="aNav">{{i}}</a>    
-                            {% endif %}
-                        {% endfor %} 
-
-                        {% if page != nbPage %}
-                            <a href="{{path('mescommandes' , {page : page + 1 , nbre : nbre } ) }}" class="aNav"><span aria-hidden='true'>&raquo;</span></a>
-                        {% endif %}
-                        </ul>
-                    </div>  
-                {% endif %}
-            </div>
-        </div>
-                <div class="confirmation">
-                    <form id="form" class="form-signin" method="post" action="{{path('paiement')}}">    
-                        <div class="d-flex mb-3">
-                            <button  id="removeModal" class="btn m-3 pl-5" ><i class="fa-solid fa-circle-left"></i> <span>Mes commandes</span></button>
-                        </div>
-                            <div class="control">
-                                <label for="numero">Numéro de commande</label>
-                                <input type="text"  name="numero" id="numero" class="box" data-aos="zoom-in-down" data-aos-delay= "450" value="" >
-                                <small></small>
-                            </div>
-                            <div class="control">
-                                <label for="montant">Montant de la commande</label>
-                                <input type="number"  name="montant" id="montant" class="box" data-aos="zoom-in-down"  data-aos-delay= "750" value="" >
-                                <small></small>
-                            </div>
-                        <input type="submit" value="Payer" class="btn" data-aos-delay= "900">
-                    </form>
+                            </ul>
+                        </div>  
+                    {% endif %}
                 </div>
+            </form>
+        </div>
             <script src="/js/paiement.js"></script>
             <script src="/js/catalogue.js"></script>
             <style>#link-mescommandes{color:#eacf4f;}</style>
-
+            <script>
+                
+                //document.getElementById("test").innerHTML =  "en cours"
+                
+            </script>
     {% endif %}
 {% endblock %}

@@ -61,50 +61,53 @@ class GestionnaireController extends AbstractController
                 return $this->redirectToRoute('listCommande');       
         
     } 
+
+
     #[Route('/listCommande/{page?1}/{nbre?3}', name: 'listCommande')]
+    #[Route('/commande{etat}/{page?1}/{nbre?3}', name: 'commandeFilter')]
     public function ListCommande( Request $request,CommandeRepository $commandeRepo , $page , $nbre, ClientRepository $clientRepo): Response
     {
-        $method = $request->getMethod();
+        $uri =$request->getRequestUri();
         $datas = $request->request->all();
         extract($datas);
         $session    = $request->getSession();
 
-
         $clients = $clientRepo->findAll();
-        $commandes = $commandeRepo->findBy(["etat" => "en cours"] , [], $nbre , ($page - 1) * $nbre );
+        $commandes = $commandeRepo->findBy(["etat" => "en cours"] , ["date" => "DESC"], $nbre , ($page - 1) * $nbre );
+        $commandesEncours = $commandeRepo->findBy(["etat" => "en cours"]);
         
         $commandeValiderByGest = $session->get('commandeValiderByGest');
         $commandeAnnulerByGest = $session->get('commandeAnnulerByGest');
-       
-        if($method == "POST"){
-           
-            $choiceEtat != '' ? $commandes = $commandeRepo->findBy(["etat" => $choiceEtat]) : '';
-            // 
-            if ($choiceProduit != '') {
-                if($choiceProduit == "Menu"){
-                    $commandes = $commandeRepo->findMenusAndCommande();
-                }else{
-                    $commandes = $commandeRepo->findBurgersAndCommande();
-                }
-            }
-            // 
-            $choiceClient != '' ? $commandes = $commandeRepo->findBy(["client" => $choiceClient]) :  '';
-            $choiceDate != '' ? $commandes = $commandeRepo->findBy(["date" => $choiceDate]) : ''; 
-
-            if ($choiceDate != '' && $choiceEtat != '') {
-                $commandes = $commandeRepo->findCommandeByDateAndEtat($choiceDate , $choiceEtat);
-            }
-            if ($choiceDate != '' && $choiceEtat != '' && $choiceClient != '') {
-                $commandes = $commandeRepo->findCommandeByDateAndEtatAndClient($choiceDate , $choiceEtat,$choiceClient);
-            }
-
-            if ($choiceEtat != '' && $choiceClient != '') {
-                $commandes = $commandeRepo->findCommandeByEtatAndClient($choiceEtat,$choiceClient);
+        
+        
+        if (array_values(explode ("/", $request->getrequestUri()))[1] != "listCommande") {
+      
+            if( $uri == "/commandeannuler"){
+                $commandes = $commandeRepo->findBy(["etat" => "annuler"],["date" => "DESC"] );
+            }elseif( $uri == "/commandevalider"){
+                $commandes = $commandeRepo->findBy(["etat" => "valider"],["date" => "DESC"] );
+            }elseif($uri == "/commandeencours"){
+                $commandes = $commandeRepo->findBy(["etat" => "en cours"], ["date" => "DESC"] , $nbre , ($page - 1) * $nbre );
+            }elseif($uri == "/commandeBurger"){
+                $commandes = $commandeRepo->findBurgersAndCommande();
+            }elseif($uri == "/commandeMenu"){
+                $commandes = $commandes = $commandeRepo->findMenusAndCommande();
+            }elseif(preg_match('~[0-9]+~', $uri)){
+                $id = (int) filter_var($uri, FILTER_SANITIZE_NUMBER_INT);
+                $commandes = $commandeRepo->findBy(["client" => $id]);
+            }if(isset(explode('+' , $uri)[1])){
+                $date = explode('+' , $uri)[1];
+                $commandes = $commandeRepo->findBy(["date" => $date]);
             }
         }
 
-        $nbCommandes =  $commandeRepo->count([]);
+        /*      $choiceDate != '' ?  : ''; */
+                
+        
+
+        $nbCommandes = count($commandesEncours);
         $nbPage = ceil($nbCommandes / $nbre) ;
+
         return $this->render('gestionnaire/listCommande.html.twig', [
             'commandes' => $commandes,
             'isVide'    => count($commandes),
@@ -178,33 +181,21 @@ class GestionnaireController extends AbstractController
         }
         
         if ($form->isSubmitted() && $form->isValid()) {
+
             $session->set("checked" , $checked);
             $session->set("nom" , $nom);
             $session->set("prix" , $prix);
             // $session->set("image" ,  $form->get('image')->getData());
             if($checked == "Menu"){
-                $session->set("burgerName" , $burgerName);
                 $oneBurger = $burgerRepo->find($burgerName);
                 $prixBurgerInMenu = $oneBurger->getPrix();
-                if (!isset($complementName)) {
-                    return $this->render('gestionnaire/formMenu.html.twig', [
-                        'form' => $form->createView(),
-                        'allBurger' => $allBurger,
-                        'allComplement' => $allComplement,
-                        'restorChecked' => $session->get('checked'),
-                        'restorNom' => $session->get('nom'),
-                        'restorBurgerName' => $oneBurger,
-                        // 'restorImage' => $session->get('image'),
-                        'errorComplement'=> 'Veuillez ajouter au moins un complément!'
-                    ]);
-                }else{
-                    foreach($complementName as $value) {
-                        $manyComplement = $complementRepo->find($value);
-                        $sumPrixComplement[] = $manyComplement->getPrix();                
-                    }
-                    $prixComplementInMenu = array_sum($sumPrixComplement);
-                    $prixMenu = $prixBurgerInMenu + $prixComplementInMenu;
+                foreach($complementName as $value) {
+                    $manyComplement = $complementRepo->find($value);
+                    $sumPrixComplement[] = $manyComplement->getPrix();                
                 }
+                $prixComplementInMenu = array_sum($sumPrixComplement);
+                $prixMenu = $prixBurgerInMenu + $prixComplementInMenu;
+                
             }
             
             
@@ -269,7 +260,7 @@ class GestionnaireController extends AbstractController
                     }
                 $entityManager->persist($menu);
             }
-             
+
             $entityManager->persist($image);
             $entityManager->flush();
             // do anything else you need here, like send an email
@@ -353,17 +344,21 @@ class GestionnaireController extends AbstractController
         ]);
     }
 
-    #[Route('/listMenu/{page?1}/{nbre?2}', name: 'listMenu')]
+    #[Route('/listMenu/{page?1}/{nbre?1}', name: 'listMenu')]
     public function listMenu($page , $nbre , BurgerRepository $burgerRepo , MenuRepository $menuRepo, ComplementRepository $complementRepo): Response
     {
         $burgers = $burgerRepo->findBy(['etat' => "non-archive"] , [], $nbre , ($page - 1) * $nbre );
         $menus = $menuRepo->findBy(['etat' => "non-archive"] , [], $nbre , ($page - 1) * $nbre );
         $complements = $complementRepo->findBy(['etat' => "non-archive"] , [], $nbre , ($page - 1) * $nbre );
-                
+             
+        $count = max( count($burgerRepo->findBy(['etat' => "non-archive"])) , count($menuRepo->findBy(['etat' => "non-archive"])) , count($complementRepo->findBy(['etat' => "non-archive"])) );
+        
         $catalogue = array_merge( $burgers, $menus, $complements);
-        $nbProduit = count($catalogue);
-        $nbPage = ceil($nbProduit / $nbre) ;
-
+        
+        // $nbProduit = count($burgerRepo->findBy(['etat' => "non-archive"])) + count($menuRepo->findBy(['etat' => "non-archive"])) + count($complementRepo->findBy(['etat' => "non-archive"]));
+       
+        $nbPage = $count;
+        
         return $this->render('gestionnaire/listMenu.html.twig', [
             'catalogue'       => $catalogue,
             'isVide'    => count($catalogue),
@@ -382,7 +377,7 @@ class GestionnaireController extends AbstractController
         $date = new DateTime("now", new DateTimeZone('Africa/Dakar') );
         $cureentDate = $date->format('Y-m-d');
         
-        $commandeJournee = $commandes->findBy(["date" => $cureentDate]);
+        $commandeJournee = $commandes->findBy(["date" => $cureentDate, "etat" => "valider"]);
         $recettes = 0 ;
         foreach ($commandeJournee as $value) {
             $recettes += $value->getMontant();

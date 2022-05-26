@@ -4,6 +4,8 @@ namespace App\Controller;
 
 use App\Entity\User;
 use App\Entity\Client;
+use App\Entity\Commande;
+use App\Service\PdfService;
 use App\Repository\MenuRepository;
 use App\Repository\BurgerRepository;
 use App\Repository\ClientRepository;
@@ -19,29 +21,17 @@ use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 class CatalogueController extends AbstractController
 {
 
-    public static function getAllFoods(Request $request , BurgerRepository $burgerRepo , MenuRepository $menuRepo, ComplementRepository $complementRepo):array{
-        $session    = $request->getSession();
-        $role = $session->get('name');
-        
-        $burgers = $burgerRepo->findBy(["etat" => "non-archive"]);
-        $menus = $menuRepo->findBy(["etat" => "non-archive"]);
-        if($role == "ROLE_ADMIN"){
-            $complement = $complementRepo->findBy(["etat" => "non-archive"]);
-            return array_merge($burgers, $menus, $complement) ;
-        }else{
-            return array_merge($burgers, $menus) ;
-
-        }
-    }
-
     #[Route('/', name: 'catalogue')]
     public function catalogue(Request $request , BurgerRepository $burgerRepo , MenuRepository $menuRepo , ComplementRepository $complementRepo): Response
     {
         $session    = $request->getSession();
         $role = $session->get('name');
-       
-        $catalogue = $this->getAllFoods($request , $burgerRepo, $menuRepo, $complementRepo);
-        
+
+        $burgers = $burgerRepo->findBy(["etat" => "non-archive"]);
+        $menus = $menuRepo->findBy(["etat" => "non-archive"]);
+
+        $catalogue = array_merge($burgers , $menus);
+
         return $this->render('catalogue/catalogue.html.twig', [
             'controller_name' => 'CatalogueController',
             'role'            => $role,
@@ -57,19 +47,15 @@ class CatalogueController extends AbstractController
         $role = $session->get('name');
         
         $id  = array_values(explode ("/", $request->getrequestUri()))[2];
-        $catalogue = $this->getAllFoods($request , $burgerRepo, $menuRepo,$complementRepo);
-        foreach ($catalogue as $value) {
-            if($value->getId() == $id){
 
-                if ($value->getType() == "Menu") {
-                    $details = $menuRepo->find($id);
-                }else{
-                    $details = $burgerRepo->find($id);
-                }
-
-            }
+        $idProduit = (int) filter_var($id, FILTER_SANITIZE_NUMBER_INT);
+        
+        if(str_contains($id , "Menu")){
+            $details = $menuRepo->find($idProduit);
+        }elseif(str_contains($id, "Burger")){
+            $details = $burgerRepo->find($idProduit);
         }
-        // dd($details);
+
         return $this->render('catalogue/showDetails.html.twig', [
             'details'       => $details,
             'role'            => $role,
@@ -160,6 +146,7 @@ class CatalogueController extends AbstractController
     
     #[Route('/panier/add/{id}', name: 'add')]
     public function add($id , SessionInterface $session){
+        /*  */
         $panier = $session->get("panier", []);
         if(!empty($panier[$id])){
             $panier[$id]++;
@@ -210,11 +197,13 @@ class CatalogueController extends AbstractController
     }
 
     #[Route('/panier', name: 'panier')]
-    public function panier(Request $request , SessionInterface $session , BurgerRepository $burgerRepo , MenuRepository $menuRepo):Response{
+    #[Route('/pdf', name: 'pdf')]
+
+    public function panier(PdfService $pdf ,Request $request , SessionInterface $session , BurgerRepository $burgerRepo , MenuRepository $menuRepo, ComplementRepository $complementRepo):Response{
        
         $session    = $request->getSession();
         $role = $session->get('name');
-
+        $complements = $complementRepo->findBy(['etat'=>"non-archive"]);
         $panier =   $session->get("panier",[]);
         $data = []; 
         foreach ($panier as $id => $quantite) {
@@ -231,12 +220,25 @@ class CatalogueController extends AbstractController
             $total += $totalItems;
         }
 
+        // generate pdf 
+        
+       /*  $html = $this->render('client/validateCommande.html.twig', [
+            'items'            => $data  ,
+             'total'     => $total,
+             'role'      => $role,
+             'complements'=>$complements,
+         ]); */
+
+        // $pdf->showPdfFile($html);
+
         return $this->render('client/validateCommande.html.twig', [
            'items'            => $data  ,
             'total'     => $total,
-            'role'      => $role
-         
+            'role'      => $role,
+            'complements'=>$complements,
         ]);
     }
+ 
+    
 
 }

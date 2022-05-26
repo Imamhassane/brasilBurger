@@ -2,18 +2,24 @@
 
 namespace App\Controller;
 
+use DateTime;
+use DateTimeZone;
 use App\Entity\Commande;
 use App\Entity\Paiement;
 use App\Repository\MenuRepository;
 use App\Repository\BurgerRepository;
 use App\Repository\ClientRepository;
 use App\Repository\CommandeRepository;
+use App\Repository\PaiementRepository;
+use App\Repository\ComplementRepository;
+use App\Service\PdfService;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\Console\Command\Command;
 
 /**
    * @Security("is_granted('ROLE_ADMIN') or is_granted('ROLE_CLIENT') or is_granted('ROLE_USER')")
@@ -22,12 +28,13 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 class ClientController extends AbstractController
 {
     
-
     #[Route('/mescommandes/{page?1}/{nbre?3}', name: 'mescommandes')]
+    #[Route('/mescommandeEtat{etat}/{page?1}/{nbre?3}', name: 'mescommandeEtat')]
     public function mesCommande($page , $nbre , Request $request , CommandeRepository $commandeRepo, ClientRepository $clientRepo, BurgerRepository $burgerRepo , MenuRepository $menuRepo, EntityManagerInterface $entityManager):Response{
         
-        $method = $request->getMethod();
         $datas = $request->request->all();
+        $uri =$request->getRequestUri();
+
         extract($datas);
         $session    = $request->getSession();
         $userConnect = $clientRepo->findOneBy(['user' => $session->get('idUser')]);
@@ -42,21 +49,19 @@ class ClientController extends AbstractController
 
 
         $UserCommande = $commandeRepo->findBy(['client' => $userConnect, 'etat' => "valider"]);
-
         $myCommandes = $commandeRepo->findBy(['client' => $userConnect, 'etat' => "valider"] , [], $nbre , ($page - 1) * $nbre );
-        if($method == "POST"){
-            if($choice == "en cours"){
-                $UserCommande = $commandeRepo->findBy(['client' => $userConnect, 'etat' => "en cours"]);        
-                $myCommandes = $commandeRepo->findBy(['client' => $userConnect, 'etat' => "en cours"]  );
-            }elseif($choice == "annuler"){
-                $UserCommande = $commandeRepo->findBy(['client' => $userConnect, 'etat' => "annuler"]);
-                $myCommandes = $commandeRepo->findBy(['client' => $userConnect, 'etat' => "annuler"]  );
-            }else{
-                $myCommandes = $commandeRepo->findBy(['client' => $userConnect, 'etat' => "valider"]  );
-            }
+        
+        if( $uri == "/mescommandeEtatannuler"){
+            $myCommandes = $commandeRepo->findBy(['client' => $userConnect, "etat" => "annuler"] );
+        }elseif( $uri == "/mescommandeEtatvalider"){
+            $myCommandes = $commandeRepo->findBy(['client' => $userConnect, "etat" => "valider"] , [], $nbre , ($page - 1) * $nbre );
+        }elseif( $uri == "/mescommandeEtaten%20cours"){
+            $myCommandes = $commandeRepo->findBy(['client' => $userConnect, "etat" => "en cours"]);
         }
+
         $nbCommandes = count($UserCommande);
         $nbPage = ceil($nbCommandes / $nbre)  ;
+
         return $this->render('client/mescommandes.html.twig', [
             'myCommandes' => $myCommandes,
             'isVide'    => count($myCommandes),
@@ -82,62 +87,55 @@ class ClientController extends AbstractController
     }
     
     #[Route('/paiement', name: 'paiement')]
-    public function paiement(Request $request , CommandeRepository $commandeRepo, ClientRepository $clientRepo, BurgerRepository $burgerRepo , MenuRepository $menuRepo, EntityManagerInterface $entityManager):Response{
+    public function paiement(Request $request ,PaiementRepository $paiementRepo ,CommandeRepository $commandeRepo, ClientRepository $clientRepo, BurgerRepository $burgerRepo , MenuRepository $menuRepo, EntityManagerInterface $entityManager):Response{
         $datas =  $request->request->all();
-        $session    = $request->getSession();              
-
+        $session    = $request->getSession();   
+        $method  = $request->getMethod();
         extract($datas);
-        $commande  = $commandeRepo->findOneBy(['numero'=>$numero]);
-        $errorNumber = "";
-        $errorMontant = "";
-        $montant = (int)$montant;
-        
-        if($commande == null)
-        {
-            $errorNumber = "Ce numéro de commande n'existe pas!";
-            $session->set('errorNumber',$errorNumber);
+
+        foreach ($commandeAPayer as $value) {
+            $commandes [] = $commandeRepo->find($value);
         }
-        else
-        {
-            if($commande->getMontant() != $montant )
-            {
-                $errorMontant = 'Le montant saisi ne correspond pas!';
-                $session->set('errorMontant',$errorMontant);
+        $total = 0;
+        foreach($commandes as $value) {
+            $total += $value->getMontant();
+        }
+        if ($method == "POST") {
+
+            foreach ($commandes as $value) {
+                $paiements[] =[
+                    'paiement' =>$paiementRepo->find($value->getId()),
+                    'montant'=>$value->getMontant()
+                ] ;
             }
-            elseif($commande->getEtat() == "en cours" )
-            {
-                $errorValidation = 'Votre commande n\'a pas encore été validée!';
-                $session->set('errorValidation',$errorValidation);
-            }
-            elseif ($commande->getPaiement()->getMontant() == $montant )
-            {
-                $alreadyPayed = 'Votre commande n\'a été déjà payée!';
-                $session->set('alreadyPayed',$alreadyPayed);
-            }
-            else
-            {
-                $paiement  = $commande->getPaiement();
-                $paiement->setMontant($montant);
-        
-                $entityManager->persist($paiement);
+            foreach ($paiements as $value) {
+                $value['paiement']->setMontant($value['montant']);
+                $entityManager->persist($value['paiement']);
                 $entityManager->flush();
-        
-                $success = "La numéro de commnade ".$numero." à été payé avec succés!" ;
-                $session->set('success',$success);
-
             }
-        }
 
-        return $this->redirectToRoute('mescommandes');
+
+            $success = "Commandes(s) payé(s) avec succés!" ;
+            $session->set('success',$success);
+
+            return $this->redirectToRoute('mescommandes');
+        }
+       
+        return $this->render('client/paiement.html.twig', [
+            'commandes' =>$commandes,
+            'total'=>$total
+        ]);
     }
 
     #[Route('/commandeValidate', name: 'commandeValidate')]
-    public function commandeValidate(Request $request , ClientRepository $clientRepo, BurgerRepository $burgerRepo , MenuRepository $menuRepo, EntityManagerInterface $entityManager):Response{
+    public function commandeValidate(Request $request , ClientRepository $clientRepo, BurgerRepository $burgerRepo , MenuRepository $menuRepo, EntityManagerInterface $entityManager , ComplementRepository $complementRepo):Response{
+
        
         $commande = new Commande();
         $paiement = new Paiement();
         $session    = $request->getSession();
-
+        $datas = $request->request->all();
+        extract($datas);
         $numero = substr(str_shuffle(str_repeat($x='023456789ABCDEFGHKMNOPQRSTUVWXYZ', ceil(4/strlen($x)) )),1,3);
         $userConnect = $clientRepo->findOneBy(['user' => $session->get('idUser')]);
 
@@ -152,12 +150,38 @@ class ClientController extends AbstractController
         }
         
         $total = 0;
+        $totalComplement = 0;
         foreach ($data as $item) {
             $totalItems =   $item['produit']->getPrix() *  $item['quantite'];
             $total += $totalItems;
         }
+
+        if(count($datas) != 0){
+            foreach ($complementadded as $value) {
+                $explodeIdandQuantite [] = explode('-' , $value);
+            }
+            //
+            foreach ($explodeIdandQuantite as $value) {
+                $getKeyIdandQuantite [] = [
+                    'id' => $value[0],
+                    'quantite'=>$value[1]
+                ];
+            }
+            //
+            foreach ($getKeyIdandQuantite as  $value) {
+                $complement = $complementRepo->find($value['id']);
+                $totalPrixComplement = $complement->getPrix() * $value['quantite'];
+                $total+=$totalPrixComplement;
+            }
         
-            $commande->setDate(date_format(date_create(),'Y-m-d '))
+        }
+        
+        $total += $totalComplement;
+       
+        $date = new DateTime("now", new DateTimeZone('Africa/Dakar') );
+        $cureentDate = $date->format('Y-m-d');
+
+            $commande->setDate($cureentDate)
                     ->setMontant($total)
                     ->setNumero('BrasiL'.$numero)
                     ->setClient($userConnect);
@@ -173,8 +197,8 @@ class ClientController extends AbstractController
             
             $paiement->setMontant(0)
                      ->setCommande($commande);
-    
-            $entityManager->persist($commande);
+
+                     $entityManager->persist($commande);
             $entityManager->persist($paiement);
             $entityManager->flush();
     
@@ -187,4 +211,6 @@ class ClientController extends AbstractController
         
     
     }
+
+   
 }

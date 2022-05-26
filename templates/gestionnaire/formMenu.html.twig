@@ -1,5 +1,10 @@
 {% extends 'base.html.twig' %}
 {% block body %}
+    {% block stylesheets %}
+        <link href="https://fonts.googleapis.com/icon?family=Material+Icons"
+        rel="stylesheet">
+        <link rel="stylesheet" href="/stylesheets/ie.css">
+    {% endblock %}
     {% block naavbarLinks %}
             {% block Gestionnaire %}{{parent()}}{% endblock %}
             {% block Client %}{% endblock %}
@@ -11,12 +16,11 @@
         {% block logout %}{{parent()}}{% endblock %}
     {% endblock %}
     <div class="form-container">  
-        {# <form class="form-add-menu" id="form" method="post" action="{{path('addMenu')}}"> #}
         {{form_start(form , {'attr': {"id":"form" , "class":"form-add-menu" } } )}}  
             <div class="d-flex">
                 <a name="" id="" class="btn m-3 pl-5" href="{{path('listMenu')}}" role="button"><i class="fa-solid fa-circle-left"></i> <span>Liste des prooduits</span></a>
             </div>
-            <div class="row">
+            <div class="row m-0 mt-3">
                 <div class="control col-md-12">
                     <label> Que voulez vous ajouter </label>
                     <select class="box" id="checked" name="checked" >
@@ -28,25 +32,25 @@
                     <small></small>
                 </div>  
             </div> 
-            <div class="row">
+            <div class="row m-0">
                 <div class="control col-md-12">
                    <label for="nom">Nom</label>
-                    <input type="text" name="nom" id="nom" class="box" data-aos="zoom-in-down"  data-aos-delay= "300" value = "{% if restorNom is defined %}{{restorNom}}{% elseif element is defined %}{{element.nom}}{% endif %}">
+                    <input type="text" name="nom" id="nom" class="box"  value = "{% if restorNom is defined %}{{restorNom}}{% elseif element is defined %}{{element.nom}}{% endif %}">
                     <small></small>
                 </div>
             </div>  
-            <div class="row">
+            <div class="row m-0">
                 <div class="control col-md-12" id="divPrix">
                     <label for="prix">Prix</label>
-                    <input type="number" name="prix" id="prix" class="box" data-aos="zoom-in-down"  data-aos-delay= "300"  value = "{% if restorPrix is defined %}{{restorPrix}}{% elseif element is defined %}{{element.prix}}{% endif %}">
+                    <input type="number" name="prix" id="prix" class="box"   value = "{% if restorPrix is defined %}{{restorPrix}}{% elseif element is defined %}{{element.prix}}{% endif %}">
                     <small></small>
                 </div>
             </div>
             <div id="ajoutMenu">
-                <div class="row">
+                <div class="row m-0">
+                    <label class="" style="display:block ;font-size: 15px; margin-left: 15px;margin-top: 3px;"> Ajouter un burger au menu </label>
                     <div class="control col-md-12">
-                        <label> ajouter un burger au menu </label>
-                        <select class="box" id="burgerMenu" name="burgerName">
+                        <select class="box select2" id="burgerMenu" name="burgerName">
                             {# <option value = "{{restorBurgerName is defined ? restorBurgerName.id : element is defined ? element.burger.id : "" }}" >{{ restorBurgerName is defined ? restorBurgerName.nom : element is defined ? element.burger.nom : "Choisir..." }}</option> #}
                             {% for item in allBurger %}
                                 <option value="{{item.id}}">{{item.nom}}</option>
@@ -55,46 +59,48 @@
                         <small></small>
                     </div>  
                 </div> 
-                <div class="row">
+                <div class="row m-0">
+                    <label class="" style="display:block ;font-size: 15px;margin-left: 15px;margin-top: 3px;"> Ajouter des compléments au menu</label>
                     <div class="control col-md-12">
-                        <label class="mb-3"> ajouter des compléments au menu </label>
-                        {% if complement is defined %}
+                        {# {% if complement is defined %}
                             {% for item in complement %}
                                 <div class="form-check ml-4" style="margin: 10px;">
                                     <input type="checkbox" class="form-check-input" name="complementName[]" id="complemntChecked~{{item.id}}" value="{{item.id is defined ? item.id : '' }}" checked>
                                     <label class="form-check-label" style="margin: 1px;margin-left: 3px;" for="complemntChecked~{{item.id}}">{{item.nom}}</label>
                                 </div>
                             {% endfor %}
-                        {% endif %}
-                        
-                        {% for item in allComplement %}
-                            <div class="form-check ml-4" style="margin: 10px;">
-                                <input type="checkbox" class="form-check-input" name="complementName[]" id="complemntChecked~{{item.id}}" value="{{item.id is defined ? item.id : '' }}" >
-                                <label class="form-check-label" style="margin: 1px;margin-left: 3px;" for="complemntChecked~{{item.id}}">{{item.nom}}</label>
-                            </div>
-                        {% endfor %}
-                        {% if errorComplement is defined  %}
-                            <small id="errorComplement">{{errorComplement}}</small>
-                        {% endif %}
+                        {% endif %} #}
+                        <select class="box select2" id="complementName" name="complementName[]" multiple="multiple">
+                            {% for item in allComplement %}
+                                <option value="{{item.id}}">{{item.nom}}</option>
+                            {% endfor %}
+                        </select>
+                        <small></small>
                     </div>  
                 </div> 
             </div> 
-            <div class="row">
+            <div class="row m-0">
                 <div class="control col-md-12">
-                    {{form_row(form.image,{'attr': {"class":"box " , "data-aos":"zoom-in-down" , "value":" ",  "data-aos-delay":"300"} } )}}
-                    <small></small>
-                    {% if errorImage is defined  %}
-                        <small id="errorImg">{{errorImage}}</small>
-                    {% endif %}
+                    {{form_row(form.image,{'attr': {"class":"box " , "value":" ",  } } )}}
+                    <small id="errorImg"></small>
                 </div>
             </div> 
+
             <input type="submit" value="Ajouter" class="btn" data-aos="" data-aos-delay= "600">
+
         {{form_end(form)}}  
-   
     </div>
+
+
+
     {% block js %}
         <script src="/js/addFoods.js"></script>
     {% endblock %}
     <style>#link-addMenu{color:#eacf4f;}</style>
-    
+    <script src="http://code.jquery.com/jquery-1.11.0.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            $('.select2').select2();
+        });
+    </script>
 {% endblock %}

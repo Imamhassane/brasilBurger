@@ -1,9 +1,8 @@
 const payer = document.getElementById("payer");
 const  confirmation = document.querySelector(".confirmation");
 const form = document.getElementById('form');
-const numero = document.getElementById('numero');
-const montant = document.getElementById('montant');
-const removeModal = document.getElementById('removeModal');
+const commandeAPayer =  document.getElementsByName("commandeAPayer[]")
+const option = document.getElementById('option');
 
 //Functions-------------------------------------------------------------
 function showError(input, message) {//Afficher les messages d'erreur
@@ -39,23 +38,36 @@ function getFieldName(input) {//Retour le nom de chaque input en se basant sur s
 //Even listeners--------------------------------------------------------
 form.addEventListener('submit',function(e){
 
-    isVerify = []
-    checkRequired([ numero, montant]);
-    for (let i = 0; i < isVerify.length; i++) {
-        if (isVerify[i]==false) {
-            e.preventDefault();//Bloquer la soumission du formulaire
-        }
-    }
+   
 
 });
 //
-payer.addEventListener("click",()=>{
-    confirmation.classList.toggle("show-modal");
+let count = 0
+commandeAPayer.forEach((element) => {
+    element.addEventListener("click",()=>{
+        if (!element.checked) {
+            count--
+        }else{
+            count++
+        }
+        ///////
+        if (count == 0) {
+            payer.disabled = true
+        }else{
+            payer.disabled = false
+
+        }
+    })
+});
+//
+option.addEventListener("change",(e)=>{
+    document.location.replace("mescommandeEtat"+option.value)
 })
 //
-removeModal.addEventListener("click",()=>{
-    confirmation.classList.remove("show-modal");
-})
+/* payer.addEventListener("click",()=>{
+    confirmation.classList.toggle("show-modal");
+}) */
+
 //
 setTimeout(function(){
     document.getElementById('message').style.display = 'none';

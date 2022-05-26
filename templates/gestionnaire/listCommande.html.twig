@@ -24,25 +24,24 @@
         <div  id = "message" class ="alert danger text-center ">{{commandeAnnulerByGest}}</div>
         {{removecommandeAnnulerByGest}}
     {% endif %} 
-    <div class=" overflow-auto">
-        <form class="filtre mt-2 d-block" method="POST" action="{{path('listCommande')}}">
+        <div class="overflow-auto filtre mt-5 mb-5" style="margin-left:9rem ;">
             <label> Etat </label>
-            <select name="choiceEtat" class="box m-0" id="option">
-                <option value="">Choisr...</option>
+            <select name="choiceEtat" class="box m-0" id="choiceEtat">
+                <option id = "test" value=""></option>
                 <option value="en cours">En cours</option>
                 <option value="valider">Validée</option>
                 <option value="annuler">Annulée</option>
             </select>
 
             <label class=""> Produits </label>
-            <select name="choiceProduit" class="box m-0" id="option">
+            <select name="choiceProduit" class="box m-0" id="choiceProduit">
                 <option value="">Choisr...</option>
                 <option value="Burger">Burger</option>
                 <option value="Menu">Menu</option>
             </select>
 
             <label class=""> Client </label>
-            <select name="choiceClient" class="box m-0" id="option">
+            <select name="choiceClient" id="choiceClient" class="box m-0  select2">
                 <option value="">Choisr...</option>
                 {% for item in clients %}
                     <option value="{{item.id}}">{{item.prenom ~ ' ' ~ item.nom}}</option>
@@ -50,11 +49,8 @@
             </select>
 
             <label class="">Date</label>
-            <input type="date" class="box" name="choiceDate">
-
-            <button class="btn ml-5" style="margin-top:18px">Valider</button>
-        </form>
-    </div>
+            <input type="date" class="box" name="choiceDate" id="choiceDate" onchange="filterByDaye(event);">
+        </div>
     {% if isVide == 0%}
         <div class="vide">
             <h1> Aucune commande n'a été enregistré! </h1>
@@ -136,9 +132,9 @@
 
 
                             {% if item.etat == "en cours" %}
-                                <td><button value="{{item.id}}" style="margin-bottom:0px; margin-top: 0px;padding: 1px 7px;" class="reglerCommande btn">Regler ?</button></td>
+                                <td><button value="{{item.id}}" style="margin-bottom:0px; margin-top: 0px;padding: 1px 7px;" class="reglerCommande btn">regler ?</button></td>
                             {% else %}
-                                <td><button disabled  style="margin-bottom:0px; margin-top: 0px;padding: 1px 7px;" class="btn">Regler ?</button></td>
+                                <td><button disabled  style="margin-bottom:0px; margin-top: 0px;padding: 1px 7px;" class="btn">regler ?</button></td>
                             {% endif %}
 
 
@@ -148,7 +144,7 @@
 
                 </tbody>
             </table>
-                <div class="confirmation">
+                <div class="confirmation2 confirmation">
                     <div class="form-signin">    
                         <div class="d-flex mb-3">
                             <button  id="removeModal" class="btn m-3 pl-5" ><i class="fa-solid fa-circle-left"></i> <span> Liste des commandes </span></button>
@@ -162,15 +158,6 @@
                 </div>
             <!-- ======= Footer tools ======= -->
             <div class="footer-tools">
-                {# <div class="list-items">
-                Show
-                <select name="n-entries" id="n-entries" class="n-entries">
-                    <option value="5">5</option>
-                    <option value="10" selected>10</option>
-                    <option value="15">15</option>
-                </select>
-                entries
-                </div> #}
                 {% if isPaginated  %}
                     <div class="pages">
                         <ul>
@@ -193,7 +180,37 @@
             </div>
         </div>
         <script src="/js/reglerPaiement.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+        <script type="text/javascript" src="https://rawgit.com/select2/select2/master/dist/js/select2.js"></script>
         <style>#link-commandes{color:#eacf4f;}</style>
 
+        <script>
+            $(document).ready(function() {
+                $('.select2').select2();
+            });
+
+
+            document.getElementById("choiceEtat").addEventListener("change",()=>{
+                localStorage.setItem("option" , document.getElementById("choiceEtat").value)
+            })
+            document.getElementById("test").innerHTML =  localStorage.getItem("option")
+
+
+            $('#choiceClient').select2().on('change', function(e) {
+                document.location.replace("/commande"+document.getElementById("choiceClient").value)
+
+            });
+
+        </script>
+        <style>
+            .select2-container {
+                width: 15% !important;
+            }
+            .select2-container--default .select2-selection--single {
+                height: 35px !important;
+                margin-top: -4px !important;
+            }
+        </style>
+        
     {% endif %}
 {% endblock %}

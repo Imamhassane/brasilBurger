@@ -19,17 +19,16 @@
 
          {% if role is defined and role != "" %}
 
-            {% block logout %}{{parent()}}{% endblock %}
+            {% block logout %} {{parent()}} {% endblock %}
 
          {% else %}
 
-            {% block loginSignIn %}{{parent()}}{% endblock %}
+            {% block loginSignIn %} {{parent()}} {% endblock %}
 
          {% endif %}
 
       {% endblock %}
-
-
+        <form method="POST" action="{{path('commandeValidate')}}">
         <div class="datatable-container">
             <!-- ======= Header tools ======= -->
             <div class="header-tools">
@@ -46,8 +45,8 @@
                         <th>Nom </th>
                         <th>Prix</th>
                         <th>Quantités</th>
+                        <th>ajouter des compléments</th>
                         <th>Supprimer</th>
-
                     </tr>
                     </thead>
                     <tbody>
@@ -57,11 +56,33 @@
                                 <td>{{item.produit.nom}}</td>
                                 <td>{{item.produit.prix * item.quantite}} F CFA</td>
                                 <td><a  href="{{path('moins', {'id':item.produit.id ~ item.produit.type}) }}" class="btn mr-2 action moins">-</a> {{item.quantite}} <a  href="{{path('addition', {'id':item.produit.id ~ item.produit.type}) }}" class="btn ml-2 action plus" value="1">+</a></td>
-                                <td><a class="deleteCommande" value="{{item.quantite}}" href="{{path('remove', {'id':item.produit.id ~ item.produit.type}) }}"> <i class="fa-solid fa-trash-can text-danger"></i><a/></td>
+                                 <td class="p-0 w-25">
+                                   {% if item.produit.type == "Burger" %}
+                                     <select class="select2" name="complementadded[]" id="" multiple="multiple">
+                                        {% for items in complements %}
+                                            <option value="{{items.id ~ '-' ~ item.quantite}}">{{items.nom}}</option>
+                                        {% endfor %}
+                                     </select>
+                                    {# <form action="{{path('panier')}}" method="POST">
+                                        <div class="row d-flex" style="margin-left: 40px;">
+                                            {% for item in complements %}
+                                            <div class="col-md-5 p-2 text-left addComplement" style="margin-left: 8%;">
+                                                <input type="checkbox" class="form-check-input" name="addComplement" id="addComplement ~ {{item.id}}" value="{{item.id}}" >
+                                                <label class="form-check-label" style="cursor:pointer; margin: 2px;margin-left: 3px;" for="addComplement ~ {{item.id}}">{{item.nom}}</label>
+                                            </div>
+                                            {% endfor %}
+                                        </div>
+                                    </form> #}
+                                    {% else %}
+                                    -
+                                    {% endif %}
+                                </td>
+                                <td><a class="deleteCommande" name="deleteCommande" value="{{item.quantite}}"  href="{{path('remove', {'id':item.produit.id ~ item.produit.type}) }}"> <i class="fa-solid fa-trash-can text-danger"></i><a/></td>
                             </tr>
                         {% endfor %}
                         <tr>
                             <td class="totalTexte">Total :</td>
+                            <td></td>
                             <td></td>
                             <td></td>
                             <td></td>
@@ -74,7 +95,7 @@
             <div class="footer-tools">
                 <div class="pages">
                     <ul>
-                        <a href="{{path('commandeValidate')}}" id="validerCommande" class="btn ml-2">Valider la commande</a>
+                        <button id="validerCommande" class="btn ml-2">Valider la commande</button>
                     </ul>
                 </div>  
             </div>
@@ -84,9 +105,16 @@
                 </div>
             {% endif %}
         </div>
+        </form>
+        
         <script src="/js/reglerPaiement.js"></script>
         <script src="/js/catalogue.js"></script>
-        <style>#link-panier{color:#eacf4f;text-decoration: underline;}</style>
+        <style>#link-panier{color:#eacf4f;text-decoration: underline;}.select2-container{width: 350px !important;}.select2-container--default .select2-selection--multiple {height: 60px;}</style>
         <style>#link-paniernotconnected{color:#eacf4f;}</style>
-
+        <script src="http://code.jquery.com/jquery-1.11.0.min.js"></script>
+        <script>
+            $(document).ready(function() {
+                $('.select2').select2();
+            });
+        </script>
 {% endblock %}

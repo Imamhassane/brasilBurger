@@ -19,7 +19,7 @@
 
     {% if isVide == 0%}
         <div class="vide">
-            <h1> Aucune commande n'a été enregistré! </h1>
+            <h1> Aucun produit n'a été enregistré! </h1>
         </div>
     {% else %}
         <div class="datatable-container">
@@ -75,8 +75,8 @@
 
                             </td>
                             <td>
-                                <button value="{{'/archiver/' ~ item.id}}"  id="archiver" style="font-size: 12px;" class="btn action modal-toggle">archiver <i class="fa-solid fa-box-archive"></i></button>
-                                <a href="{{'/edit/' ~ item.id ~ item.type}}" style="font-size: 12px;"  class="btn action">modifier <i class="fa-solid fa-pen-to-square"></i></a>
+                                <button value="{{'/archiver/' ~ item.id}}"  id="archiver"  class="btn action modal-toggle">archiver <i class="fa-solid fa-box-archive"></i></button>
+                                <a href="{{'/edit/' ~ item.id ~ item.type}}"   class="btn action">modifier <i class="fa-solid fa-pen-to-square"></i></a>
                             </td>
                         </tr>
                     {% endfor %}

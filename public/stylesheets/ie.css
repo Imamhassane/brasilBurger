@@ -249,9 +249,13 @@ input[type=checkbox] {
   cursor: pointer;
 }
 
-/* line 244, ../sass/ie.scss */
-.confirmation {
+/* line 243, ../sass/ie.scss */
+.confirmation2 {
   display: none;
+}
+
+/* line 246, ../sass/ie.scss */
+.confirmation, .confirmation2 {
   position: fixed;
   background-color: rgba(0, 0, 0, 0.9);
   top: 0;
@@ -262,26 +266,17 @@ input[type=checkbox] {
   animation-duration: 1s;
   z-index: 1000;
 }
-/* line 256, ../sass/ie.scss */
-.confirmation .form-signin {
+/* line 257, ../sass/ie.scss */
+.confirmation .form-signin, .confirmation2 .form-signin {
   top: 18%;
   box-shadow: #eacf4f 0px 0px 13px 0px;
 }
-/* line 260, ../sass/ie.scss */
-.confirmation.show-modal {
+/* line 261, ../sass/ie.scss */
+.confirmation.show-modal, .confirmation2.show-modal {
   display: block;
-  /* &::before{
-     content:'';
-     background:rgba(0, 0, 0, 0.8);
-     position: absolute;
-     left: 0;
-     top: 0;
-     bottom: 0;
-     right: 0;
-  } */
 }
-/* line 273, ../sass/ie.scss */
-.confirmation h3 {
+/* line 265, ../sass/ie.scss */
+.confirmation h3, .confirmation2 h3 {
   font-size: 2rem;
   text-transform: initial;
   color: #fff;
@@ -289,21 +284,21 @@ input[type=checkbox] {
   text-align: center;
   margin-top: 30px;
 }
-/* line 281, ../sass/ie.scss */
-.confirmation .validation-button {
+/* line 273, ../sass/ie.scss */
+.confirmation .validation-button, .confirmation2 .validation-button {
   display: flex;
   justify-content: space-evenly;
   padding: 0;
   margin-top: 16px;
 }
 
-/* line 288, ../sass/ie.scss */
+/* line 280, ../sass/ie.scss */
 .justify {
   justify-content: space-evenly;
 }
 
-/* line 292, ../sass/ie.scss */
-.box {
+/* line 284, ../sass/ie.scss */
+.box, .select2-hidden-accessible {
   font-size: 1.6rem;
   color: #fff;
   background: none;
@@ -313,12 +308,12 @@ input[type=checkbox] {
   padding: 5px;
   margin: .7rem 3rem;
 }
-/* line 302, ../sass/ie.scss */
-.box:focus {
+/* line 294, ../sass/ie.scss */
+.box:focus, .select2-hidden-accessible:focus {
   border-color: #eacf4f;
 }
 
-/* line 306, ../sass/ie.scss */
+/* line 298, ../sass/ie.scss */
 .total {
   color: #eacf4f;
   font-size: 21px;
@@ -326,7 +321,92 @@ input[type=checkbox] {
   font-style: italic;
 }
 
-/* line 312, ../sass/ie.scss */
+/* line 304, ../sass/ie.scss */
 .totalTexte {
   font-size: 23px;
+}
+
+/* line 308, ../sass/ie.scss */
+.select2-container--default .select2-results__option--highlighted.select2-results__option--selectable {
+  background-color: #eacf4f;
+  color: #000;
+}
+
+/* line 312, ../sass/ie.scss */
+.select2-container--open .select2-dropdown--below {
+  border-top: none;
+  border-top-left-radius: 0;
+  border-top-right-radius: 0;
+  background: #000;
+  border: 0.2rem solid rgba(255, 255, 255, 0.3);
+  color: #fff;
+  font-size: 14px;
+  padding: 5px;
+}
+
+/* line 324, ../sass/ie.scss */
+.select2-container--default .select2-search--dropdown .select2-search__field {
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  background: #000;
+}
+
+/* line 329, ../sass/ie.scss */
+.select2-container--default .select2-selection--single .select2-selection__rendered {
+  color: #fff;
+  line-height: 28px;
+}
+
+/* line 333, ../sass/ie.scss */
+.select2-container--default .select2-selection--single {
+  background-color: transparent;
+  border: 1px solid #aaa;
+}
+
+/* line 341, ../sass/ie.scss */
+.select2-container--default .select2-selection--single, .select2-container--default .select2-selection--multiple {
+  font-size: 1.6rem;
+  color: #fff;
+  background: none;
+  border: 0.2rem solid rgba(255, 255, 255, 0.3);
+  text-transform: none;
+  height: 42px;
+  margin-top: 0px;
+  border-radius: 0;
+  display: flex;
+  align-items: center;
+}
+
+/* line 354, ../sass/ie.scss */
+.select2-container {
+  box-sizing: border-box;
+  display: inline-block;
+  position: relative;
+  vertical-align: middle;
+  width: 50% !important;
+  margin: 0.7rem 0;
+}
+
+/* line 362, ../sass/ie.scss */
+.select2-container--default .select2-selection--multiple .select2-selection__choice {
+  background-color: #000;
+  border: 0.2rem solid rgba(255, 255, 255, 0.3);
+  border-radius: 4px;
+  box-sizing: border-box;
+  display: inline-block;
+  margin-left: 5px;
+  margin-top: 5px;
+  padding: 0;
+  padding-left: 20px;
+  position: relative;
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  vertical-align: bottom;
+  white-space: nowrap;
+}
+
+/* line 380, ../sass/ie.scss */
+.select2-container--default.select2-container--focus .select2-selection--multiple {
+  border: 0.2rem solid rgba(255, 255, 255, 0.3);
+  outline: 0;
 }
