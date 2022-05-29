@@ -20,7 +20,7 @@
 
     <div class="form-container" style="height: 92.8vh;">
         {% if InscriptSuccess is defined and InscriptSuccess != null %}
-            <div  id = "message" class ="alert successs text-center mt-5">{{InscriptSuccess}}</div>
+            <div  id = "message" class ="successs text-center mt-5">{{InscriptSuccess}}</div>
         {% endif %}
         {{remove}}
         <form method="post" class="form-login" id="form">
@@ -31,7 +31,7 @@
                 <h1 class="h4 font-weight-bold">Connectez-vous pour accéder à plus de fonctionnalités!</h1>
             </div>
             {% if error %}
-                <div class="alert text-center danger">Login ou mot de pass incorrect</div>
+                <div class="text-center danger">Login ou mot de pass incorrect</div>
             {% endif %}
             <div class="control">
                 <label for="inputEmail">Email</label>

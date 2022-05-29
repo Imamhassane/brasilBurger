@@ -120,10 +120,17 @@ body{
    .danger{
       background-color:red;
       color: #fff;
+      height: 63px;
+      font-size: 16px;
+      text-align: center;
+      margin-bottom: 22px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
    }
    .successs{
+      @extend .danger;
       background-color:green;
-      color: #fff;
    }
    .panier{
       font-size: 15px;

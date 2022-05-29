@@ -12,6 +12,7 @@ use App\Entity\Client;
 use App\Entity\Commande;
 use App\Entity\Paiement;
 use App\Entity\Complement;
+use App\Service\PdfService;
 use App\Form\BurgerFormType;
 use App\Repository\MenuRepository;
 use App\Repository\UserRepository;
@@ -100,11 +101,7 @@ class GestionnaireController extends AbstractController
                 $commandes = $commandeRepo->findBy(["date" => $date]);
             }
         }
-
-        /*      $choiceDate != '' ?  : ''; */
-                
-        
-
+            
         $nbCommandes = count($commandesEncours);
         $nbPage = ceil($nbCommandes / $nbre) ;
 
@@ -265,7 +262,10 @@ class GestionnaireController extends AbstractController
             $entityManager->flush();
             // do anything else you need here, like send an email
 
-                return $this->redirectToRoute('listMenu');
+            // added success
+            $session->set("addFoodSuccess", "Produit ajouter avec succés");
+
+            return $this->redirectToRoute('listMenu');
         }
             return $this->render('gestionnaire/formMenu.html.twig', [
                 'controller_name' => 'GestionnaireController',
@@ -345,7 +345,7 @@ class GestionnaireController extends AbstractController
     }
 
     #[Route('/listMenu/{page?1}/{nbre?1}', name: 'listMenu')]
-    public function listMenu($page , $nbre , BurgerRepository $burgerRepo , MenuRepository $menuRepo, ComplementRepository $complementRepo): Response
+    public function listMenu(Request $request , $page , $nbre , BurgerRepository $burgerRepo , MenuRepository $menuRepo, ComplementRepository $complementRepo): Response
     {
         $burgers = $burgerRepo->findBy(['etat' => "non-archive"] , [], $nbre , ($page - 1) * $nbre );
         $menus = $menuRepo->findBy(['etat' => "non-archive"] , [], $nbre , ($page - 1) * $nbre );
@@ -354,9 +354,10 @@ class GestionnaireController extends AbstractController
         $count = max( count($burgerRepo->findBy(['etat' => "non-archive"])) , count($menuRepo->findBy(['etat' => "non-archive"])) , count($complementRepo->findBy(['etat' => "non-archive"])) );
         
         $catalogue = array_merge( $burgers, $menus, $complements);
-        
-        // $nbProduit = count($burgerRepo->findBy(['etat' => "non-archive"])) + count($menuRepo->findBy(['etat' => "non-archive"])) + count($complementRepo->findBy(['etat' => "non-archive"]));
-       
+        $session    = $request->getSession();
+    
+        $addFoodSuccess = $session->get('addFoodSuccess');
+               
         $nbPage = $count;
         
         return $this->render('gestionnaire/listMenu.html.twig', [
@@ -365,7 +366,9 @@ class GestionnaireController extends AbstractController
             'isPaginated'   => true,
             'nbPage'        => $nbPage,
             'page'          => $page,
-            'nbre'          => $nbre
+            'nbre'          => $nbre,
+            'addFoodSuccess'=>$addFoodSuccess,
+            'removeaddFoodSuccess'   => $session->remove('addFoodSuccess'),
 
         ]);
     }
@@ -392,5 +395,33 @@ class GestionnaireController extends AbstractController
             'date'              => $date->format('d-m-Y'),
             'recettes'          => $recettes,
         ]);
+    }
+
+    #[Route('/pdf', name: 'pdf')]
+    public function generatePdf(CommandeRepository $commandes , PdfService $pdf)
+    {
+        // generate pdf 
+
+        $date = new DateTime("now", new DateTimeZone('Africa/Dakar') );
+        $cureentDate = $date->format('Y-m-d');
+
+        $commandeJournee = $commandes->findBy(["date" => $cureentDate, "etat" => "valider"]);
+        $recettes = 0 ;
+
+        foreach ($commandeJournee as $value) {
+            $recettes += $value->getMontant();
+        }
+        // dd($commandeJournee);
+
+        $html =  $this->render('gestionnaire/pdf.html', [
+            'items'            => $commandeJournee  ,
+            'date'      => $date->format('d-m-Y'),
+            'recettes'  => $recettes,
+
+        ])->getContent();
+
+        $pdf->showPdfFile($html);
+        
+
     }
 }

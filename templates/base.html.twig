@@ -3,20 +3,27 @@
         <head>
             <meta charset="UTF-8">
             <title>{% block title %}Welcome!{% endblock %}</title>
-            <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 128 128%22><text y=%221.2em%22 font-size=%2296%22>⚫️</text></svg>">
-            {# Run `composer require symfony/webpack-encore-bundle` to start using Symfony UX #}
-            <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
-            <!-- font awesome cdn link  -->
-            <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
 
-            <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.css">
+            
+            <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 128 128%22><text y=%221.2em%22 font-size=%2296%22>⚫️</text></svg>">
+            
+            {# Run `composer require symfony/webpack-encore-bundle` to start using Symfony UX #}
+            
+            <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+            
+            <!-- font awesome cdn link  -->
+                <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+
+                <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.css">
 
             <!-- custom css file link  -->
-            <link rel="stylesheet" href="/stylesheets/screen.css">
+                <link rel="stylesheet" href="/stylesheets/screen.css">
+            
             <!-- cdn link   -->
-            <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" integrity="sha512-9usAa10IRO0HhonpyAIVpjrylPvoDwiPUiKdWk5t3PyolY1cOd4DSE0Ga+ri4AuTroPR5aQvXU9xC6qOPnzFeg==" crossorigin="anonymous" referrerpolicy="no-referrer"/>
-            <!--select2 -->
-            <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+                <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" integrity="sha512-9usAa10IRO0HhonpyAIVpjrylPvoDwiPUiKdWk5t3PyolY1cOd4DSE0Ga+ri4AuTroPR5aQvXU9xC6qOPnzFeg==" crossorigin="anonymous" referrerpolicy="no-referrer"/>
+            
+            <!-- select2 -->
+                <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
 
             {% block stylesheets %}
             {% endblock %}
@@ -31,15 +38,14 @@
                 <nav class="navbar">
                     {% block naavbarLinks %}
                         {% block Gestionnaire %}
-                            <a href="{{path('dashboard')}}" id="link-dashoard" class="nav-links">Dashboard</a>
-                            <a href="{{path('listMenu')}}" id="link-produitList" class="nav-links">Liste des produits</a>
-                            <a href="{{path('listCommande')}}" id="link-commandes" class="nav-links">commandes</a>
-                            <a href="{{path('addMenu')}}" id="link-addMenu" class="nav-links">Produits</a>
+                            <a href="{{path('dashboard')}}" id="link-dashoard" class="nav-links">Tableau de bord</a>
+                            <a href="{{path('listMenu')}}" id="link-produitList" class="nav-links">Produits</a>
+                            <a href="{{path('listCommande')}}" id="link-commandes" class="nav-links">Commandes</a>
                             <a href="{{path('archiveList')}}" id="link-archives" class="nav-links"> Archives </a>
                         {% endblock %}
                         {% block Client %}
                             <a href="{{path('catalogue')}}" id="link-catalogue" class="nav-links">Catalogue</a>
-                            <a href="{{path('mescommandes')}}" id="link-mescommandes" class="nav-links">mes commandes</a>
+                            <a href="{{path('mescommandes')}}" id="link-mescommandes" class="nav-links">Commandes</a>
                             <a href="{{path('panier')}}" id="link-panier"  class="nav-links"><svg id="svg" class=" mr-3" xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="currentColor" class="bi bi-cart" viewBox="0 0 16 16"><path d="M0 1.5A.5.5 0 0 1 .5 1H2a.5.5 0 0 1 .485.379L2.89 3H14.5a.5.5 0 0 1 .491.592l-1.5 8A.5.5 0 0 1 13 12H4a.5.5 0 0 1-.491-.408L2.01 3.607 1.61 2H.5a.5.5 0 0 1-.5-.5zM3.102 4l1.313 7h8.17l1.313-7H3.102zM5 12a2 2 0 1 0 0 4 2 2 0 0 0 0-4zm7 0a2 2 0 1 0 0 4 2 2 0 0 0 0-4zm-7 1a1 1 0 1 1 0 2 1 1 0 0 1 0-2zm7 0a1 1 0 1 1 0 2 1 1 0 0 1 0-2z"/></svg>
                             <span id="compteur" name="compteur" value=""></span></a>
                         {% endblock %}
@@ -67,12 +73,19 @@
                 </form> #}
             </header>
             {% block body %}{% endblock %}
+
             <!-- AOS     -->
             <script src="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.js"></script>
             <script> AOS.init({duration: 800,});</script>
-            <script>function filterByDaye(e) {
-                document.location.replace("/commande+"+choiceDate.value)
-            }</script>
+            <script>
+                function filterByDaye(e) {
+                    document.location.replace("/commande+"+choiceDate.value)
+                }
+                const option = document.getElementById('option');
+                option.addEventListener("change",(e)=>{
+                    document.location.replace("/mescommandeEtat"+option.value)
+                })
+            </script>
             <!-- custom js file link      -->
             <script src="/js/script.js"></script>
             <script src="/js/reglerPaiement.js"></script>

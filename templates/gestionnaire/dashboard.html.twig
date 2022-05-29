@@ -60,8 +60,87 @@
                                     <th>Paiement</th>
                                 </tr>
                             </thead>
-                            <tbody id="enCours">    
-                                {% for item in commandeEncours %}
+                            <tbody id="enCours" style="display:none">
+                                {% if commandeEncours | length > 0 %}
+                                    {% for item in commandeEncours %}
+                                        <tr >
+                                            <td>{{item.numero}}</td>
+
+                                            {% if item.burgers != null or item.menus != null %}
+                                                <td>
+                                                    {% for itemBurger in item.burgers %}
+                                                        <span class="p-2">{{itemBurger.nom }}</span>
+                                                    {% endfor %}
+                                                    {% for itemMenu in item.menus %}
+                                                        <span class="p-2">{{itemMenu.nom }}</span>
+                                                    {% endfor %}
+                                                </td>
+                                            {% endif %}
+
+                                            <td>{{item.montant}}</td>
+
+
+                                            {% if item.paiement.montant == 0 %}
+                                                <td><span class="badge badge-warning ml-4 "><i class="fa-solid fa-triangle-exclamation "></i></span></td>
+                                            {% elseif item.paiement.montant != 0 %}
+                                                <td><span class="badge badge-success ml-4 "><i class="fas fa-check "></i></span></td>
+                                            {% elseif item.etat == "annuler" %}
+                                                <td><span class="badge badge-danger ml-4"><i class="fa-solid fa-circle-xmark mt-1"></i></span></td>
+                                            {% endif %}
+
+                                        </tr>
+                                    {% endfor %}
+                                {% else %}  
+                                        <tr>
+                                            <td style="font-size: 20px;position: absolute;">
+                                                Aucune Commande en cours de la journée
+                                            </td>
+                                        </tr>
+                                {% endif %}    
+                            </tbody>
+
+                            <tbody id="valide" >
+                                {% if commandeValider | length > 0 %}
+                                    {% for item in commandeValider %}
+                                    <tr>
+                                        <td>{{item.numero}}</td>
+
+                                        {% if item.burgers != null or item.menus != null %}
+                                            <td>
+                                                {% for itemBurger in item.burgers %}
+                                                    <span class="p-2">{{itemBurger.nom }}</span>
+                                                {% endfor %}
+                                                {% for itemMenu in item.menus %}
+                                                    <span class="p-2">{{itemMenu.nom }}</span>
+                                                {% endfor %}
+                                            </td>
+                                        {% endif %}
+
+                                        <td>{{item.montant}}</td>
+
+
+                                        {% if item.paiement.montant == 0 %}
+                                            <td><span class="badge badge-warning ml-4 "><i class="fa-solid fa-triangle-exclamation "></i></span></td>
+                                        {% elseif item.paiement.montant != 0 %}
+                                            <td><span class="badge badge-success ml-4 "><i class="fas fa-check "></i></span></td>
+                                        {% elseif item.etat == "annuler" %}
+                                            <td><span class="badge badge-danger ml-4"><i class="fa-solid fa-circle-xmark mt-1"></i></span></td>
+                                        {% endif %}
+
+                                    </tr>
+                                    {% endfor %}
+                                {% else %}  
+                                        <tr>
+                                            <td style="font-size: 20px;position: absolute;">
+                                                Aucune Commande validée de la journée
+                                            </td>
+                                        </tr>
+                                {% endif %}   
+                            </tbody>
+
+                            <tbody id="annule" style="display:none">
+                                {% if commandeAnnuler | length > 0 %}
+                                    {% for item in commandeAnnuler %}
                                     <tr >
                                         <td>{{item.numero}}</td>
 
@@ -88,73 +167,14 @@
                                         {% endif %}
 
                                     </tr>
-                                {% endfor %}
-
-                            </tbody>
-
-                            <tbody id="valide" style="display:none">
-
-                                {% for item in commandeValider %}
-                                <tr>
-                                    <td>{{item.numero}}</td>
-
-                                    {% if item.burgers != null or item.menus != null %}
-                                        <td>
-                                            {% for itemBurger in item.burgers %}
-                                                <span class="p-2">{{itemBurger.nom }}</span>
-                                            {% endfor %}
-                                            {% for itemMenu in item.menus %}
-                                                <span class="p-2">{{itemMenu.nom }}</span>
-                                            {% endfor %}
+                                    {% endfor %}
+                                {% else %}  
+                                    <tr>
+                                        <td style="font-size: 20px;position: absolute;">
+                                            Aucune Commande annulée de la journée
                                         </td>
-                                    {% endif %}
-
-                                    <td>{{item.montant}}</td>
-
-
-                                    {% if item.paiement.montant == 0 %}
-                                        <td><span class="badge badge-warning ml-4 "><i class="fa-solid fa-triangle-exclamation "></i></span></td>
-                                    {% elseif item.paiement.montant != 0 %}
-                                        <td><span class="badge badge-success ml-4 "><i class="fas fa-check "></i></span></td>
-                                    {% elseif item.etat == "annuler" %}
-                                        <td><span class="badge badge-danger ml-4"><i class="fa-solid fa-circle-xmark mt-1"></i></span></td>
-                                    {% endif %}
-
-                                </tr>
-                                {% endfor %}
-                            </tbody>
-
-                            <tbody id="annule" style="display:none">
-
-                                {% for item in commandeAnnuler %}
-                                <tr >
-                                    <td>{{item.numero}}</td>
-
-                                    {% if item.burgers != null or item.menus != null %}
-                                        <td>
-                                            {% for itemBurger in item.burgers %}
-                                                <span class="p-2">{{itemBurger.nom }}</span>
-                                            {% endfor %}
-                                            {% for itemMenu in item.menus %}
-                                                <span class="p-2">{{itemMenu.nom }}</span>
-                                            {% endfor %}
-                                        </td>
-                                    {% endif %}
-
-                                    <td>{{item.montant}}</td>
-
-
-                                    {% if item.paiement.montant == 0 %}
-                                        <td><span class="badge badge-warning ml-4 "><i class="fa-solid fa-triangle-exclamation "></i></span></td>
-                                    {% elseif item.paiement.montant != 0 %}
-                                        <td><span class="badge badge-success ml-4 "><i class="fas fa-check "></i></span></td>
-                                    {% elseif item.etat == "annuler" %}
-                                        <td><span class="badge badge-danger ml-4"><i class="fa-solid fa-circle-xmark mt-1"></i></span></td>
-                                    {% endif %}
-
-                                </tr>
-                                {% endfor %}
-
+                                    </tr>
+                                {% endif %}    
                             </tbody>
                         </table>
                     </div>
@@ -167,6 +187,11 @@
                         <div class="d-flex h-50 h1">
                             {{recettes}} F CFA
                         </div>
+                        {% if recettes !=0 %}
+                            <a href="{{path('pdf')}}" class="btn float-right"><i class="fa-solid fa-print"></i> Imprimer</a>
+                        {% else %}
+                            <a href="#" class="btn float-right disabled" ><i class="fa-solid fa-print"></i> Aucune recette journalière</a>
+                        {% endif %}
                     </div>
                 </div>
        

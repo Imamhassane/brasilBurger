@@ -4,8 +4,8 @@ const commandeEncours = document.getElementById("commandeEncours");
 const valide = document.getElementById("valide")
 console.log(valide);
 
-commandeEncours.style.backgroundColor = "#eacf4f";
-commandeEncours.style.color = "#000";
+commandeValider.style.backgroundColor = "#eacf4f";
+commandeValider.style.color = "#000";
 
 commandeValider.addEventListener("click",()=>{
     commandeValider.style.backgroundColor = "#eacf4f";

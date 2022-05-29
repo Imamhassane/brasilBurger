@@ -197,9 +197,7 @@ class CatalogueController extends AbstractController
     }
 
     #[Route('/panier', name: 'panier')]
-    #[Route('/pdf', name: 'pdf')]
-
-    public function panier(PdfService $pdf ,Request $request , SessionInterface $session , BurgerRepository $burgerRepo , MenuRepository $menuRepo, ComplementRepository $complementRepo):Response{
+    public function panier(Request $request , SessionInterface $session , BurgerRepository $burgerRepo , MenuRepository $menuRepo, ComplementRepository $complementRepo):Response{
        
         $session    = $request->getSession();
         $role = $session->get('name');
@@ -220,16 +218,6 @@ class CatalogueController extends AbstractController
             $total += $totalItems;
         }
 
-        // generate pdf 
-        
-       /*  $html = $this->render('client/validateCommande.html.twig', [
-            'items'            => $data  ,
-             'total'     => $total,
-             'role'      => $role,
-             'complements'=>$complements,
-         ]); */
-
-        // $pdf->showPdfFile($html);
 
         return $this->render('client/validateCommande.html.twig', [
            'items'            => $data  ,

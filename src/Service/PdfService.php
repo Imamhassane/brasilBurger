@@ -3,7 +3,6 @@ namespace App\Service;
 
 use Dompdf\Dompdf;
 use Dompdf\Options;
-
 Class PdfService
 {
     private $dompdf;
@@ -12,16 +11,19 @@ Class PdfService
         $this->dompdf = new Dompdf();
 
         $pdfOptions = new Options();
-
-        $pdfOptions->set("defaultFont" , "Garamond");
+        $pdfOptions->set('isHtml5ParserEnabled', true);
+        $pdfOptions->set('isRemoteEnabled', true);
+     //    $pdfOptions->set("defaultFont" , "Garamond");
 
         $this->dompdf->setOptions($pdfOptions);
+
+
    }
 
-   public function showPdfFile($html  ){
+   public function showPdfFile($html){
         $this->dompdf->loadHtml($html);
         $this->dompdf->render();
-        $this->dompdf->stream("details.pdf" , [
+        $this->dompdf->stream("recettes.pdf" , [
             'Attachement' => false
         ]);
    }

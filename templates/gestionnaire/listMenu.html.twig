@@ -20,28 +20,23 @@
     {% if isVide == 0%}
         <div class="vide">
             <h1> Aucun produit n'a été enregistré! </h1>
+            <div class="m-5 " >
+                <a href="{{path('addMenu')}}" id="link-addMenu" class="mt-4 nav-links btn float-right">ajoute <i class="fa fa-plus"></i> </a>
+            </div>
+
         </div>
     {% else %}
+        {% if addFoodSuccess is defined and addFoodSuccess != null %}
+            <div  id = "message" class ="success text-center ">{{addFoodSuccess}}</div>
+            {{removeaddFoodSuccess}}
+        {% endif %}
+        
         <div class="datatable-container">
             <!-- ======= Header tools ======= -->
             <div class="header-tools">
                 <div class="tools">
-                {# <form>
-                    <div class="control">
-                    <label for=""></label>
-                    <select class="box" name="" id="">
-                        <option></option>
-                        <option></option>
-                        <option></option>
-                    </select>
-                    </div>
-                <form> #}
-
-                    
-                </form>
-
+                    <a href="{{path('addMenu')}}" id="link-addMenu" class="nav-links btn float-right">Ajouter <i class="fa fa-plus"></i> </a>
                 </div> 
-
             </div> 
 
             <!-- ======= Table ======= -->
@@ -62,7 +57,7 @@
                             <td><img src="/images/{{item.image.nom}}" width="45"/></td>
                             <td>{{item.type}}</td>
                             <td>{{item.nom}}</td>
-                            <td>{{item.prix}}</td>
+                            <td>{{item.prix}} F CFA</td>
                             <td>
                                 {% if item.type == "Menu" %}
                                         {{item.burger.nom }} 
@@ -116,5 +111,10 @@
         <script src="/js/reglerPaiement.js"></script>
         <script src="/js/catalogue.js"></script>
         <style>#link-produitList{color:#eacf4f;}</style>
+        <script>
+            setTimeout(function(){
+                document.getElementById('message').style.display = 'none';
+            }, 4000);
+        </script>
     {% endif %}
 {% endblock %}

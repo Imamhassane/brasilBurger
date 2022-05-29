@@ -19,45 +19,6 @@
         {% block loginSignIn %}{% endblock %}
         {% block logout %}{{parent()}}{% endblock %}
     {% endblock %}
-        
-    {% if isVide == 0 %}
-        <div class="vide">
-            <h1>Aucune commande! </h1>
-        </div>
-    {% else %}
-
-        {% if errorNumber is defined and errorNumber != null %}
-            <div  id = "message" class ="alert danger text-center ">{{errorNumber}}</div>
-            {{removeSessionNumber}}
-        {% endif %}
-        
-        {% if errorMontant is defined and errorMontant != null %}
-            <div  id = "message" class ="alert danger text-center ">{{errorMontant}}</div>
-            {{removeSessionMontant}}
-        {% endif %}
-      
-        {% if success is defined and success != "" %}
-            <div  id = "message" class ="alert successs text-center">{{success}}</div>
-            {{removeSessionSuccess}}
-        {% endif %}
-
-        {% if successCommande is defined and successCommande != "" %}
-            <div  id = "message" class ="alert successs text-center ">{{successCommande}}</div>
-            {{removeSessionSuccessCommande}}
-        {% endif %}
-
-        {% if errorValidation is defined and errorValidation != null %}
-            <div  id = "message" class ="alert danger text-center ">{{errorValidation}}</div>
-            {{removeErrorValidation}}
-        {% endif %} 
-        {% if alreadyPayed is defined and alreadyPayed != null %}
-            <div  id = "message" class ="alert danger text-center ">{{alreadyPayed}}</div>
-            {{removeAlreadyPayed}}
-        {% endif %} 
-        {% if commandeValider is defined and commandeValider != null %}
-            <div  id = "message" class ="alert successs text-center ">{{commandeValider}}</div>
-            {{removecommandeValider}}
-        {% endif %} 
         <div class="filtre2">
             <label> Etat </label>
             <select name="choice" class="box m-0" id="option">
@@ -67,6 +28,45 @@
                 <option value="annuler">Annulée</option>
             </select>
         </div>
+    {% if isVide == 0 %}
+        <div class="vide">
+            <h1>Aucune commande! </h1>
+        </div>
+    {% else %}
+
+        {% if errorNumber is defined and errorNumber != null %}
+            <div  id = "message" class =" danger text-center ">{{errorNumber}}</div>
+            {{removeSessionNumber}}
+        {% endif %}
+        
+        {% if errorMontant is defined and errorMontant != null %}
+            <div  id = "message" class =" danger text-center ">{{errorMontant}}</div>
+            {{removeSessionMontant}}
+        {% endif %}
+      
+        {% if success is defined and success != "" %}
+            <div  id = "message" class =" successs text-center">{{success}}</div>
+            {{removeSessionSuccess}}
+        {% endif %}
+
+        {% if successCommande is defined and successCommande != "" %}
+            <div  id = "message" class =" successs text-center ">{{successCommande}}</div>
+            {{removeSessionSuccessCommande}}
+        {% endif %}
+
+        {% if errorValidation is defined and errorValidation != null %}
+            <div  id = "message" class =" danger text-center ">{{errorValidation}}</div>
+            {{removeErrorValidation}}
+        {% endif %} 
+        {% if alreadyPayed is defined and alreadyPayed != null %}
+            <div  id = "message" class =" danger text-center ">{{alreadyPayed}}</div>
+            {{removeAlreadyPayed}}
+        {% endif %} 
+        {% if commandeValider is defined and commandeValider != null %}
+            <div  id = "message" class =" successs text-center ">{{commandeValider}}</div>
+            {{removecommandeValider}}
+        {% endif %} 
+        
        
         <div class="datatable-container">
             <!-- ======= Header tools ======= -->
@@ -189,10 +189,5 @@
             <script src="/js/paiement.js"></script>
             <script src="/js/catalogue.js"></script>
             <style>#link-mescommandes{color:#eacf4f;}</style>
-            <script>
-                
-                //document.getElementById("test").innerHTML =  "en cours"
-                
-            </script>
     {% endif %}
 {% endblock %}

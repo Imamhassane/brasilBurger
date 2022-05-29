@@ -2,7 +2,6 @@ const payer = document.getElementById("payer");
 const  confirmation = document.querySelector(".confirmation");
 const form = document.getElementById('form');
 const commandeAPayer =  document.getElementsByName("commandeAPayer[]")
-const option = document.getElementById('option');
 
 //Functions-------------------------------------------------------------
 function showError(input, message) {//Afficher les messages d'erreur
@@ -59,10 +58,6 @@ commandeAPayer.forEach((element) => {
         }
     })
 });
-//
-option.addEventListener("change",(e)=>{
-    document.location.replace("mescommandeEtat"+option.value)
-})
 //
 /* payer.addEventListener("click",()=>{
     confirmation.classList.toggle("show-modal");
