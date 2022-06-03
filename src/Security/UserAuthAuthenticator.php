@@ -47,17 +47,13 @@ class UserAuthAuthenticator extends AbstractLoginFormAuthenticator
 
     public function onAuthenticationSuccess(Request $request, TokenInterface $token, string $firewallName): ?Response
     {
-        $session = new Session();
         if ($targetPath = $this->getTargetPath($request->getSession(), $firewallName)) {
             $targetPath = $request->getSession()->get('_security.main.target_path'); 
-
-            if(preg_match("/\/match\/[0-9]+$/", $targetPath))
-            {
-              dd($targetPath);
-            };
+            
+            $session = new Session();
             $session->set('targetPath' , $targetPath);
-           
-           return new RedirectResponse($this->urlGenerator->generate('redirection'));
+            
+            return new RedirectResponse($this->urlGenerator->generate('redirection'));
         }
         
         // For example:

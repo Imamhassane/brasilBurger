@@ -18,11 +18,11 @@
     {% endblock %}
     {% if commandeValiderByGest is defined and commandeValiderByGest != null %}
         <div  id = "message" class =" successs text-center ">{{commandeValiderByGest}}</div>
-        {{removecommandeValiderByGest}}
+        <span class="d-none">{{removecommandeValiderByGest}}</span>
     {% endif %} 
     {% if commandeAnnulerByGest is defined and commandeAnnulerByGest != null %}
         <div  id = "message" class =" danger text-center ">{{commandeAnnulerByGest}}</div>
-        {{removecommandeAnnulerByGest}}
+        <span class="d-none">{{removecommandeAnnulerByGest}}</span>
     {% endif %} 
         <div class="overflow-auto filtre mt-5 mb-5" style="margin-left:9rem ;">
             <label> Etat </label>
@@ -80,106 +80,92 @@
                 </div>
 
             </div> 
-
-            <!-- ======= Table ======= -->
-            <table class="datatable mt-4">
-                <thead>
-                <tr>
-                    {# <th><input type="checkbox" /></th> #}
-                    {# <th>Status</th> #}
-                    <th>Date</xth>
-                    <th>Numero commande</th>
-                    <th>Commandes</th>
-                    <th>Montant</th>
-                    <th>Etat</th>
-                    <th>Paiement</th>
-                    <th>Régler</th>
-                </tr>
-                </thead>
-                <tbody>
-                    {% for item in commandes %}
-                        <tr>
-                            {# <td>
-                                <input type="checkbox" />
-                            </td> #}
-
-                            <td>{{item.date |date("d/m/Y")}}</td>
-                            <td>{{item.numero}}</td>
-
-                            {% if item.burgers != null or item.menus != null %}
+            <form method="POST" action="{{path('traitement')}}">
+                <!-- ======= Table ======= -->
+                <table class="datatable mt-4">
+                    <thead>
+                    <tr>
+                        <th>Choisir</th>
+                        {# <th>Status</th> #}
+                        <th>Commandes</th>
+                        <th>Date</xth>
+                        <th>Numero </th>
+                        <th>Montant</th>
+                        {# <th>Etat</th> #}
+                        <th>Paiement</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                        {% for item in commandes %}
+                            <tr>
                                 <td>
-                                    {% for itemBurger in item.burgers %}
-                                        <span class="p-2">{{itemBurger.nom }}</span>
-                                    {% endfor %}
-                                    {% for itemMenu in item.menus %}
-                                        <span class="p-2">{{itemMenu.nom }}</span>
-                                    {% endfor %}
+                                    {% if item.etat == "en cours" %}
+                                        <input type="checkbox" / name="commandeATraiter[]" value="{{item.id}}">
+                                    {% else %}
+                                        <input type="checkbox" / disabled>
+                                    {% endif %}
                                 </td>
+
+                                {% if item.burgers != null or item.menus != null %}
+                                    <td>
+                                        {% for itemBurger in item.burgers %}
+                                            <span class="p-2">{{itemBurger.nom }}</span>
+                                        {% endfor %}
+                                        {% for itemMenu in item.menus %}
+                                            <span class="p-2">{{itemMenu.nom }}</span>
+                                        {% endfor %}
+                                    </td>
+                                {% endif %}
+                                <td>{{item.date |date("d/m/Y")}}</td>
+                                <td>{{item.numero}}</td>
+
+
+                                <td>{{item.montant}} FCFA</td>
+
+                                {# <td>{{item.etat}}</td> #}
+
+                                {% if item.paiement.montant == 0 %}
+                                    <td><span class="badge badge-warning ml-4 "><i class="fa-solid fa-triangle-exclamation "></i></span></td>
+                                {% elseif item.paiement.montant != 0 %}
+                                    <td><span class="badge badge-success ml-4 "><i class="fas fa-check "></i></span></td>
+                                {% elseif item.etat == "annuler" %}
+                                    <td><span class="badge badge-danger ml-4"><i class="fa-solid fa-circle-xmark mt-1"></i></span></td>
+                                {% endif %}
+
+                            </tr>
+                        {% endfor %}
+
+                    </tbody>
+                </table>
+               
+                <!-- ======= Footer tools ======= -->
+                <div class="footer-tools">
+                    <button style="margin-bottom:0px; margin-top: 0px;padding: 1px 7px;" class="btn">Traiter commande</button>
+
+                    {% if isPaginated  %}
+                        <div class="pages">
+                            <ul>
+                            {% if page != 1 %}
+                                <a href="{{path('listCommande' , {page : page - 1 , nbre : nbre } ) }}" class="aNav"> <span aria-hidden='true'>&laquo;</span></a> 
                             {% endif %}
 
-                            <td>{{item.montant}}</td>
+                            {% for i in range (1 , nbPage) %}
+                                {% if i != 0 %}
+                                    <a href="{{path('listCommande' , {page : i , nbre : nbre } ) }}" class="aNav">{{i}}</a>    
+                                {% endif %}
+                            {% endfor %} 
 
-                            <td>{{item.etat}}</td>
-
-                            {% if item.paiement.montant == 0 %}
-                                <td><span class="badge badge-warning ml-4 "><i class="fa-solid fa-triangle-exclamation "></i></span></td>
-                            {% elseif item.paiement.montant != 0 %}
-                                <td><span class="badge badge-success ml-4 "><i class="fas fa-check "></i></span></td>
-                            {% elseif item.etat == "annuler" %}
-                                <td><span class="badge badge-danger ml-4"><i class="fa-solid fa-circle-xmark mt-1"></i></span></td>
+                            {% if page != nbPage %}
+                                <a href="{{path('listCommande' , {page : page + 1 , nbre : nbre } ) }}" class="aNav"><span aria-hidden='true'>&raquo;</span></a>
                             {% endif %}
-
-
-
-                            {% if item.etat == "en cours" %}
-                                <td><button value="{{item.id}}" style="margin-bottom:0px; margin-top: 0px;padding: 1px 7px;" class="reglerCommande btn">regler ?</button></td>
-                            {% else %}
-                                <td><button disabled  style="margin-bottom:0px; margin-top: 0px;padding: 1px 7px;" class="btn">regler ?</button></td>
-                            {% endif %}
-
-
-
-                        </tr>
-                    {% endfor %}
-
-                </tbody>
-            </table>
-                <div class="confirmation2 confirmation">
-                    <div class="form-signin">    
-                        <div class="d-flex mb-3">
-                            <button  id="removeModal" class="btn m-3 pl-5" ><i class="fa-solid fa-circle-left"></i> <span> Liste des commandes </span></button>
-                        </div>
-                        <div class="text-center p-4 h2">Voulez-vous valider ou annuler cette commande ?</div>
-                        <div class="d-flex justify">
-                            <a href="#"  id="refuser" class="btn ml-2">Annuler</a>
-                            <a href="#"  id="valider" class="btn ml-2">Valider</a>
-                        </div>
-                    </div>
+                            </ul>
+                        </div>  
+                    {% endif %}
                 </div>
-            <!-- ======= Footer tools ======= -->
-            <div class="footer-tools">
-                {% if isPaginated  %}
-                    <div class="pages">
-                        <ul>
-                        {% if page != 1 %}
-                            <a href="{{path('listCommande' , {page : page - 1 , nbre : nbre } ) }}" class="aNav"> <span aria-hidden='true'>&laquo;</span></a> 
-                        {% endif %}
-
-                        {% for i in range (1 , nbPage) %}
-                            {% if i != 0 %}
-                                <a href="{{path('listCommande' , {page : i , nbre : nbre } ) }}" class="aNav">{{i}}</a>    
-                            {% endif %}
-                        {% endfor %} 
-
-                        {% if page != nbPage %}
-                            <a href="{{path('listCommande' , {page : page + 1 , nbre : nbre } ) }}" class="aNav"><span aria-hidden='true'>&raquo;</span></a>
-                        {% endif %}
-                        </ul>
-                    </div>  
-                {% endif %}
-            </div>
+            </form>
         </div>
         <script src="/js/reglerPaiement.js"></script>
+        <script src="/js/filterCommmandes.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
         <script type="text/javascript" src="https://rawgit.com/select2/select2/master/dist/js/select2.js"></script>
         <style>#link-commandes{color:#eacf4f;}</style>
@@ -188,13 +174,6 @@
             $(document).ready(function() {
                 $('.select2').select2();
             });
-
-
-            document.getElementById("choiceEtat").addEventListener("change",()=>{
-                localStorage.setItem("option" , document.getElementById("choiceEtat").value)
-            })
-            document.getElementById("test").innerHTML =  localStorage.getItem("option")
-
 
             $('#choiceClient').select2().on('change', function(e) {
                 document.location.replace("/commande"+document.getElementById("choiceClient").value)

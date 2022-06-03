@@ -27,7 +27,9 @@
          {% endif %}
 
       {% endblock %}
-
+<div class="ml-5">
+   <a  href="{{path('catalogue')}}" class="btn pl-5" ><i class="fa-solid fa-circle-left"></i> <span>Catalogue</span></a>
+</div>
 <section class="about mt-5" id="about">
    {% if details is defined %}   
       <div class="image" data-aos="fade-right" data-aos-delay="150">
@@ -51,10 +53,35 @@
          <div class="d-flex justify-content-center">
             <a href="{{path('add', {'id':details.id ~ details.type}) }}" class="btn btn-commande">ajouter au panier </a>
          </div>
-      </div>
+      </div>      
    {% endif %}
-<script src="/js/catalogue.js"></script>
-<style>#link-catalogue{color:#eacf4f;}</style>
-
+   <script src="/js/catalogue.js"></script>
+   <style>#link-catalogue{color:#eacf4f;}</style>
 </section>
+  {% if details.type == "Burger" %}
+            <section class="menu " id="menu">
+               <div class="box-container">
+                  {% for item in burgers %}
+                     <div class="box" id="main" data-aos="zoom-in-down" data-aos-delay="150">
+                     <img src="/images/{{item.image.nom}}" alt="">
+                        <div class="content">
+                        <div class="stars">
+                              <i class="fas fa-star"></i>
+                              <i class="fas fa-star"></i>
+                              <i class="fas fa-star"></i>
+                              <i class="fas fa-star"></i>
+                              <i class="fas fa-star-half-alt"></i>
+                        </div>
+                        <h3>{{item.nom}}</h3>
+                        <div class="price">F CFA {{item.prix}}</div>
+                           {% if role is defined and role == "ROLE_CLIENT" or role == "" %}
+                              <a href="{{path('add', {'id':item.id ~ item.type}) }}" class="btn btn-commande ml-2">ajouter au panier </a>
+                              <a href="{{'showDetails/' ~ item.id ~ item.type}}" class="btn ml-2">Détails</a>
+                           {% endif %}
+                        </div>
+                     </div>
+                  {% endfor %}
+               </div>
+            </section>
+      {% endif %}
 {% endblock %}

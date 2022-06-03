@@ -63,16 +63,6 @@
                                             <option value="{{items.id ~ '-' ~ item.quantite}}">{{items.nom}}</option>
                                         {% endfor %}
                                      </select>
-                                    {# <form action="{{path('panier')}}" method="POST">
-                                        <div class="row d-flex" style="margin-left: 40px;">
-                                            {% for item in complements %}
-                                            <div class="col-md-5 p-2 text-left addComplement" style="margin-left: 8%;">
-                                                <input type="checkbox" class="form-check-input" name="addComplement" id="addComplement ~ {{item.id}}" value="{{item.id}}" >
-                                                <label class="form-check-label" style="cursor:pointer; margin: 2px;margin-left: 3px;" for="addComplement ~ {{item.id}}">{{item.nom}}</label>
-                                            </div>
-                                            {% endfor %}
-                                        </div>
-                                    </form> #}
                                     {% else %}
                                     -
                                     {% endif %}

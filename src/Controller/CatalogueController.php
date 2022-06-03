@@ -55,11 +55,14 @@ class CatalogueController extends AbstractController
         }elseif(str_contains($id, "Burger")){
             $details = $burgerRepo->find($idProduit);
         }
+        $burgers = $burgerRepo->findBy(["etat" => "non-archive"], [] , 3);
+        $menus = $menuRepo->findBy(["etat" => "non-archive"], [] , 3);
 
         return $this->render('catalogue/showDetails.html.twig', [
             'details'       => $details,
             'role'            => $role,
-
+            'menus'            => $menus,
+            'burgers'            => $burgers,
         ]);
     }
 

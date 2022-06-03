@@ -7,7 +7,7 @@
 {% block body %}
 
     
-
+    <span id="pdfdownload" value="{{success}}" ></span>
 
     {% block naavbarLinks %}
             {% block Gestionnaire %}{% endblock %}
@@ -19,6 +19,46 @@
         {% block loginSignIn %}{% endblock %}
         {% block logout %}{{parent()}}{% endblock %}
     {% endblock %}
+
+        {% if errorNumber is defined and errorNumber != null %}
+            <div  id = "message" class =" danger text-center ">{{errorNumber}}</div>
+            <span class="d-none">{{removeSessionNumber}}</span>
+        {% endif %}
+        
+        {% if errorMontant is defined and errorMontant != null %}
+            <div  id = "message" class =" danger text-center ">{{errorMontant}}</div>
+            <span class="d-none">{{removeSessionMontant}}</span>
+        {% endif %}
+      
+        {% if success is defined and success != "" %}
+            <div  id = "validation" class ="successs text-center">
+                <div class="">{{success}} , Télécharger votre reçu ?</div>
+                <div class="d-block p-3">
+                    <a  id="download"     href="#"  style="cursor:pointer" class="mr-3">télécharger</a>
+                    <a  id="notDownload"  href="#"  style="cursor:pointer ; color:red;" class="">annuler</a>
+                </div>
+            </div>
+            <span class="d-none">{{removeSessionSuccess}}</span>
+        {% endif %}
+
+        {% if successCommande is defined and successCommande != "" %}
+            <div  id = "message" class =" successs text-center ">{{successCommande}}</div>
+            <span class="d-none">{{removeSessionSuccessCommande}}</span>
+        {% endif %}
+
+        {% if errorValidation is defined and errorValidation != null %}
+            <div  id = "message" class =" danger text-center ">{{errorValidation}}</div>
+            <span class="d-none">{{removeErrorValidation}}</span>
+        {% endif %} 
+        {% if alreadyPayed is defined and alreadyPayed != null %}
+            <div  id = "message" class =" danger text-center ">{{alreadyPayed}}</div>
+            <span class="d-none">{{removeAlreadyPayed}}</span>
+        {% endif %} 
+        {% if commandeValider is defined and commandeValider != null %}
+            <div  id = "message" class =" successs text-center ">{{commandeValider}}</div>
+            <span class="d-none">{{removecommandeValider}}</span>
+        {% endif %} 
+        
         <div class="filtre2">
             <label> Etat </label>
             <select name="choice" class="box m-0" id="option">
@@ -33,40 +73,6 @@
             <h1>Aucune commande! </h1>
         </div>
     {% else %}
-
-        {% if errorNumber is defined and errorNumber != null %}
-            <div  id = "message" class =" danger text-center ">{{errorNumber}}</div>
-            {{removeSessionNumber}}
-        {% endif %}
-        
-        {% if errorMontant is defined and errorMontant != null %}
-            <div  id = "message" class =" danger text-center ">{{errorMontant}}</div>
-            {{removeSessionMontant}}
-        {% endif %}
-      
-        {% if success is defined and success != "" %}
-            <div  id = "message" class =" successs text-center">{{success}}</div>
-            {{removeSessionSuccess}}
-        {% endif %}
-
-        {% if successCommande is defined and successCommande != "" %}
-            <div  id = "message" class =" successs text-center ">{{successCommande}}</div>
-            {{removeSessionSuccessCommande}}
-        {% endif %}
-
-        {% if errorValidation is defined and errorValidation != null %}
-            <div  id = "message" class =" danger text-center ">{{errorValidation}}</div>
-            {{removeErrorValidation}}
-        {% endif %} 
-        {% if alreadyPayed is defined and alreadyPayed != null %}
-            <div  id = "message" class =" danger text-center ">{{alreadyPayed}}</div>
-            {{removeAlreadyPayed}}
-        {% endif %} 
-        {% if commandeValider is defined and commandeValider != null %}
-            <div  id = "message" class =" successs text-center ">{{commandeValider}}</div>
-            {{removecommandeValider}}
-        {% endif %} 
-        
        
         <div class="datatable-container">
             <!-- ======= Header tools ======= -->
@@ -75,7 +81,7 @@
                 <ul>
                     <li>
                     <button>
-                        <span class="badge badge-warning p-2"><i class="fa-solid fa-triangle-exclamation "></i> Commande non payée</span>
+                       <span class="badge badge-warning p-2"><i class="fa-solid fa-triangle-exclamation "></i> Commande non payée</span>
                     </button>
                     </li>
                     <li>
@@ -158,6 +164,7 @@
                         
                     </tbody>
                 </table>
+             
                 <!-- ======= EndForm ======= -->
 
                 <!-- ======= Footer tools ======= -->
@@ -186,8 +193,10 @@
                 </div>
             </form>
         </div>
+            <script src="/js/mescommandes.js"></script>
             <script src="/js/paiement.js"></script>
             <script src="/js/catalogue.js"></script>
+            <script src="/js/pdf.js"></script>
             <style>#link-mescommandes{color:#eacf4f;}</style>
     {% endif %}
 {% endblock %}

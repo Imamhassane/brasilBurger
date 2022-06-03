@@ -37,44 +37,80 @@ use Symfony\Component\HttpFoundation\File\Exception\FileException;
 class GestionnaireController extends AbstractController
 {
 
-    #[Route('/validerCommande/{id}', name: 'validerCommande')]
-    #[Route('/annulerCommande/{id}', name: 'annulerCommande')]
-    public function commande(EntityManagerInterface $entityManager , Request $request, CommandeRepository $commandeRepo): Response
+    #[Route('/traitementCommande', name: 'traitement')]
+    public function traitement(EntityManagerInterface $entityManager , Request $request, CommandeRepository $commandeRepo): Response
     {
-            $id = array_values(explode ("/", $request->getrequestUri()))[2];
-            $action = array_values(explode ("/", $request->getrequestUri()))[1];
-            $session    = $request->getSession();
+            
+                $session    = $request->getSession();
+                $data = $request->request->all();
+                extract($data);
 
-                $commande = $commandeRepo->find($id);
-                if ($action=="validerCommande") {
-                    $commande->setEtat('valider');
-                    $commandeValiderByGest = "le numéro de commande ".$commande->getNumero()."  été validé avec succés!" ;
+                if (count($commandeATraiter) != 0) {
+                    foreach ($commandeATraiter as  $value) {
+                        $commandes[] = $commandeRepo->find($value);
+                    }
+                }
+                $session->set("commandeATraiter" , $commandeATraiter);
+
+                
+                return $this->render('gestionnaire/traitement.html.twig', [
+                    'commandes' => $commandes,
+                ]);
+    } 
+    #[Route('/commandeATraiter', name: 'commandeATraiter')]
+    public function commandeATraiter(EntityManagerInterface $entityManager , Request $request ,  CommandeRepository $commandeRepo): Response
+    {
+            $session    = $request->getSession();
+            $data = $request->request->all();
+            extract($data);
+
+         
+            $commandeATraiter = $session->get("commandeATraiter");
+            foreach ($commandeATraiter as $value2) {
+                $commandes [] = $commandeRepo->find($value2);
+                
+                /*  */
+            }
+            foreach ($commandes as $value) {
+                if ($choix=="valider") {
+                    $commandesTraiter [] = $value->setEtat('valider');
+                    
+                    // message de succés
+                    $commandeValiderByGest = "Commande(s) validée(s) avec succés!" ;
                     $session->set('commandeValiderByGest',$commandeValiderByGest);      
-                }elseif ($action=="annulerCommande") {
-                    $commande->setEtat('annuler');
-                    $commandeAnnulerByGest = "le numéro de commande ".$commande->getNumero()."  été annulé avec succés!" ;
+               
+                }elseif ($choix=="annuler") {
+                    $commandesTraiter [] =  $value->setEtat('annuler');
+                    
+                    // message de succés
+                    $commandeAnnulerByGest = "Commande(s) annulée(s) avec succés!" ;
                     $session->set('commandeAnnulerByGest',$commandeAnnulerByGest);
                 }
-            
-                $entityManager->persist($commande);
+                $entityManager->persist($value);
                 $entityManager->flush();
-                
-                return $this->redirectToRoute('listCommande');       
-        
-    } 
+              
+            }
 
+            $session->remove("commandeATraiter");
+                
+            return $this->redirectToRoute('listCommande');       
+               
+    } 
 
     #[Route('/listCommande/{page?1}/{nbre?3}', name: 'listCommande')]
     #[Route('/commande{etat}/{page?1}/{nbre?3}', name: 'commandeFilter')]
     public function ListCommande( Request $request,CommandeRepository $commandeRepo , $page , $nbre, ClientRepository $clientRepo): Response
     {
-        $uri =$request->getRequestUri();
+        $uri = $request->getRequestUri();
+
         $datas = $request->request->all();
         extract($datas);
         $session    = $request->getSession();
 
         $clients = $clientRepo->findAll();
+
         $commandes = $commandeRepo->findBy(["etat" => "en cours"] , ["date" => "DESC"], $nbre , ($page - 1) * $nbre );
+        
         $commandesEncours = $commandeRepo->findBy(["etat" => "en cours"]);
         
         $commandeValiderByGest = $session->get('commandeValiderByGest');
@@ -85,7 +121,15 @@ class GestionnaireController extends AbstractController
       
             if( $uri == "/commandeannuler"){
                 $commandes = $commandeRepo->findBy(["etat" => "annuler"],["date" => "DESC"] );
-            }elseif( $uri == "/commandevalider"){
+            }
+            
+            
+            
+            
+            
+            
+            
+            elseif( $uri == "/commandevalider"){
                 $commandes = $commandeRepo->findBy(["etat" => "valider"],["date" => "DESC"] );
             }elseif($uri == "/commandeencours"){
                 $commandes = $commandeRepo->findBy(["etat" => "en cours"], ["date" => "DESC"] , $nbre , ($page - 1) * $nbre );
@@ -411,7 +455,6 @@ class GestionnaireController extends AbstractController
         foreach ($commandeJournee as $value) {
             $recettes += $value->getMontant();
         }
-        // dd($commandeJournee);
 
         $html =  $this->render('gestionnaire/pdf.html', [
             'items'            => $commandeJournee  ,

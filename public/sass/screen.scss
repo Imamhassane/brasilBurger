@@ -118,8 +118,9 @@ body{
    
    }
    .danger{
-      background-color:red;
-      color: #fff;
+      color: #721c24;
+      background-color: #f8d7da;
+      border-color: #f5c6cb;
       height: 63px;
       font-size: 16px;
       text-align: center;
@@ -130,7 +131,9 @@ body{
    }
    .successs{
       @extend .danger;
-      background-color:green;
+      color: #155724;
+      background-color: #d4edda;
+      border-color: #c3e6cb;
    }
    .panier{
       font-size: 15px;
@@ -256,6 +259,12 @@ body{
          margin-top: 20px;
       }
    }
+   .validation2{
+      @extend .validation;
+      display: block;
+      width:343px;
+      height:105px;
+   }
    .itemExist{
       @extend .validation;
       transform: translate(23vw, 40vh);
@@ -269,15 +278,7 @@ body{
       }
    }
    .form-container{  
-      background-color: rgba(0, 0, 0, 0.5);
-      z-index: 9999;
-      height:100vh;
-      margin-top: -6px;
-      &.heighadding{
-        height: 120vh;
-      }
-      
-      
+     
    
       #divPrix{
          display: none;
@@ -1233,9 +1234,9 @@ section{
  .paiement{
    z-index: 100;
    background-color: #000;
-   box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+   // box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
    height: 75vh;
-   position: absolute;
+   position: relative;
    overflow: hidden;
    top: 15%;
    left: 50%;
@@ -1245,4 +1246,6 @@ section{
    animation-duration: 2s;   
    box-shadow: #eacf4f 0px 0px 13px 0px;
    overflow-y: auto;
+   max-width: 1000px;
+   border-radius:10px;
  }

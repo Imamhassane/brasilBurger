@@ -1,5 +1,5 @@
-const elements = document.getElementsByClassName("modal-toggle");
 const validCommande = document.getElementsByClassName("btn-commande");
+const elements = document.getElementsByClassName("modal-toggle");
 const validation = document.getElementById("validation");
 const annuler = document.getElementById("annuler");
 const continuer = document.getElementById("continuer");
@@ -8,7 +8,6 @@ let deleteCommande = document.getElementsByName("deleteCommande");
 //
 const compteur = document.getElementById("compteur");
 const svg = document.getElementById("svg");
-const validerCommande = document.getElementById('validerCommande');
 
 //archive
 for (let i = 0; i < elements.length; i++) {
@@ -50,12 +49,14 @@ function addInPanier(params) {
     }
 }
 //
-deleteCommande.forEach(input => {
-    input.addEventListener("click",()=>{
-            let value       = input.getAttribute('value');
-            updateCompteur(value)
-    })
-});
+if(deleteCommande){
+    deleteCommande.forEach(input => {
+        input.addEventListener("click",()=>{
+                let value       = input.getAttribute('value');
+                updateCompteur(value)
+        })
+    });
+}
 //Rechargement de page 
 let currpage    = window.location.href;
 let lasturl     = sessionStorage.getItem("last_url");
@@ -82,13 +83,4 @@ function update(params) {
 }
 
 
-//
-validerCommande.addEventListener("click",()=>{
-    localStorage.setItem("nbrCommande" , 0)
-})
-//
 
-
-
-//
-    

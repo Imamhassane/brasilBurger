@@ -19,7 +19,6 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\Console\Command\Command;
 
 /**
    * @Security("is_granted('ROLE_ADMIN') or is_granted('ROLE_CLIENT') or is_granted('ROLE_USER')")
@@ -30,7 +29,7 @@ class ClientController extends AbstractController
     
     #[Route('/mescommandes/{page?1}/{nbre?3}', name: 'mescommandes')]
     #[Route('/mescommandeEtat{etat}/{page?1}/{nbre?3}', name: 'mescommandeEtat')]
-    public function mesCommande($page , $nbre , Request $request , CommandeRepository $commandeRepo, ClientRepository $clientRepo, BurgerRepository $burgerRepo , MenuRepository $menuRepo, EntityManagerInterface $entityManager):Response{
+    public function mesCommande( $page , $nbre , Request $request , CommandeRepository $commandeRepo, ClientRepository $clientRepo, BurgerRepository $burgerRepo , MenuRepository $menuRepo, EntityManagerInterface $entityManager):Response{
         
         $datas = $request->request->all();
         $uri =$request->getRequestUri();
@@ -47,7 +46,8 @@ class ClientController extends AbstractController
         $errorValidation = $session->get('errorValidation');
         $alreadyPayed = $session->get('alreadyPayed');
 
-
+       
+      
         $UserCommande = $commandeRepo->findBy(['client' => $userConnect, 'etat' => "valider"]);
         $myCommandes = $commandeRepo->findBy(['client' => $userConnect, 'etat' => "valider"] , [], $nbre , ($page - 1) * $nbre );
         
@@ -82,12 +82,14 @@ class ClientController extends AbstractController
             'isPaginated'   => true,
             'nbPage'        => $nbPage,
             'page'          => $page,
-            'nbre'          => $nbre
+            'nbre'          => $nbre,
         ]);
+       
+
     }
     
     #[Route('/paiement', name: 'paiement')]
-    public function paiement(Request $request ,PaiementRepository $paiementRepo ,CommandeRepository $commandeRepo, ClientRepository $clientRepo, BurgerRepository $burgerRepo , MenuRepository $menuRepo, EntityManagerInterface $entityManager):Response{
+    public function paiement(Request $request ,CommandeRepository $commandeRepo, ClientRepository $clientRepo, BurgerRepository $burgerRepo , MenuRepository $menuRepo, EntityManagerInterface $entityManager):Response{
         $datas =  $request->request->all();
         $session    = $request->getSession();   
         $method  = $request->getMethod();
@@ -96,12 +98,26 @@ class ClientController extends AbstractController
         foreach ($commandeAPayer as $value) {
             $commandes [] = $commandeRepo->find($value);
         }
+        $session->set("commandesTovalidate" , $commandes);
         $total = 0;
         foreach($commandes as $value) {
             $total += $value->getMontant();
         }
-        if ($method == "POST") {
+        $session->set("prixTotalCommande" , $total);
+    
+        return $this->render('client/paiement.html.twig', [
+            'commandes' =>$commandes,
+            'total'=>$total
+        ]);
+    }
 
+
+    #[Route('/commandesTovalidate', name: 'commandesTovalidate')]
+    public function commandesTovalidate( Request $request , PdfService $pdf ,PaiementRepository $paiementRepo ,CommandeRepository $commandeRepo, ClientRepository $clientRepo, BurgerRepository $burgerRepo , MenuRepository $menuRepo, EntityManagerInterface $entityManager):Response{
+       
+
+            $session    = $request->getSession();   
+            $commandes = $session->get("commandesTovalidate");
             foreach ($commandes as $value) {
                 $paiements[] =[
                     'paiement' =>$paiementRepo->find($value->getId()),
@@ -112,20 +128,35 @@ class ClientController extends AbstractController
                 $value['paiement']->setMontant($value['montant']);
                 $entityManager->persist($value['paiement']);
                 $entityManager->flush();
-            }
+            }   
 
-
+            
             $success = "Commandes(s) payé(s) avec succés!" ;
             $session->set('success',$success);
-
+            // $this->pdfClient($request , $pdf);
             return $this->redirectToRoute('mescommandes');
-        }
-       
-        return $this->render('client/paiement.html.twig', [
-            'commandes' =>$commandes,
-            'total'=>$total
-        ]);
+        
+  
     }
+    #[Route('/pdfClient' , name: 'pdfClient')]
+    public function pdfClient(Request $request , PdfService $pdf ){
+        $date = new DateTime("now", new DateTimeZone('Africa/Dakar'));
+        $session    = $request->getSession();  
+
+        $commandes = $session->get("commandesTovalidate");
+        $html =  $this->render('client/pdf.html', [
+            'items'            => $commandes  ,
+            'date'      => $date->format('d-m-Y'),
+            'recettes'  => $session->get("prixTotalCommande")
+
+        ])->getContent();
+        
+        $pdf->showPdfFile($html);
+        $commandes = $session->remove("commandesTovalidate");
+        $session->remove("prixTotalCommande");
+        
+    }
+
 
     #[Route('/commandeValidate', name: 'commandeValidate')]
     public function commandeValidate(Request $request , ClientRepository $clientRepo, BurgerRepository $burgerRepo , MenuRepository $menuRepo, EntityManagerInterface $entityManager , ComplementRepository $complementRepo):Response{
@@ -155,8 +186,9 @@ class ClientController extends AbstractController
             $totalItems =   $item['produit']->getPrix() *  $item['quantite'];
             $total += $totalItems;
         }
-
-        if(count($datas) != 0){
+        
+    
+        if(count($complementadded) != 0){
             foreach ($complementadded as $value) {
                 $explodeIdandQuantite [] = explode('-' , $value);
             }
@@ -197,8 +229,8 @@ class ClientController extends AbstractController
             
             $paiement->setMontant(0)
                      ->setCommande($commande);
-
-                     $entityManager->persist($commande);
+            
+            $entityManager->persist($commande);
             $entityManager->persist($paiement);
             $entityManager->flush();
     

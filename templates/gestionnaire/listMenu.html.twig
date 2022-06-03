@@ -16,14 +16,14 @@
         {% block loginSignIn %}{% endblock %}
         {% block logout %}{{parent()}}{% endblock %}
     {% endblock %}
-
+    <div class="vide " style="height:7vh; justify-content:end; margin-right :12rem;margin-top: 2.5rem;">
+        <div>
+            <a href="{{path('addMenu')}}" id="link-addMenu" class="mt-4 nav-links btn float-right">ajouter <i class="fa fa-plus"></i> </a>
+        </div>
+    </div>
     {% if isVide == 0%}
         <div class="vide">
             <h1> Aucun produit n'a été enregistré! </h1>
-            <div class="m-5 " >
-                <a href="{{path('addMenu')}}" id="link-addMenu" class="mt-4 nav-links btn float-right">ajoute <i class="fa fa-plus"></i> </a>
-            </div>
-
         </div>
     {% else %}
         {% if addFoodSuccess is defined and addFoodSuccess != null %}
@@ -33,12 +33,6 @@
         
         <div class="datatable-container">
             <!-- ======= Header tools ======= -->
-            <div class="header-tools">
-                <div class="tools">
-                    <a href="{{path('addMenu')}}" id="link-addMenu" class="nav-links btn float-right">Ajouter <i class="fa fa-plus"></i> </a>
-                </div> 
-            </div> 
-
             <!-- ======= Table ======= -->
             <table class="datatable mt-4">
                 <thead>

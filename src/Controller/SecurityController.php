@@ -46,7 +46,6 @@ class SecurityController extends AbstractController
             $session->set('name', $role[0]);
 
             $targetPath = $session->get('targetPath');
-
             if($role[0] == "ROLE_ADMIN" && $targetPath == null){
                 return $this->redirectToRoute('listCommande');
             }elseif($role[0] == "ROLE_CLIENT" && $targetPath == null){

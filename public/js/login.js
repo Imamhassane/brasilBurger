@@ -46,6 +46,8 @@ form.addEventListener('submit',function(e){
 
 });
 
-setTimeout(function(){
-    document.getElementById('message').style.display = 'none';
-}, 4000);
+if(document.getElementById('message')){
+    setTimeout(function(){
+        document.getElementById('message').style.display = 'none';
+    }, 4000);
+}
