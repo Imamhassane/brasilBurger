@@ -165,7 +165,7 @@ class ClientController extends AbstractController
         $commande = new Commande();
         $paiement = new Paiement();
         $session    = $request->getSession();
-        $datas = $request->request->all();
+        $datas = $request->query->all();
         extract($datas);
         $numero = substr(str_shuffle(str_repeat($x='023456789ABCDEFGHKMNOPQRSTUVWXYZ', ceil(4/strlen($x)) )),1,3);
         $userConnect = $clientRepo->findOneBy(['user' => $session->get('idUser')]);
