@@ -109,9 +109,9 @@ class CommandeRepository extends ServiceEntityRepository
     public function CalculRecetteByJournee($date)
     {
         return $this->createQueryBuilder('c')
-            ->innerJoin(Paiement::class , 'p')
+            ->join(Paiement::class, 'p', 'WITH', 'p.id = c.id')
+            ->Where('p.montant > 0')
             ->andWhere('c.date = :date')
-            ->andWhere('p.montant > 0')
             ->setParameter('date', $date)
             ->getQuery()
             ->getResult()

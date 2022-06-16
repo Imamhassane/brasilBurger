@@ -134,7 +134,7 @@ class GestionnaireController extends AbstractController
                 $commandes = $commandes = $commandeRepo->findMenusAndCommande();
             }elseif(preg_match('~[0-9]+~', $uri)){
                 $id = (int) filter_var($uri, FILTER_SANITIZE_NUMBER_INT);
-                $commandes = $commandeRepo->findBy(["client" => $id]);
+                $commandes = $commandeRepo->findBy(["user" => $id]);
             }if(isset(explode('+' , $uri)[1])){
                 $date = explode('+' , $uri)[1];
                 $commandes = $commandeRepo->findBy(["date" => $date]);

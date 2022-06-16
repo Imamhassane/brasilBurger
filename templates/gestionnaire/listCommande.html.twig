@@ -140,7 +140,7 @@
                
                 <!-- ======= Footer tools ======= -->
                 <div class="footer-tools">
-                    <button style="margin-bottom:0px; margin-top: 0px;padding: 1px 7px;" id="reglerCommandes"   class="btn">Traiter commande</button>
+                    <button style="margin-bottom:0px; margin-top: 0px;padding: 1px 7px;" id="payer"  disabled  class="btn p-3">Traiter commande</button>
 
                     {% if isPaginated  %}
                         <div class="pages">
@@ -164,6 +164,8 @@
                 </div>
             </form>
         </div>
+        
+    {% endif %}
         <script src="/js/reglerPaiement.js"></script>
         <script src="/js/paiement.js"></script>
         <script src="/js/filterCommmandes.js"></script>
@@ -191,6 +193,4 @@
                 margin-top: -4px !important;
             }
         </style>
-        
-    {% endif %}
 {% endblock %}

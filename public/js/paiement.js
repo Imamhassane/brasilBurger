@@ -20,14 +20,10 @@ function displayChekbox(params) {
             }
             ///////
             if (count == 0) {
-                if (reglerCommandes) {
-                    reglerCommandes.disabled = true
-                }
+                
                 payer.disabled = true
             }else{
-                if (reglerCommandes) {
-                    reglerCommandes.disabled = false
-                }
+                
                 payer.disabled = false
 
             }
