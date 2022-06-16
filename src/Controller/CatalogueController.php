@@ -10,6 +10,7 @@ use App\Repository\MenuRepository;
 use App\Repository\BurgerRepository;
 use App\Repository\ClientRepository;
 use App\Repository\ComplementRepository;
+use App\Repository\UserRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -67,7 +68,7 @@ class CatalogueController extends AbstractController
     }
 
     #[Route('/newClient', name: 'newClient')]
-    public function formClient(Request $request , EntityManagerInterface $entityManager , UserPasswordHasherInterface $userPasswordHasher , ClientRepository $clientRepo): Response
+    public function formClient(Request $request , EntityManagerInterface $entityManager , UserPasswordHasherInterface $userPasswordHasher , UserRepository $clientRepo): Response
     {
 
         $method = $request->getMethod();
@@ -75,7 +76,7 @@ class CatalogueController extends AbstractController
         $allClients = $clientRepo->findAll();
         extract($datas);
 
-        $newClient = new Client();
+        // $newClient = new Client();
         $user = new User();
         $session    = $request->getSession();
         
@@ -115,26 +116,27 @@ class CatalogueController extends AbstractController
                 ->setEmail($email)
                 ->setPassword(
                 $userPasswordHasher->hashPassword(
-                    $newClient,
+                    $user,
                     $password
                     )
                 )
+                ->setTelephone($telephone)
                 ->setRoles(["ROLE_CLIENT"]);
-            $newClient->setTelephone($telephone)
-                      ->setPrenom($prenom)
-                      ->setNom($nom)
-                      ->setEmail($email)
-                      ->setRoles(["ROLE_CLIENT"])
-                      ->setPassword(
-                        $userPasswordHasher->hashPassword(
-                            $newClient,
-                            $password
-                            )
-                        );
-            $newClient->setUser($user);
+            // $newClient->setTelephone($telephone)
+            //           ->setPrenom($prenom)
+            //           ->setNom($nom)
+            //           ->setEmail($email)
+            //           ->setRoles(["ROLE_CLIENT"])
+            //           ->setPassword(
+            //             $userPasswordHasher->hashPassword(
+            //                 $newClient,
+            //                 $password
+            //                 )
+            //             );
+            // $newClient->setUser($user);
 
             $entityManager->persist($user);
-            $entityManager->persist($newClient);
+            // $entityManager->persist($newClient);
             $entityManager->flush();
             $InscriptSuccess = 'Votre inscription a reussi, vous pouvez vous connecter!';
             $session->set('InscriptSuccess',$InscriptSuccess);

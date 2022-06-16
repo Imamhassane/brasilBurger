@@ -17,7 +17,6 @@ use App\Form\BurgerFormType;
 use App\Repository\MenuRepository;
 use App\Repository\UserRepository;
 use App\Repository\BurgerRepository;
-use App\Repository\ClientRepository;
 use App\Repository\CommandeRepository;
 use App\Controller\CatalogueController;
 use App\Repository\ComplementRepository;
@@ -60,11 +59,11 @@ class GestionnaireController extends AbstractController
     #[Route('/commandeATraiter', name: 'commandeATraiter')]
     public function commandeATraiter(EntityManagerInterface $entityManager , Request $request ,  CommandeRepository $commandeRepo): Response
     {
+
             $session    = $request->getSession();
             $data = $request->request->all();
             extract($data);
-
-         
+            
             $commandeATraiter = $session->get("commandeATraiter");
             foreach ($commandeATraiter as $value2) {
                 $commandes [] = $commandeRepo->find($value2);
@@ -72,14 +71,14 @@ class GestionnaireController extends AbstractController
                 /*  */
             }
             foreach ($commandes as $value) {
-                if ($choix=="valider") {
+                if ($choix=="valider commande(s)") {
                     $commandesTraiter [] = $value->setEtat('valider');
                     
                     // message de succés
                     $commandeValiderByGest = "Commande(s) validée(s) avec succés!" ;
                     $session->set('commandeValiderByGest',$commandeValiderByGest);      
                
-                }elseif ($choix=="annuler") {
+                }elseif ($choix=="annuler commande(s)") {
                     $commandesTraiter [] =  $value->setEtat('annuler');
                     
                     // message de succés
@@ -99,7 +98,7 @@ class GestionnaireController extends AbstractController
 
     #[Route('/listCommande/{page?1}/{nbre?3}', name: 'listCommande')]
     #[Route('/commande{etat}/{page?1}/{nbre?3}', name: 'commandeFilter')]
-    public function ListCommande( Request $request,CommandeRepository $commandeRepo , $page , $nbre, ClientRepository $clientRepo): Response
+    public function ListCommande( Request $request,CommandeRepository $commandeRepo , $page , $nbre, UserRepository $clientRepo): Response
     {
         $uri = $request->getRequestUri();
 
@@ -107,10 +106,10 @@ class GestionnaireController extends AbstractController
         extract($datas);
         $session    = $request->getSession();
 
-        $clients = $clientRepo->findAll();
+        $clients = $clientRepo->findClient();
 
         $commandes = $commandeRepo->findBy(["etat" => "en cours"] , ["date" => "DESC"], $nbre , ($page - 1) * $nbre );
-        
+
         $commandesEncours = $commandeRepo->findBy(["etat" => "en cours"]);
         
         $commandeValiderByGest = $session->get('commandeValiderByGest');
@@ -122,11 +121,7 @@ class GestionnaireController extends AbstractController
             if( $uri == "/commandeannuler"){
                 $commandes = $commandeRepo->findBy(["etat" => "annuler"],["date" => "DESC"] );
             }
-            
-            
-            
-            
-            
+        
             
             
             elseif( $uri == "/commandevalider"){
@@ -424,7 +419,7 @@ class GestionnaireController extends AbstractController
         $date = new DateTime("now", new DateTimeZone('Africa/Dakar') );
         $cureentDate = $date->format('Y-m-d');
         
-        $commandeJournee = $commandes->findBy(["date" => $cureentDate, "etat" => "valider"]);
+        $commandeJournee = $commandes->CalculRecetteByJournee($cureentDate);
         $recettes = 0 ;
         foreach ($commandeJournee as $value) {
             $recettes += $value->getMontant();

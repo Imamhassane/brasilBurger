@@ -106,26 +106,28 @@ class CommandeRepository extends ServiceEntityRepository
         ;
     }
 
-    public function CalculRecetteByJournee($value,$value3)
+    public function CalculRecetteByJournee($date)
     {
         return $this->createQueryBuilder('c')
             ->innerJoin(Paiement::class , 'p')
-            ->andWhere('c.client = :val3')
-            ->setParameter('val', $value)
-            ->setParameter('val3', $value3)
+            ->andWhere('c.date = :date')
+            ->andWhere('p.montant > 0')
+            ->setParameter('date', $date)
             ->getQuery()
             ->getResult()
         ;
     }
-    /*
-    public function findOneBySomeField($value): ?Commande
+    
+    public function findCommandePayer($date): ?Commande
     {
+        
         return $this->createQueryBuilder('c')
-            ->andWhere('c.exampleField = :val')
-            ->setParameter('val', $value)
+            ->innerJoin(Paiement::class , 'p')
+            ->andWhere('c.date = :date')
+            ->setParameter('date', $date)
             ->getQuery()
-            ->getOneOrNullResult()
+            ->getResult()
         ;
     }
-    */
+   
 }

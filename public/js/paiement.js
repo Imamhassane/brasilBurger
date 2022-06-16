@@ -1,7 +1,12 @@
 const commandeAPayer =  document.getElementsByName("commandeAPayer[]")
+const commandeATraiter =  document.getElementsByName("commandeATraiter[]")
+const reglerCommandes = document.getElementsByName("reglerCommandes")
 
 if(commandeAPayer){
     displayChekbox(commandeAPayer)
+}
+if(commandeATraiter){
+    displayChekbox(commandeATraiter)
 }
 
 function displayChekbox(params) {
@@ -15,14 +20,21 @@ function displayChekbox(params) {
             }
             ///////
             if (count == 0) {
+                if (reglerCommandes) {
+                    reglerCommandes.disabled = true
+                }
                 payer.disabled = true
             }else{
+                if (reglerCommandes) {
+                    reglerCommandes.disabled = false
+                }
                 payer.disabled = false
 
             }
         })
     });
 }
+
 //
 if(document.getElementById('message')){
     setTimeout(function(){

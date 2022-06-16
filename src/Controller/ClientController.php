@@ -8,7 +8,6 @@ use App\Entity\Commande;
 use App\Entity\Paiement;
 use App\Repository\MenuRepository;
 use App\Repository\BurgerRepository;
-use App\Repository\ClientRepository;
 use App\Repository\CommandeRepository;
 use App\Repository\PaiementRepository;
 use App\Repository\ComplementRepository;
@@ -29,14 +28,14 @@ class ClientController extends AbstractController
     
     #[Route('/mescommandes/{page?1}/{nbre?3}', name: 'mescommandes')]
     #[Route('/mescommandeEtat{etat}/{page?1}/{nbre?3}', name: 'mescommandeEtat')]
-    public function mesCommande( $page , $nbre , Request $request , CommandeRepository $commandeRepo, ClientRepository $clientRepo, BurgerRepository $burgerRepo , MenuRepository $menuRepo, EntityManagerInterface $entityManager):Response{
+    public function mesCommande( $page , $nbre , Request $request , CommandeRepository $commandeRepo,  BurgerRepository $burgerRepo , MenuRepository $menuRepo, EntityManagerInterface $entityManager):Response{
         
         $datas = $request->request->all();
         $uri =$request->getRequestUri();
 
         extract($datas);
         $session    = $request->getSession();
-        $userConnect = $clientRepo->findOneBy(['user' => $session->get('idUser')]);
+        $userConnect = $this->getUser();
                 
         $errorNumber = $session->get('errorNumber');
         $errorMontant = $session->get('errorMontant');
@@ -48,15 +47,16 @@ class ClientController extends AbstractController
 
        
       
-        $UserCommande = $commandeRepo->findBy(['client' => $userConnect, 'etat' => "valider"]);
-        $myCommandes = $commandeRepo->findBy(['client' => $userConnect, 'etat' => "valider"] , [], $nbre , ($page - 1) * $nbre );
+        $UserCommande = $commandeRepo->findBy(['user' => $userConnect, 'etat' => "valider"]);
+
+        $myCommandes = $commandeRepo->findBy(['user' => $userConnect, 'etat' => "valider"] , [], $nbre , ($page - 1) * $nbre );
         
         if( $uri == "/mescommandeEtatannuler"){
-            $myCommandes = $commandeRepo->findBy(['client' => $userConnect, "etat" => "annuler"] );
+            $myCommandes = $commandeRepo->findBy(['user' => $userConnect, "etat" => "annuler"] );
         }elseif( $uri == "/mescommandeEtatvalider"){
-            $myCommandes = $commandeRepo->findBy(['client' => $userConnect, "etat" => "valider"] , [], $nbre , ($page - 1) * $nbre );
+            $myCommandes = $commandeRepo->findBy(['user' => $userConnect, "etat" => "valider"] , [], $nbre , ($page - 1) * $nbre );
         }elseif( $uri == "/mescommandeEtaten%20cours"){
-            $myCommandes = $commandeRepo->findBy(['client' => $userConnect, "etat" => "en cours"]);
+            $myCommandes = $commandeRepo->findBy(['user' => $userConnect, "etat" => "en cours"]);
         }
 
         $nbCommandes = count($UserCommande);
@@ -89,7 +89,7 @@ class ClientController extends AbstractController
     }
     
     #[Route('/paiement', name: 'paiement')]
-    public function paiement(Request $request ,CommandeRepository $commandeRepo, ClientRepository $clientRepo, BurgerRepository $burgerRepo , MenuRepository $menuRepo, EntityManagerInterface $entityManager):Response{
+    public function paiement(Request $request ,CommandeRepository $commandeRepo,  BurgerRepository $burgerRepo , MenuRepository $menuRepo, EntityManagerInterface $entityManager):Response{
         $datas =  $request->request->all();
         $session    = $request->getSession();   
         $method  = $request->getMethod();
@@ -113,7 +113,7 @@ class ClientController extends AbstractController
 
 
     #[Route('/commandesTovalidate', name: 'commandesTovalidate')]
-    public function commandesTovalidate( Request $request , PdfService $pdf ,PaiementRepository $paiementRepo ,CommandeRepository $commandeRepo, ClientRepository $clientRepo, BurgerRepository $burgerRepo , MenuRepository $menuRepo, EntityManagerInterface $entityManager):Response{
+    public function commandesTovalidate( Request $request , PdfService $pdf ,PaiementRepository $paiementRepo ,CommandeRepository $commandeRepo, BurgerRepository $burgerRepo , MenuRepository $menuRepo, EntityManagerInterface $entityManager):Response{
        
 
             $session    = $request->getSession();   
@@ -159,7 +159,7 @@ class ClientController extends AbstractController
 
 
     #[Route('/commandeValidate', name: 'commandeValidate')]
-    public function commandeValidate(Request $request , ClientRepository $clientRepo, BurgerRepository $burgerRepo , MenuRepository $menuRepo, EntityManagerInterface $entityManager , ComplementRepository $complementRepo):Response{
+    public function commandeValidate(Request $request ,  BurgerRepository $burgerRepo , MenuRepository $menuRepo, EntityManagerInterface $entityManager , ComplementRepository $complementRepo):Response{
 
        
         $commande = new Commande();
@@ -168,7 +168,7 @@ class ClientController extends AbstractController
         $datas = $request->query->all();
         extract($datas);
         $numero = substr(str_shuffle(str_repeat($x='023456789ABCDEFGHKMNOPQRSTUVWXYZ', ceil(4/strlen($x)) )),1,3);
-        $userConnect = $clientRepo->findOneBy(['user' => $session->get('idUser')]);
+        $userConnect = $this->getUser();
 
         $panier =   $session->get("panier",[]);
         $data = []; 
@@ -188,7 +188,7 @@ class ClientController extends AbstractController
         }
         
     
-        if(count($complementadded) != 0){
+        if(count($datas) != 0){
             foreach ($complementadded as $value) {
                 $explodeIdandQuantite [] = explode('-' , $value);
             }
@@ -216,7 +216,7 @@ class ClientController extends AbstractController
             $commande->setDate($cureentDate)
                     ->setMontant($total)
                     ->setNumero('BrasiL'.$numero)
-                    ->setClient($userConnect);
+                    ->setUser($userConnect);
                     
             foreach ($data as $value) {
                 if(get_class($value['produit']) == "App\Entity\Menu"){

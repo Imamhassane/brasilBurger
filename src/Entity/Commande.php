@@ -30,15 +30,15 @@ class Commande
     #[ORM\Column(type: 'string', length: 255)]
     private $numero;
 
-    #[ORM\ManyToOne(targetEntity: Client::class, inversedBy: 'commandes')]
-    #[ORM\JoinColumn(nullable: false)]
-    private $client;
 
     #[ORM\ManyToMany(targetEntity: Burger::class, mappedBy: 'commandes')]
     private $burgers;
 
     #[ORM\ManyToMany(targetEntity: Menu::class, mappedBy: 'commandes')]
     private $menus;
+
+    #[ORM\ManyToOne(targetEntity: User::class, inversedBy: 'commandes')]
+    private $user;
 
     public function __construct()
     {
@@ -120,19 +120,6 @@ class Commande
 
         return $this;
     }
-
-    public function getClient(): ?Client
-    {
-        return $this->client;
-    }
-
-    public function setClient(?Client $client): self
-    {
-        $this->client = $client;
-
-        return $this;
-    }
-
     /**
      * @return Collection<int, Burger>
      */
@@ -183,6 +170,18 @@ class Commande
         if ($this->menus->removeElement($menu)) {
             $menu->removeCommande($this);
         }
+
+        return $this;
+    }
+
+    public function getUser(): ?User
+    {
+        return $this->user;
+    }
+
+    public function setUser(?User $user): self
+    {
+        $this->user = $user;
 
         return $this;
     }
