@@ -24,12 +24,12 @@
             <div class="row">
                 <div class="control col-md-6">
                     <label for="prenom">Prenom</label>
-                    <input type="text"  name="prenom" id="prenom" value = "{{restorPrenom is defined ? restorPrenom : ''}}" class="box" data-aos="zoom-in-down" data-aos-delay= "150" autofocus>
+                    <input type="text"  name="prenom" id="prenom" value = "{{restorPrenom is defined ? restorPrenom : ''}}" class="box" autofocus>
                     <small></small>
                 </div>
                 <div class="control col-md-6">
                     <label for="nom">Nom</label>
-                    <input type="text" name="nom" id="nom" class="box" data-aos="zoom-in-down"  data-aos-delay= "300" value = "{{restorNom is defined ? restorNom : ''}}">
+                    <input type="text" name="nom" id="nom" class="box"  value = "{{restorNom is defined ? restorNom : ''}}">
                     <small></small>
                 </div>
             </div>  
@@ -37,24 +37,24 @@
             <div class="row">
                 <div class="control col-md-6">
                     <label for="email">Email</label>
-                    <input type="text"  name="email" id="email" class="box" data-aos="zoom-in-down" data-aos-delay= "450" value="{{restorNom is defined ? restorNom : ''}}" >
+                    <input type="text"  name="email" id="email" class="box" value="{{restorNom is defined ? restorNom : ''}}" >
                     <small></small>
                     <p style="font-size: 14px;color: red;margin-left: 4px;">{{emailExist is defined ? emailExist : ''}}</p>
                 </div>
                 <div class="control col-md-6">
                     <label for="password">Password</label>
-                    <input type="password" name="password" id="password" class="box" data-aos="zoom-in-down"  data-aos-delay= "600" value = "{{restorPassword is defined ? restorPassword : ''}}">
+                    <input type="password" name="password" id="password" class="box"  value = "{{restorPassword is defined ? restorPassword : ''}}">
                     <small></small>
                 </div>
             </div> 
             <div class="row ">
                 <div class="control col-md-12">
                     <label for="telephone">Telephone</label>
-                    <input type="number"  name="telephone" id="telephone" class="box" data-aos="zoom-in-down"  data-aos-delay= "750" value = "{{restorTelephone is defined ? restorTelephone : ''}}">
+                    <input type="number"  name="telephone" id="telephone" class="box"  value = "{{restorTelephone is defined ? restorTelephone : ''}}">
                     <small></small>
                 </div>
             </div>
-            <input type="submit" value="S'inscrire" class="btn" data-aos-delay= "900">
+            <input type="submit" value="S'inscrire" class="btn" >
         </form>
     </div>
     {% block js %}

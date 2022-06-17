@@ -3,12 +3,8 @@
 namespace App\Controller;
 
 use App\Entity\User;
-use App\Entity\Client;
-use App\Entity\Commande;
-use App\Service\PdfService;
 use App\Repository\MenuRepository;
 use App\Repository\BurgerRepository;
-use App\Repository\ClientRepository;
 use App\Repository\ComplementRepository;
 use App\Repository\UserRepository;
 use Doctrine\ORM\EntityManagerInterface;
@@ -76,7 +72,6 @@ class CatalogueController extends AbstractController
         $allClients = $clientRepo->findAll();
         extract($datas);
 
-        // $newClient = new Client();
         $user = new User();
         $session    = $request->getSession();
         
@@ -122,21 +117,8 @@ class CatalogueController extends AbstractController
                 )
                 ->setTelephone($telephone)
                 ->setRoles(["ROLE_CLIENT"]);
-            // $newClient->setTelephone($telephone)
-            //           ->setPrenom($prenom)
-            //           ->setNom($nom)
-            //           ->setEmail($email)
-            //           ->setRoles(["ROLE_CLIENT"])
-            //           ->setPassword(
-            //             $userPasswordHasher->hashPassword(
-            //                 $newClient,
-            //                 $password
-            //                 )
-            //             );
-            // $newClient->setUser($user);
 
             $entityManager->persist($user);
-            // $entityManager->persist($newClient);
             $entityManager->flush();
             $InscriptSuccess = 'Votre inscription a reussi, vous pouvez vous connecter!';
             $session->set('InscriptSuccess',$InscriptSuccess);
