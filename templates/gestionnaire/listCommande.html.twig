@@ -18,11 +18,11 @@
     {% endblock %}
     {% if commandeValiderByGest is defined and commandeValiderByGest != null %}
         <div  id = "message" class =" successs text-center ">{{commandeValiderByGest}}</div>
-        <span class="d-none">{{removecommandeValiderByGest}}</span>
+        {# <span class="d-none">{{removecommandeValiderByGest}}</span> #}
     {% endif %} 
     {% if commandeAnnulerByGest is defined and commandeAnnulerByGest != null %}
         <div  id = "message" class =" danger text-center ">{{commandeAnnulerByGest}}</div>
-        <span class="d-none">{{removecommandeAnnulerByGest}}</span>
+        {# <span class="d-none">{{removecommandeAnnulerByGest}}</span> #}
     {% endif %} 
         <div class="overflow-auto filtre mt-5 mb-5" style="margin-left:9rem ;">
             <label> Etat </label>
