@@ -27,7 +27,7 @@ class ClientController extends AbstractController
 {
     
     #[Route('/mescommandes/{page?1}/{nbre?3}', name: 'mescommandes')]
-    #[Route('/mescommandeEtat{etat}/{page?1}/{nbre?3}', name: 'mescommandeEtat')]
+    #[Route('/mescommande{etat}/{page?1}/{nbre?3}', name: 'mescommandeEtat')]
     public function mesCommande( $page , $nbre , Request $request , CommandeRepository $commandeRepo,  BurgerRepository $burgerRepo , MenuRepository $menuRepo, EntityManagerInterface $entityManager):Response{
         
         $datas = $request->request->all();
@@ -51,11 +51,11 @@ class ClientController extends AbstractController
 
         $myCommandes = $commandeRepo->findBy(['user' => $userConnect, 'etat' => "valider"] , [], $nbre , ($page - 1) * $nbre );
         
-        if( $uri == "/mescommandeEtatannuler"){
+        if( $uri == "/mescommandeannuler"){
             $myCommandes = $commandeRepo->findBy(['user' => $userConnect, "etat" => "annuler"] );
-        }elseif( $uri == "/mescommandeEtatvalider"){
+        }elseif( $uri == "/mescommandevalider"){
             $myCommandes = $commandeRepo->findBy(['user' => $userConnect, "etat" => "valider"] , [], $nbre , ($page - 1) * $nbre );
-        }elseif( $uri == "/mescommandeEtaten%20cours"){
+        }elseif( $uri == "/mescommandeencours"){
             $myCommandes = $commandeRepo->findBy(['user' => $userConnect, "etat" => "en cours"]);
         }
 

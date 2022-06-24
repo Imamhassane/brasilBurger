@@ -54,7 +54,7 @@
                             <tr>
                                 <td>{{item.produit.type}}</td>
                                 <td>{{item.produit.nom}}</td>
-                                <td>{{item.produit.prix * item.quantite}} F CFA</td>
+                                <td>{{item.produit.prix}} F CFA</td>
                                 <td><a  href="{{path('moins', {'id':item.produit.id ~ item.produit.type}) }}" class="btn mr-2 action moins">-</a> {{item.quantite}} <a  href="{{path('addition', {'id':item.produit.id ~ item.produit.type}) }}" class="btn ml-2 action plus" value="1">+</a></td>
                                  <td class="p-0 w-25">
                                    {% if item.produit.type == "Burger" %}

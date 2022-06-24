@@ -22,12 +22,10 @@
 
         {% if errorNumber is defined and errorNumber != null %}
             <div  id = "message" class =" danger text-center ">{{errorNumber}}</div>
-            {# <span class="d-none">{{removeSessionNumber}}</span> #}
         {% endif %}
         
         {% if errorMontant is defined and errorMontant != null %}
             <div  id = "message" class =" danger text-center ">{{errorMontant}}</div>
-            {# <span class="d-none">{{removeSessionMontant}}</span> #}
         {% endif %}
       
         {% if success is defined and success != "" %}
@@ -38,32 +36,27 @@
                     <a  id="notDownload"  href="#"  style="cursor:pointer ; color:red;" class="">annuler</a>
                 </div>
             </div>
-            {# <span class="d-none">{{removeSessionSuccess}}</span> #}
         {% endif %}
 
         {% if successCommande is defined and successCommande != "" %}
             <div  id = "message" class =" successs text-center ">{{successCommande}}</div>
-            {# <span class="d-none">{{removeSessionSuccessCommande}}</span> #}
         {% endif %}
 
         {% if errorValidation is defined and errorValidation != null %}
             <div  id = "message" class =" danger text-center ">{{errorValidation}}</div>
-            {# <span class="d-none">{{removeErrorValidation}}</span> #}
         {% endif %} 
         {% if alreadyPayed is defined and alreadyPayed != null %}
             <div  id = "message" class =" danger text-center ">{{alreadyPayed}}</div>
-            {# <span class="d-none">{{removeAlreadyPayed}}</span> #}
         {% endif %} 
         {% if commandeValider is defined and commandeValider != null %}
             <div  id = "message" class =" successs text-center ">{{commandeValider}}</div>
-            {# <span class="d-none">{{removecommandeValider}}</span> #}
         {% endif %} 
         
         <div class="filtre2">
             <label> Etat </label>
             <select name="choice" class="box m-0" id="option">
-                <option id="test1">Choisir...</option>
-                <option value="en cours">En cours</option>
+                <option id="optionSelected">Choisir...</option>
+                <option value="encours">En cours</option>
                 <option value="valider">Validée</option>
                 <option value="annuler">Annulée</option>
             </select>
@@ -193,10 +186,10 @@
                 </div>
             </form>
         </div>
+    {% endif %}
             <script src="/js/mescommandes.js"></script>
             <script src="/js/paiement.js"></script>
             <script src="/js/catalogue.js"></script>
             <script src="/js/pdf.js"></script>
             <style>#link-mescommandes{color:#eacf4f;}</style>
-    {% endif %}
 {% endblock %}

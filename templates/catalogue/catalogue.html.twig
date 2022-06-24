@@ -92,7 +92,9 @@
                     <h3>{{item.nom}}</h3>
                     <div class="price">F CFA {{item.prix}}</div>
                      {% if role is defined and role == "ROLE_CLIENT" or role == "" %}
-                        <a href="{{path('add', {'id':item.id ~ item.type}) }}" class="btn btn-commande ml-2">ajouter au panier </a>
+                        <a href="{{path('add', {'id':item.id ~ item.type}) }}" class="btn btn-commande ml-2">
+                           panier <i class="fa-solid fa-cart-shopping"></i>                    
+                        </a>
                         <a href="{{'showDetails/' ~ item.id ~ item.type}}" class="btn ml-2">Détails</a>
                      {% endif %}
                   </div>
