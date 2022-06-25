@@ -11,7 +11,7 @@ class BurgerFixtures extends Fixture
 {
     public function load(ObjectManager $manager): void
     {
-        for ($i=0; $i < 5; $i++){ 
+        for ($i=0; $i < 2; $i++){ 
             $burger = new Burger();
             $image = new Image();
             $image->setNom("product-3-62748c146b0db.png");
@@ -23,7 +23,7 @@ class BurgerFixtures extends Fixture
             $manager->persist($image);
             $manager->flush();
         }
-        for ($i=0; $i < 7; $i++){ 
+        for ($i=0; $i < 3; $i++){ 
             $burger = new Burger();
             $image = new Image();
             $image->setNom("product-6.png");

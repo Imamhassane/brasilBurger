@@ -127,22 +127,9 @@
                                     {% endif %}
                                 </td>
                                 <td>{{item.numero}}</td>
-
                                 <td>{{item.date |date("d/m/Y")}}</td>
-
-                                {% if item.burgers != null or item.menus != null %}
-                                    <td>
-                                        {% for itemBurger in item.burgers %}
-                                            <span class="p-2">{{itemBurger.nom}}</span>
-                                        {% endfor %}
-                                        {% for itemMenu in item.menus %}
-                                            <span class="p-2">{{itemMenu.nom }}</span>
-                                        {% endfor %}
-                                    </td>
-                                {% endif %}
-
+                                <td>{{item.quantite}}</td>
                                 <td>{{item.montant}}</td>
-
                                 <td>{{item.etat}}</td>
 
                             {% if item.paiement.montant == 0 %}

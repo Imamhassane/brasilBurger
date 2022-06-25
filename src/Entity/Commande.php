@@ -40,6 +40,9 @@ class Commande
     #[ORM\ManyToOne(targetEntity: User::class, inversedBy: 'commandes')]
     private $user;
 
+    #[ORM\Column(type: 'string', length: 255)]
+    private $quantite;
+
     public function __construct()
     {
         $this->etat="en cours";
@@ -182,6 +185,18 @@ class Commande
     public function setUser(?User $user): self
     {
         $this->user = $user;
+
+        return $this;
+    }
+
+    public function getQuantite(): ?string
+    {
+        return $this->quantite;
+    }
+
+    public function setQuantite(string $quantite): self
+    {
+        $this->quantite = $quantite;
 
         return $this;
     }

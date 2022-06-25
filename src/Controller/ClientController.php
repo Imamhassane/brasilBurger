@@ -209,7 +209,7 @@ class ClientController extends AbstractController
         }
         
         $total += $totalComplement;
-       
+        
         $date = new DateTime("now", new DateTimeZone('Africa/Dakar') );
         $cureentDate = $date->format('Y-m-d');
 
@@ -223,9 +223,12 @@ class ClientController extends AbstractController
                         $commande->addMenu($value['produit']);
                 }
                 if(get_class($value['produit']) == "App\Entity\Burger"){
-                    $commande->addBurger($value['produit']);               
+                    $commande->addBurger($value['produit']);
                 }
+                $tab [] = $value['produit']->getNom()."( ".$value['quantite']." )";
             }
+            $quantiteChecked = implode(" ",$tab);
+            $commande->setQuantite($quantiteChecked); 
             
             $paiement->setMontant(0)
                      ->setCommande($commande);

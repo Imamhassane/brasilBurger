@@ -76,7 +76,7 @@ function update(params) {
          //
          compteur.style.display = "flex";
          compteur.innerHTML = localStorage.getItem("nbrCommande");
-         svg.style.marginTop="1.5rem"
+         svg.style.marginTop="21px"
      }else{
          compteur.style.display = "none";
      }

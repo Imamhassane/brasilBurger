@@ -35,7 +35,9 @@
                 <div class="tools">
                 </div>  
             </div> 
-
+            <div class="d-flex mb-1">
+                <a name="" id="" class="btn m-3 pl-5" href="{{path('catalogue')}}" role="button"><i class="fa-solid fa-circle-left"></i> <span>Catalogue</span></a>
+            </div>  
             <!-- ======= Table ======= -->
             {% if items | length > 0 %}
                 <table class="datatable mt-4">
@@ -54,17 +56,23 @@
                             <tr>
                                 <td>{{item.produit.type}}</td>
                                 <td>{{item.produit.nom}}</td>
-                                <td>{{item.produit.prix}} F CFA</td>
-                                <td><a  href="{{path('moins', {'id':item.produit.id ~ item.produit.type}) }}" class="btn mr-2 action moins">-</a> {{item.quantite}} <a  href="{{path('addition', {'id':item.produit.id ~ item.produit.type}) }}" class="btn ml-2 action plus" value="1">+</a></td>
+                                <td name="prix">{{item.produit.prix}}</td>
+                                <td>
+                                    {#<a class="btn mr-2 action moins moinsProduit">-</a>
+                                        <span name="quantite">1</span> 
+                                    <a value="{{"id:" ~ item.produit.id}}" class="btn ml-2 action plus plusProduit" name="plusProduit" >+</a>#}
+                                     <a  href="{{path('moins', {'id':item.produit.id ~ item.produit.type}) }}" class="btn mr-2 action moins">-</a> {{item.quantite}} 
+                                    <a  href="{{path('addition', {'id':item.produit.id ~ item.produit.type}) }}" class="btn ml-2 action plus" value="1">+</a> 
+                                </td>
                                  <td class="p-0 w-25">
                                    {% if item.produit.type == "Burger" %}
-                                     <select class="select2" name="complementadded[]" id="" multiple="multiple">
+                                    <select class="select2" name="complementadded[]" id="" multiple="multiple">
                                         {% for items in complements %}
                                             <option value="{{items.id ~ '-' ~ item.quantite}}">{{items.nom}}</option>
                                         {% endfor %}
-                                     </select>
+                                    </select>
                                     {% else %}
-                                    -
+                                        -
                                     {% endif %}
                                 </td>
                                 <td><a class="deleteCommande" name="deleteCommande" value="{{item.quantite}}"  href="{{path('remove', {'id':item.produit.id ~ item.produit.type}) }}"> <i class="fa-solid fa-trash-can text-danger"></i><a/></td>
@@ -76,7 +84,7 @@
                             <td></td>
                             <td></td>
                             <td></td>
-                            <td class="total">{{total}} FCFA</td>
+                            <td class="total" id="total" value="{{total}}">{{total}}</td>
                         </tr>
                     </tbody>
                 </table>
@@ -99,6 +107,7 @@
         
         <script src="/js/reglerPaiement.js"></script>
         <script src="/js/catalogue.js"></script>
+        <script src="/js/valideCommande.js"></script>
         <style>#link-panier{color:#eacf4f;text-decoration: underline;}.select2-container{width: 350px !important;}.select2-container--default .select2-selection--multiple {height: 60px;}</style>
         <style>#link-paniernotconnected{color:#eacf4f;}</style>
         <script src="http://code.jquery.com/jquery-1.11.0.min.js"></script>

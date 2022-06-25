@@ -11,7 +11,7 @@ class ComplementFixtures extends Fixture
 {
     public function load(ObjectManager $manager): void
     {
-        for ($i=0; $i < 10 ; $i++) { 
+        for ($i=0; $i < 3 ; $i++) { 
             $image = new Image();
             $image->setNom("coca-62aa85f77005b.png");
             $complemnt = new Complement();
@@ -20,7 +20,7 @@ class ComplementFixtures extends Fixture
                       ->setImage($image);
             $manager->persist($complemnt);
         }
-        for ($i=0; $i < 8 ; $i++) { 
+        for ($i=0; $i < 2 ; $i++) { 
             $image = new Image();
             $image->setNom("3x-62aa862770ed6.png");
             $complemnt = new Complement();
