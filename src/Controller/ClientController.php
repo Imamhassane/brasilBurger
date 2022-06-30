@@ -47,7 +47,7 @@ class ClientController extends AbstractController
 
        
       
-        $UserCommande = $commandeRepo->findBy(['user' => $userConnect, 'etat' => "valider"]);
+        $UserCommande = $commandeRepo->findBy(['user' => $userConnect]);
 
         $myCommandes = $commandeRepo->findBy(['user' => $userConnect, 'etat' => "valider"] , [], $nbre , ($page - 1) * $nbre );
         
@@ -61,7 +61,7 @@ class ClientController extends AbstractController
 
         $nbCommandes = count($UserCommande);
         $nbPage = ceil($nbCommandes / $nbre)  ;
-
+        // dd($nbPage);
         return $this->render('client/mescommandes.html.twig', [
             'myCommandes' => $myCommandes,
             'isVide'    => count($myCommandes),

@@ -105,24 +105,10 @@
                                         <input type="checkbox" / disabled>
                                     {% endif %}
                                 </td>
-
-                                {% if item.burgers != null or item.menus != null %}
-                                    <td>
-                                        {% for itemBurger in item.burgers %}
-                                            <span class="p-2">{{itemBurger.nom }}</span>
-                                        {% endfor %}
-                                        {% for itemMenu in item.menus %}
-                                            <span class="p-2">{{itemMenu.nom }}</span>
-                                        {% endfor %}
-                                    </td>
-                                {% endif %}
+                                <td>{{item.quantite}}</td>
                                 <td>{{item.date |date("d/m/Y")}}</td>
                                 <td>{{item.numero}}</td>
-
-
                                 <td>{{item.montant}} FCFA</td>
-
-                                {# <td>{{item.etat}}</td> #}
 
                                 {% if item.paiement.montant == 0 %}
                                     <td><span class="badge badge-warning ml-4 "><i class="fa-solid fa-triangle-exclamation "></i></span></td>

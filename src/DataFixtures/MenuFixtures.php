@@ -13,26 +13,27 @@ class MenuFixtures extends Fixture
 {
     public function load(ObjectManager $manager): void
     {
-        for ($i = 0; $i < 5 ; $i++){ 
-            /*  */
-            $burger = new Burger();
-            $imageBurger = new Image();
-            $imageBurger->setNom("product-2.png");
-            $burger->setNom("Herbi")
-                    ->setPrix(1500)
-                    ->setImage($imageBurger);
-            /*  */
-            $imageComplement = new Image();
-            $imageComplement->setNom("coca-62aa85f77005b.png");
-            $complement = new Complement();
-            $complement->setNom("Coca")
-                      ->setPrix(800)
-                      ->setImage($imageComplement);
+
+        /*  */
+        $burger = new Burger();
+        $imageBurger = new Image();
+        $imageBurger->setNom("about10.png");
+        $burger->setNom("Herbi")
+                ->setPrix(2500)
+                ->setImage($imageBurger);
+        /*  */
+        $imageComplement = new Image();
+        $imageComplement->setNom("boisson5.png");
+        $complement = new Complement();
+        $complement->setNom("Coca")
+                  ->setPrix(1200)
+                  ->setImage($imageComplement);
+        for ($i = 1; $i < 5 ; $i++){ 
             /*  */
             $menu = new Menu();
             $image = new Image();
-            $image->setNom("burgerImg5-removebg-preview-628d5c0d521ea.png");
-            $menu->setNom("yakhanaal")
+            $image->setNom("menu$i.png");
+            $menu->setNom("yakhanaal".$i)
                     ->setPrix($burger->getPrix() + $complement->getPrix())
                     ->setImage($image)
                     ->setBurger($burger)
@@ -44,6 +45,7 @@ class MenuFixtures extends Fixture
             $manager->persist($image);
             $manager->flush();
         }
+        
         $manager->flush();
     }
 }

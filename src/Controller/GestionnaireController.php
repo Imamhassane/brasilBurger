@@ -5,12 +5,8 @@ namespace App\Controller;
 use DateTime;
 use DateTimeZone;
 use App\Entity\Menu;
-use App\Entity\User;
 use App\Entity\Image;
 use App\Entity\Burger;
-use App\Entity\Client;
-use App\Entity\Commande;
-use App\Entity\Paiement;
 use App\Entity\Complement;
 use App\Service\PdfService;
 use App\Form\BurgerFormType;
@@ -18,7 +14,6 @@ use App\Repository\MenuRepository;
 use App\Repository\UserRepository;
 use App\Repository\BurgerRepository;
 use App\Repository\CommandeRepository;
-use App\Controller\CatalogueController;
 use App\Repository\ComplementRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
@@ -110,21 +105,16 @@ class GestionnaireController extends AbstractController
 
         $commandes = $commandeRepo->findBy(["etat" => "en cours"] , ["date" => "DESC"], $nbre , ($page - 1) * $nbre );
 
-        $commandesEncours = $commandeRepo->findBy(["etat" => "en cours"]);
+        // $commandesEncours = $commandeRepo->findBy(["etat" => "en cours"]);
         
         $commandeValiderByGest = $session->get('commandeValiderByGest');
         $commandeAnnulerByGest = $session->get('commandeAnnulerByGest');
         
         
         if (array_values(explode ("/", $request->getrequestUri()))[1] != "listCommande") {
-      
             if( $uri == "/commandeannuler"){
                 $commandes = $commandeRepo->findBy(["etat" => "annuler"],["date" => "DESC"] );
-            }
-        
-            
-            
-            elseif( $uri == "/commandevalider"){
+            }elseif( $uri == "/commandevalider"){
                 $commandes = $commandeRepo->findBy(["etat" => "valider"],["date" => "DESC"] );
             }elseif($uri == "/commandeencours"){
                 $commandes = $commandeRepo->findBy(["etat" => "en cours"], ["date" => "DESC"] , $nbre , ($page - 1) * $nbre );
@@ -141,7 +131,7 @@ class GestionnaireController extends AbstractController
             }
         }
             
-        $nbCommandes = count($commandesEncours);
+        $nbCommandes = count($commandeRepo->findAll());
         $nbPage = ceil($nbCommandes / $nbre) ;
 
         return $this->render('gestionnaire/listCommande.html.twig', [
@@ -383,7 +373,7 @@ class GestionnaireController extends AbstractController
         ]);
     }
 
-    #[Route('/listMenu/{page?1}/{nbre?1}', name: 'listMenu')]
+    #[Route('/listMenu/{page?1}/{nbre?2}', name: 'listMenu')]
     public function listMenu(Request $request , $page , $nbre , BurgerRepository $burgerRepo , MenuRepository $menuRepo, ComplementRepository $complementRepo): Response
     {
         $burgers = $burgerRepo->findBy(['etat' => "non-archive"] , [], $nbre , ($page - 1) * $nbre );
@@ -397,7 +387,7 @@ class GestionnaireController extends AbstractController
     
         $addFoodSuccess = $session->get('addFoodSuccess');
                
-        $nbPage = $count;
+        $nbPage = $count/2;
         
         return $this->render('gestionnaire/listMenu.html.twig', [
             'catalogue'       => $catalogue,

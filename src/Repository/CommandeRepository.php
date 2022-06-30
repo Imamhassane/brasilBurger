@@ -120,7 +120,6 @@ class CommandeRepository extends ServiceEntityRepository
     
     public function findCommandePayer($date): ?Commande
     {
-        
         return $this->createQueryBuilder('c')
             ->innerJoin(Paiement::class , 'p')
             ->andWhere('c.date = :date')

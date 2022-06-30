@@ -11,28 +11,17 @@ class BurgerFixtures extends Fixture
 {
     public function load(ObjectManager $manager): void
     {
-        for ($i=0; $i < 2; $i++){ 
+        for ($i= 1 ; $i < 9 ; $i++){ 
             $burger = new Burger();
             $image = new Image();
-            $image->setNom("product-3-62748c146b0db.png");
-            $burger->setNom("Cheese")
+            $image->setNom("about$i.png");
+            $burger->setNom("Cheese".$i)
                     ->setPrix(2000)
                     ->setImage($image);
                     
             $manager->persist($burger);
             $manager->persist($image);
-            $manager->flush();
-        }
-        for ($i=0; $i < 3; $i++){ 
-            $burger = new Burger();
-            $image = new Image();
-            $image->setNom("product-6.png");
-            $burger->setNom("Mini")
-                    ->setPrix(1000)
-                    ->setImage($image);
-                    
-            $manager->persist($burger);
-            $manager->persist($image);
+       
             $manager->flush();
         }
     }
